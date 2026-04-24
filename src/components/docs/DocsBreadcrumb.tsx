@@ -1,4 +1,13 @@
+import { Fragment } from "react";
 import { Link } from "react-router-dom";
+import {
+	Breadcrumb,
+	BreadcrumbItem,
+	BreadcrumbLink,
+	BreadcrumbList,
+	BreadcrumbPage,
+	BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import type { DocPage } from "../../docs-map";
 
 type DocsBreadcrumbProps = {
@@ -13,30 +22,28 @@ export function DocsBreadcrumb({ currentDoc }: DocsBreadcrumbProps) {
 	const currentLabel = currentDoc?.title ?? "Pagina nao encontrada";
 
 	return (
-		<nav aria-label="Breadcrumb" className="mb-8 text-slate-500 text-sm">
-			<ol className="flex flex-wrap items-center gap-2">
-				<li>
-					<Link className="transition hover:text-slate-900" to="/">
-						Inicio
-					</Link>
-				</li>
-				<li aria-hidden="true">/</li>
-				<li>
-					<Link className="transition hover:text-slate-900" to="/docs">
-						Docs
-					</Link>
-				</li>
+		<Breadcrumb className="mb-8">
+			<BreadcrumbList>
+				<BreadcrumbItem>
+					<BreadcrumbLink render={<Link to="/" />}>Inicio</BreadcrumbLink>
+				</BreadcrumbItem>
+				<BreadcrumbSeparator />
+				<BreadcrumbItem>
+					<BreadcrumbLink render={<Link to="/docs" />}>Docs</BreadcrumbLink>
+				</BreadcrumbItem>
 				{parentSegments.map((segment) => (
-					<li className="contents" key={segment}>
-						<span aria-hidden="true">/</span>
-						<span>{formatSegment(segment)}</span>
-					</li>
+					<Fragment key={segment}>
+						<BreadcrumbSeparator />
+						<BreadcrumbItem>
+							<span>{formatSegment(segment)}</span>
+						</BreadcrumbItem>
+					</Fragment>
 				))}
-				<li aria-hidden="true">/</li>
-				<li aria-current="page" className="font-medium text-slate-950">
-					{currentLabel}
-				</li>
-			</ol>
-		</nav>
+				<BreadcrumbSeparator />
+				<BreadcrumbItem>
+					<BreadcrumbPage>{currentLabel}</BreadcrumbPage>
+				</BreadcrumbItem>
+			</BreadcrumbList>
+		</Breadcrumb>
 	);
 }

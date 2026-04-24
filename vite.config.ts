@@ -1,3 +1,4 @@
+import path from "node:path";
 import mdx from "@mdx-js/rollup";
 import babel from "@rolldown/plugin-babel";
 import tailwindcss from "@tailwindcss/vite";
@@ -22,4 +23,9 @@ export default defineConfig({
 		babel({ presets: [reactCompilerPreset()] }),
 		tailwindcss(),
 	],
+	resolve: {
+		alias: {
+			"@": path.resolve(__dirname, "./src"),
+		},
+	},
 });

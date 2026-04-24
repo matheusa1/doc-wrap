@@ -1,3 +1,4 @@
+import { BatteryWarning, Info, Lamp } from "lucide-react";
 import type { ReactNode } from "react";
 
 type CalloutType = "info" | "success" | "warning";
@@ -8,18 +9,24 @@ type CalloutProps = {
 	type?: CalloutType;
 };
 
+const icon = {
+	info: <Info />,
+	hint: <Lamp />,
+	warning: <BatteryWarning />,
+};
+
 const calloutStyles: Record<CalloutType, { label: string; style: string }> = {
 	info: {
 		label: "Nota",
-		style: "border-sky-200 bg-sky-50 text-sky-950",
+		style: "border-sky-500 bg-sky-100/10 text-sky-500",
 	},
 	success: {
 		label: "Dica",
-		style: "border-emerald-200 bg-emerald-50 text-emerald-950",
+		style: "border-emerald-500 bg-emerald-100/10 text-emerald-500",
 	},
 	warning: {
-		label: "Atencao",
-		style: "border-amber-200 bg-amber-50 text-amber-950",
+		label: "Atenção",
+		style: "border-amber-500 bg-amber-100/10 text-amber-500",
 	},
 };
 
@@ -27,11 +34,11 @@ export function Callout({ children, title, type = "info" }: CalloutProps) {
 	const selectedStyle = calloutStyles[type];
 
 	return (
-		<aside className={`my-6 rounded-2xl border p-5 ${selectedStyle.style}`}>
-			<p className="mb-2 font-semibold text-sm uppercase tracking-wide">
+		<aside className={`my-6 rounded-2xl border p-4 ${selectedStyle.style}`}>
+			<p className="m-0 font-semibold text-lg tracking-wide">
 				{title ?? selectedStyle.label}
 			</p>
-			<div className="space-y-3 text-sm leading-6">{children}</div>
+			<div className="text-sm leading-6">{children}</div>
 		</aside>
 	);
 }

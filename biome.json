@@ -20,11 +20,15 @@
 				"noUnknownFunction": {
 					"options": {
 						"ignore": ["theme"]
-					}
+					},
+					"level": "error"
 				}
 			},
 			"nursery": {
-				"useSortedClasses": "error"
+				"useSortedClasses": {
+					"level": "error",
+					"fix": "safe"
+				}
 			},
 			"suspicious": {
 				"noUnknownAtRules": {
@@ -40,7 +44,8 @@
 							"config",
 							"plugin"
 						]
-					}
+					},
+					"level": "error"
 				}
 			}
 		}

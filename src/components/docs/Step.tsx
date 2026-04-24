@@ -8,13 +8,17 @@ type StepProps = {
 
 export function Step({ children, number, title }: StepProps) {
 	return (
-		<section className="my-6 flex gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-			<div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald-600 font-semibold text-sm text-white">
-				{number}
-			</div>
+		<section className="my-2 flex flex-col gap-4 rounded-xl border-2 border-foreground p-5 shadow-sm">
+			<header className="w-full">
+				<div className="flex items-center space-x-5">
+					<p className="flex aspect-square h-8 w-8 items-center justify-center rounded-full bg-primary p-2 font-semibold text-primary-foreground text-sm">
+						{number}
+					</p>
+					<h1 className="font-semibold text-foreground text-lg">{title}</h1>
+				</div>
+			</header>
 			<div className="min-w-0 space-y-2">
-				<h3 className="font-semibold text-lg text-slate-950">{title}</h3>
-				<div className="text-slate-700 text-sm leading-6">{children}</div>
+				<div className="text-foreground text-sm leading-6">{children}</div>
 			</div>
 		</section>
 	);
