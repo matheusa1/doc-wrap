@@ -1,0 +1,41 @@
+export const cards = [
+  {
+    title: 'Markdown',
+    description: 'Títulos, listas, links e blocos de texto são renderizados como JSX.'
+  },
+  {
+    title: 'JSX embutido',
+    description: 'Você pode misturar markup com componentes e expressões React.'
+  },
+  {
+    title: 'Vite + React',
+    description: 'O bundler compila `.mdx` e o app importa o arquivo como um componente.'
+  }
+]
+
+# MDX ativo no projeto
+
+Este arquivo está sendo importado diretamente pelo `src/App.tsx`.
+
+Isso significa que agora você pode criar paginas, blocos de documentação e conteúdo rico usando **Markdown + JSX** no mesmo arquivo.
+
+## Exemplo rápido
+
+- Escreva texto em markdown normalmente.
+- Use JSX quando precisar de layout ou interatividade.
+- Importe o arquivo `.mdx` como qualquer outro componente React.
+
+<div className="mt-6 grid gap-4 sm:grid-cols-3">
+  {cards.map((card) => (
+    <section key={card.title} className="rounded-2xl border border-slate-800 bg-slate-900/70 p-4 shadow-lg shadow-slate-950/20">
+      <h3 className="text-lg font-semibold text-white">{card.title}</h3>
+      <p className="mt-2 text-sm leading-6 text-slate-300">{card.description}</p>
+    </section>
+  ))}
+</div>
+
+## Próximo uso
+  
+Você já pode criar outro arquivo como `src/content/guia.mdx` e renderiza-lo no app.
+
+Use links como [documentação do MDX](https://mdxjs.com/docs/getting-started/) normalmente.

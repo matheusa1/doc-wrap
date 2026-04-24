@@ -1,0 +1,43 @@
+{
+	"name": "doc-gest",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "tsc -b && vite build && bun run docs:index && bun run pagefind:index",
+		"docs:index": "node scripts/build-pagefind-docs.mjs",
+		"pagefind:index": "pagefind --site dist --force-language pt",
+		"format": "biome format --write .",
+		"lint": "biome lint .",
+		"lint:fix": "biome lint --write --unsafe .",
+		"check": "biome check .",
+		"check:fix": "biome check --write --unsafe .",
+		"preview": "vite preview"
+	},
+	"dependencies": {
+		"@mdx-js/rollup": "^3.1.1",
+		"@tailwindcss/vite": "^4.2.4",
+		"react": "^19.2.5",
+		"react-dom": "^19.2.5",
+		"react-router-dom": "^7.14.2",
+		"remark-frontmatter": "^5.0.0",
+		"remark-mdx-frontmatter": "^5.2.0",
+		"tailwindcss": "^4.2.4"
+	},
+	"devDependencies": {
+		"@babel/core": "^7.29.0",
+		"@biomejs/biome": "2.4.13",
+		"@rolldown/plugin-babel": "^0.2.3",
+		"@types/babel__core": "^7.20.5",
+		"@types/mdx": "^2.0.13",
+		"@types/node": "^24.12.2",
+		"@types/react": "^19.2.14",
+		"@types/react-dom": "^19.2.3",
+		"@vitejs/plugin-react": "^6.0.1",
+		"babel-plugin-react-compiler": "^1.0.0",
+		"pagefind": "^1.5.2",
+		"typescript": "~6.0.2",
+		"vite": "^8.0.10"
+	}
+}
