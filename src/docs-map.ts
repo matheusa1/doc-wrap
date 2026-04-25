@@ -2,10 +2,12 @@ import type { MDXComponents } from "mdx/types";
 import type { ComponentType } from "react";
 
 export type DocFrontmatter = {
-	title: string;
-	description: string;
+	author: string;
 	category: string;
+	description: string;
 	order: number;
+	title: string;
+	updatedAt: string;
 };
 
 type DocModule = {
@@ -39,6 +41,7 @@ const createDocPage = ([filePath, module]: [string, DocModule]): DocPage => {
 		.replaceAll(/\b\w/g, (letter) => letter.toUpperCase());
 
 	return {
+		author: module.frontmatter?.author ?? "",
 		category: module.frontmatter?.category ?? "Documentação",
 		Component: module.default,
 		description: module.frontmatter?.description ?? "",
@@ -48,6 +51,7 @@ const createDocPage = ([filePath, module]: [string, DocModule]): DocPage => {
 		segments: slug.split("/"),
 		slug,
 		title: module.frontmatter?.title ?? fallbackTitle ?? slug,
+		updatedAt: module.frontmatter?.updatedAt ?? "",
 	};
 };
 

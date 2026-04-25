@@ -10,6 +10,18 @@ const normalizePath = (path: string) => {
 	return path.replace(/\/$/, "");
 };
 
+const formatDocumentDate = (value: string) => {
+	const match = value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+
+	if (!match) {
+		return value;
+	}
+
+	const [, year, month, day] = match;
+
+	return `${day}/${month}/${year}`;
+};
+
 export function DocsPage() {
 	const location = useLocation();
 	const currentPath = normalizePath(location.pathname);
@@ -39,6 +51,7 @@ export function DocsPage() {
 	}
 
 	const Component = currentDoc.Component;
+	const formattedUpdatedAt = formatDocumentDate(currentDoc.updatedAt);
 
 	return (
 		<DocsLayout currentDoc={currentDoc} currentPath={currentPath}>
@@ -59,6 +72,15 @@ export function DocsPage() {
 					>
 						{currentDoc.description}
 					</p>
+					<div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-muted-foreground text-sm">
+						<span>Por {currentDoc.author}</span>
+						<span aria-hidden="true" className="text-border">
+							|
+						</span>
+						<time dateTime={currentDoc.updatedAt}>
+							Atualizado em {formattedUpdatedAt}
+						</time>
+					</div>
 				</header>
 
 				<div className="mt-8 max-w-none text-muted-foreground [&_a]:font-medium [&_a]:text-primary [&_a]:underline [&_a]:underline-offset-4 [&_code]:rounded [&_code]:bg-muted [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-foreground [&_h2]:mt-10 [&_h2]:mb-4 [&_h2]:font-semibold [&_h2]:text-2xl [&_h2]:text-foreground [&_h3]:mt-8 [&_h3]:mb-3 [&_h3]:font-semibold [&_h3]:text-foreground [&_h3]:text-xl [&_li]:leading-7 [&_ol]:list-decimal [&_ol]:space-y-2 [&_ol]:pl-6 [&_p]:my-4 [&_p]:leading-7 [&_strong]:font-semibold [&_strong]:text-foreground [&_ul]:list-disc [&_ul]:space-y-2 [&_ul]:pl-6">
