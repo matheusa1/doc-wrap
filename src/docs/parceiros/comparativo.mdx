@@ -1,35 +1,42 @@
 ---
 title: Comparativo de Parceiros
-description: Entenda como comparar informacoes entre parceiros cadastrados.
+description: Entenda como comparar informações entre parceiros cadastrados.
 category: Cadastros
 order: 2
 ---
+import {Steps} from "@/components/docs/Step.tsx";
+import {Callout} from "@/components/docs/Callout.tsx";
 
 ## Objetivo
 
-O comparativo de parceiros ajuda a avaliar dados cadastrais, historico de negociacoes e indicadores relevantes antes de tomar uma decisao comercial.
+O comparativo de parceiros ajuda a avaliar dados cadastrais, histórico de negociações e indicadores relevantes antes de tomar uma decisão comercial.
 
-<Callout title="Dica de analise" type="info">
-  Compare parceiros usando criterios consistentes. Assim, a decisao fica baseada em informacoes equivalentes.
+<Callout title="Dica de análise" type="hint">
+  Compare parceiros usando critérios consistentes. Assim, a decisão fica baseada em informações equivalentes.
 </Callout>
 
 ## Como comparar
 
-<Step number={1} title="Selecione os parceiros">
-  Escolha dois ou mais parceiros cadastrados para iniciar a comparacao.
-</Step>
+export const steps = [
+    {
+        title: "Selecione os parceiros",
+        children: "Escolha dois ou mais parceiros cadastrados para iniciar a comparação."
+    },
+    {
+        title: "Verifique os indicadores",
+        children: "Analise dados como volume negociado, pagamentos pendentes, recorrência e histórico de contato."
+    },
+    {
+        title: "Registre a conclusão",
+        children: "Use o resultado da comparação para orientar compras, vendas, contratos ou proximos contatos."
+    }
+]
 
-<Step number={2} title="Verifique os indicadores">
-  Analise dados como volume negociado, pagamentos pendentes, recorrencia e historico de contato.
-</Step>
-
-<Step number={3} title="Registre a conclusao">
-  Use o resultado da comparacao para orientar compras, vendas, contratos ou proximos contatos.
-</Step>
+<Steps steps={steps} />
 
 ## Campos recomendados
 
 - Tipo de parceiro.
 - Documento e localidade.
-- Historico financeiro.
-- Observacoes comerciais.
+- Histórico financeiro.
+- Observações comerciais.

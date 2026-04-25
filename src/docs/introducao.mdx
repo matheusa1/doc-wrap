@@ -4,6 +4,9 @@ description: Visão geral da central de documentação e dos guias disponíveis.
 category: Primeiros passos
 order: 0
 ---
+import { Steps} from "@/components/docs/Step.tsx";
+import {Callout} from "@/components/docs/Callout.tsx";
+
 
 ## Bem-vindo
 
@@ -15,14 +18,19 @@ Esta central organiza os guias do usuário em páginas leves escritas com MDX. C
 
 ## Navegação inicial
 
-<Step number={1} title="Use a sidebar">
-  Selecione um guia na lateral para abrir o documento correspondente.
-</Step>
+export const steps = [
+    {
+        title: "Use a sidebar",
+        children: "Selecione um guia na lateral para abrir o documento correspondente."
+    },
+    {
+        title: "Busque por titulo ou descrição",
+        children: "Digite uma palavra no campo de busca para filtrar os documentos localmente."
+    },
+    {
+        title: "Crie novos arquivos MDX",
+        children: "Adicione novos arquivos em `src/docs` para expandir a central sem alterar manualmente a lista de rotas."
+    },
+]
 
-<Step number={2} title="Busque por titulo ou descrição">
-  Digite uma palavra no campo de busca para filtrar os documentos localmente.
-</Step>
-
-<Step number={3} title="Crie novos arquivos MDX">
-  Adicione novos arquivos em `src/docs` para expandir a central sem alterar manualmente a lista de rotas.
-</Step>
+<Steps steps={steps} />

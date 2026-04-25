@@ -1,34 +1,41 @@
 ---
 title: Contas Financeiras
-description: Guia para organizar contas e acompanhar movimentacoes financeiras.
+description: Guia para organizar contas e acompanhar movimentações financeiras.
 category: Financeiro
 order: 1
 ---
+import {Steps} from "@/components/docs/Step.tsx";
+import {Callout} from "@/components/docs/Callout.tsx";
 
-## Visao geral
+## Visão geral
 
 As contas financeiras representam os locais onde o dinheiro entra ou sai, como caixa, banco, cooperativa ou carteira digital.
 
-<Callout title="Atencao" type="warning">
-  Cadastre contas separadas para operacoes diferentes quando precisar acompanhar saldos e relatorios com mais precisao.
+<Callout title="Atenção" type="warning">
+  Cadastre contas separadas para operações diferentes quando precisar acompanhar saldos e relatórios com mais precisão.
 </Callout>
 
 ## Cadastro da conta
 
-<Step number={1} title="Defina o tipo de conta">
-  Escolha se a conta representa caixa, banco, cooperativa ou outro controle financeiro.
-</Step>
+export const steps = [
+    {
+        title: "Defina o tipo de conta",
+        children: "Escolha se a conta representa caixa, banco, cooperativa ou outro controle financeiro."
+    },
+    {
+        title: "Informe os dados de identificação",
+        children: "Preencha nome, descrição e dados complementares que ajudem a reconhecer a conta no dia a dia."
+    },
+    {
+        title: "Acompanhe as movimentações",
+        children: "Use a conta em lançamentos de receitas, despesas e transferências para manter o saldo atualizado."
+    }
+]
 
-<Step number={2} title="Informe os dados de identificacao">
-  Preencha nome, descricao e dados complementares que ajudem a reconhecer a conta no dia a dia.
-</Step>
+<Steps steps={steps} />
 
-<Step number={3} title="Acompanhe as movimentacoes">
-  Use a conta em lancamentos de receitas, despesas e transferencias para manter o saldo atualizado.
-</Step>
+## Organização sugerida
 
-## Organizacao sugerida
-
-- Uma conta para caixa fisico.
+- Uma conta para caixa físico.
 - Uma conta para cada banco usado na fazenda.
-- Uma conta separada para operacoes de safra, quando necessario.
+- Uma conta separada para operações de safra, quando necessário.

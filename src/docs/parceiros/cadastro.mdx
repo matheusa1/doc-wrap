@@ -4,31 +4,38 @@ description: Guia para cadastrar parceiros comerciais.
 category: Cadastros
 order: 1
 ---
+import {Steps} from "@/components/docs/Step.tsx";
+import {Callout} from "@/components/docs/Callout.tsx";
 
 ## Quando usar
 
-Use o cadastro de parceiros para registrar clientes, fornecedores, produtores, transportadoras e outros contatos comerciais usados na operacao rural.
+Use o cadastro de parceiros para registrar clientes, fornecedores, produtores, transportadoras e outros contatos comerciais usados na operação rural.
 
-<Callout title="Antes de comecar" type="success">
-  Separe os dados basicos do parceiro, como nome, documento, telefone, endereco e tipo de relacionamento comercial.
+<Callout title="Antes de começar" type="hint">
+  Separe os dados básicos do parceiro, como nome, documento, telefone, endereço e tipo de relacionamento comercial.
 </Callout>
 
 ## Passo a passo
 
-<Step number={1} title="Abra a area de parceiros">
-  Acesse o menu de cadastros e selecione a opcao de parceiros comerciais.
-</Step>
+export const steps = [
+    {
+        title: "Abra a área de parceiros",
+        children: "Acesse o menu de cadastros e selecione a opção de parceiros comerciais."
+    },
+    {
+        title: "Informe os dados principais",
+        children: "Preencha nome, documento, contato e classificação do parceiro. Esses campos ajudam nas buscas e nos relatórios."
+    },
+    {
+        title: "Revise e salve",
+        children: "Confira os dados antes de salvar. Depois do cadastro, o parceiro já pode ser vinculado a operações financeiras e comerciais."
+    }
+]
 
-<Step number={2} title="Informe os dados principais">
-  Preencha nome, documento, contato e classificacao do parceiro. Esses campos ajudam nas buscas e nos relatorios.
-</Step>
-
-<Step number={3} title="Revise e salve">
-  Confira os dados antes de salvar. Depois do cadastro, o parceiro ja pode ser vinculado a operacoes financeiras e comerciais.
-</Step>
+<Steps steps={steps} />
 
 ## Boas praticas
 
 - Evite duplicar parceiros com nomes parecidos.
-- Use uma classificacao clara para facilitar filtros.
+- Use uma classificação clara para facilitar filtros.
 - Mantenha os contatos atualizados para reduzir retrabalho.

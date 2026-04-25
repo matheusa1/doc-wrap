@@ -1,14 +1,6 @@
-import type { MDXComponents } from "mdx/types";
 import { Navigate, useLocation } from "react-router-dom";
-import { Callout } from "@/components/docs/Callout";
 import { DocsLayout } from "@/components/docs/DocsLayout";
-import { Step } from "@/components/docs/Step";
 import { docPagesByPath, firstDocPath } from "@/docs-map";
-
-const mdxComponents = {
-	Callout,
-	Step,
-} satisfies MDXComponents;
 
 const normalizePath = (path: string) => {
 	if (path.length <= 1) {
@@ -50,10 +42,7 @@ export function DocsPage() {
 
 	return (
 		<DocsLayout currentDoc={currentDoc} currentPath={currentPath}>
-			<article
-				className="rounded-3xl border bg-card p-6 text-card-foreground shadow-sm sm:p-10"
-				data-pagefind-body
-			>
+			<article data-pagefind-body>
 				<header className="border-b pb-8">
 					<p className="font-semibold text-primary text-sm uppercase tracking-wide">
 						{currentDoc.category}
@@ -73,7 +62,7 @@ export function DocsPage() {
 				</header>
 
 				<div className="mt-8 max-w-none text-muted-foreground [&_a]:font-medium [&_a]:text-primary [&_a]:underline [&_a]:underline-offset-4 [&_code]:rounded [&_code]:bg-muted [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-foreground [&_h2]:mt-10 [&_h2]:mb-4 [&_h2]:font-semibold [&_h2]:text-2xl [&_h2]:text-foreground [&_h3]:mt-8 [&_h3]:mb-3 [&_h3]:font-semibold [&_h3]:text-foreground [&_h3]:text-xl [&_li]:leading-7 [&_ol]:list-decimal [&_ol]:space-y-2 [&_ol]:pl-6 [&_p]:my-4 [&_p]:leading-7 [&_strong]:font-semibold [&_strong]:text-foreground [&_ul]:list-disc [&_ul]:space-y-2 [&_ul]:pl-6">
-					<Component components={mdxComponents} />
+					<Component />
 				</div>
 			</article>
 		</DocsLayout>
