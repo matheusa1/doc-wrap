@@ -1,25 +1,45 @@
-import type { ReactNode } from "react";
+import type * as React from "react";
 
 type StepProps = {
-	children: ReactNode;
-	number: number | string;
+	children: React.ReactNode;
+	number?: number;
 	title: string;
+};
+
+type TSteps = {
+	steps: StepProps[];
 };
 
 export function Step({ children, number, title }: StepProps) {
 	return (
-		<section className="my-2 flex flex-col gap-4 rounded-xl border-2 border-foreground p-5 shadow-sm">
-			<header className="w-full">
+		<section className={"flex flex-col"}>
+			<header className="flex w-full gap-4">
+				<p className="flex aspect-square h-8 w-8 items-center justify-center rounded-full bg-primary p-2 font-semibold text-primary-foreground text-sm">
+					{number}
+				</p>
 				<div className="flex items-center space-x-5">
-					<p className="flex aspect-square h-8 w-8 items-center justify-center rounded-full bg-primary p-2 font-semibold text-primary-foreground text-sm">
-						{number}
-					</p>
 					<h1 className="font-semibold text-foreground text-lg">{title}</h1>
 				</div>
 			</header>
-			<div className="min-w-0 space-y-2">
-				<div className="text-foreground text-sm leading-6">{children}</div>
-			</div>
+			<div className="ml-12 text-foreground text-sm leading-6">{children}</div>
 		</section>
 	);
 }
+
+export const Steps: React.FC<TSteps> = ({ steps = [] }) => {
+	const formattedSteps: StepProps[] = steps?.map((step, index) => ({
+		children: step.children,
+		title: step.title,
+		number: step.number ?? index + 1,
+	}));
+
+	return (
+		<div className={"relative flex flex-col"}>
+			{formattedSteps.map((step) => (
+				<Step key={step.number} number={step.number} title={step.title}>
+					{step.children}
+				</Step>
+			))}
+		</div>
+	);
+};
