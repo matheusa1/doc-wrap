@@ -1,5 +1,19 @@
-import { useEffect, useState } from "react";
+import { Search, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import {
+	Field,
+	FieldDescription,
+	FieldLabel,
+} from "@/components/ui/field";
+import {
+	InputGroup,
+	InputGroupAddon,
+	InputGroupButton,
+	InputGroupInput,
+} from "@/components/ui/input-group";
+import { Kbd, KbdGroup } from "@/components/ui/kbd";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { searchDocPages } from "../../docs-map";
 
 type PagefindSearchResult = {
@@ -63,9 +77,16 @@ const searchWithPagefind = async (query: string): Promise<SearchResult[]> => {
 };
 
 export function DocsSearch() {
+	const inputGroupRef = useRef<HTMLDivElement>(null);
+	const inputRef = useRef<HTMLInputElement>(null);
 	const [mode, setMode] = useState<SearchMode>("idle");
+	const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 	const [query, setQuery] = useState("");
 	const [results, setResults] = useState<SearchResult[]>([]);
+
+	const isAppleDevice =
+		typeof window !== "undefined" &&
+		/Mac|iPhone|iPad|iPod/.test(window.navigator.platform);
 
 	useEffect(() => {
 		const normalizedQuery = query.trim();
@@ -73,6 +94,7 @@ export function DocsSearch() {
 		if (!normalizedQuery) {
 			setMode("idle");
 			setResults([]);
+			setIsPopoverOpen(false);
 			return;
 		}
 
@@ -109,68 +131,173 @@ export function DocsSearch() {
 		};
 	}, [query]);
 
+	useEffect(() => {
+		const handleKeyDown = (event: KeyboardEvent) => {
+			if (
+				event.defaultPrevented ||
+				event.key.toLowerCase() !== "k" ||
+				(!event.ctrlKey && !event.metaKey) ||
+				event.altKey ||
+				event.shiftKey
+			) {
+				return;
+			}
+
+			event.preventDefault();
+			inputRef.current?.focus();
+
+			if (query.trim().length > 0) {
+				setIsPopoverOpen(true);
+			}
+		};
+
+		window.addEventListener("keydown", handleKeyDown);
+
+		return () => {
+			window.removeEventListener("keydown", handleKeyDown);
+		};
+	}, [query]);
+
 	const hasQuery = query.trim().length > 0;
+	const popoverOpen = hasQuery && isPopoverOpen;
 	const statusText = (() => {
 		if (!hasQuery) {
-			return "Digite para buscar no conteudo dos documentos.";
+			return "Digite para buscar no conteúdo dos documentos.";
 		}
 
 		if (mode === "loading") {
-			return "Buscando no indice Pagefind...";
+			return "Buscando...";
 		}
 
-		if (mode === "pagefind") {
-			return `${results.length} ${results.length === 1 ? "resultado Pagefind" : "resultados Pagefind"}`;
+		return `${results.length} ${results.length === 1 ? "resultado" : "resultados"}`;
+	})();
+
+	const handleQueryChange = (value: string) => {
+		setQuery(value);
+		setIsPopoverOpen(value.trim().length > 0);
+	};
+
+	const clearSearch = () => {
+		setQuery("");
+		setIsPopoverOpen(false);
+		inputRef.current?.focus();
+	};
+
+	const resultsContent = (() => {
+		if (mode === "loading") {
+			return (
+				<p className="px-2.5 py-2 text-muted-foreground text-sm">Buscando...</p>
+			);
 		}
 
-		return `${results.length} ${results.length === 1 ? "resultado local" : "resultados locais"}`;
+		if (results.length === 0) {
+			return (
+				<p className="rounded-md border border-dashed p-3 text-muted-foreground text-sm">
+					Nenhum resultado encontrado.
+				</p>
+			);
+		}
+
+		return (
+			<ul className="grid gap-1">
+				{results.map((result) => (
+					<li key={`${result.url}-${result.title}`}>
+						<Link
+							className="block rounded-md px-2.5 py-2 text-sm transition hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+							onClick={() => setIsPopoverOpen(false)}
+							to={result.url}
+						>
+							<span className="font-medium text-foreground">
+								{result.title}
+							</span>
+							{result.excerpt ? (
+								<span className="mt-1 line-clamp-2 block text-muted-foreground text-xs leading-5">
+									{result.excerpt}
+								</span>
+							) : null}
+						</Link>
+					</li>
+				))}
+			</ul>
+		);
 	})();
 
 	return (
-		<div className="space-y-3" data-pagefind-ignore="all">
-			<label
-				className="font-medium text-slate-700 text-sm"
-				htmlFor="docs-search"
-			>
-				Buscar com Pagefind
-			</label>
-			<input
-				className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-slate-950 text-sm outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
-				id="docs-search"
-				onChange={(event) => setQuery(event.target.value)}
-				placeholder="Buscar nos guias"
-				type="search"
-				value={query}
-			/>
-			<p className="text-slate-500 text-xs">{statusText}</p>
+		<Field className="gap-1.5" data-pagefind-ignore="all">
+			<FieldLabel htmlFor="docs-search" className="text-sidebar-foreground">
+				Buscar
+			</FieldLabel>
+			<Popover
+				open={popoverOpen}
+				onOpenChange={(nextOpen, details) => {
+					if (!nextOpen && details.reason === "trigger-press" && hasQuery) {
+						setIsPopoverOpen(true);
+						return;
+					}
 
-			{hasQuery && mode !== "loading" ? (
-				results.length > 0 ? (
-					<ul className="space-y-2">
-						{results.map((result) => (
-							<li key={`${result.url}-${result.title}`}>
-								<Link
-									className="block rounded-xl border border-slate-200 bg-white p-3 text-sm transition hover:border-emerald-300 hover:text-emerald-800"
-									to={result.url}
+					setIsPopoverOpen(nextOpen && hasQuery);
+				}}
+			>
+				<div className="w-full" ref={inputGroupRef}>
+					<InputGroup className="bg-background">
+						<InputGroupAddon>
+							<PopoverTrigger
+								aria-label="Abrir busca"
+								onClick={() => {
+									inputRef.current?.focus();
+								}}
+								render={<InputGroupButton size="icon-xs" variant="ghost" />}
+							>
+								<Search className="size-3.5" />
+							</PopoverTrigger>
+						</InputGroupAddon>
+						<InputGroupInput
+							id="docs-search"
+							onChange={(event) => handleQueryChange(event.target.value)}
+							onFocus={() => {
+								if (hasQuery) {
+									setIsPopoverOpen(true);
+								}
+							}}
+							onKeyDown={(event) => {
+								if (event.key === "Escape") {
+									setIsPopoverOpen(false);
+								}
+							}}
+							placeholder="Buscar nos guias"
+							ref={inputRef}
+							type="search"
+							value={query}
+						/>
+						<InputGroupAddon align="inline-end">
+							{hasQuery ? (
+								<InputGroupButton
+									aria-label="Limpar busca"
+									onClick={clearSearch}
+									size="icon-xs"
 								>
-									<span className="font-semibold text-slate-950">
-										{result.title}
-									</span>
-									{result.excerpt ? (
-										<span className="mt-1 line-clamp-2 block text-slate-500 text-xs leading-5">
-											{result.excerpt}
-										</span>
-									) : null}
-								</Link>
-							</li>
-						))}
-					</ul>
-				) : (
-					<p className="rounded-xl border border-slate-200 border-dashed p-3 text-slate-500 text-sm">
-						Nenhum resultado encontrado.
-					</p>
-				)
-			) : null}
-		</div>
+									<X className="size-3.5" />
+								</InputGroupButton>
+							) : (
+								<KbdGroup aria-label="Atalho de busca">
+									<Kbd>{isAppleDevice ? "⌘" : "Ctrl"}</Kbd>
+									<Kbd>K</Kbd>
+								</KbdGroup>
+							)}
+						</InputGroupAddon>
+					</InputGroup>
+				</div>
+				<PopoverContent
+					align="start"
+					anchor={inputGroupRef}
+					className="max-h-80 w-(--anchor-width) overflow-y-auto p-1"
+					initialFocus={false}
+					sideOffset={6}
+				>
+					{resultsContent}
+				</PopoverContent>
+			</Popover>
+			<FieldDescription className="text-xs">{statusText}</FieldDescription>
+		</Field>
 	);
 }
