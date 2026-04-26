@@ -6,9 +6,9 @@ type TContainer = HTMLProps<HTMLDivElement> & {
 	children: React.ReactNode;
 };
 
-const Container: FC<TContainer> = ({ children, ...props }) => {
+const Container: FC<TContainer> = ({ children, className, ...props }) => {
 	return (
-		<div className={cn("mx-auto max-w-3xl", props.className)} {...props}>
+		<div className={cn("mx-auto max-w-3xl", className)} {...props}>
 			{children}
 		</div>
 	);
