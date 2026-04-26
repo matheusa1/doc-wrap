@@ -1,8 +1,11 @@
 import { Navigate, Route, Routes } from "react-router-dom";
+import { useSmoothHashScroll } from "@/hooks/use-smooth-hash-scroll";
 import { DocsPage } from "./Docs";
 import { Home } from "./Home";
 
 export default function App() {
+	useSmoothHashScroll();
+
 	return (
 		<Routes>
 			<Route element={<Home />} path="/" />
