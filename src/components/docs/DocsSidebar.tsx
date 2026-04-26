@@ -1,9 +1,8 @@
-import { BookOpenText, Home } from "lucide-react";
+import { BookOpenText } from "lucide-react";
 import { Link } from "react-router-dom";
 import {
 	Sidebar,
 	SidebarContent,
-	SidebarFooter,
 	SidebarGroup,
 	SidebarGroupContent,
 	SidebarGroupLabel,
@@ -84,20 +83,6 @@ export function DocsSidebar({ currentPath }: DocsSidebarProps) {
 					</SidebarGroup>
 				))}
 			</SidebarContent>
-
-			<SidebarFooter className="border-sidebar-border border-t p-4">
-				<SidebarMenu>
-					<SidebarMenuItem>
-						<SidebarMenuButton
-							render={<Link to="/" />}
-							tooltip="Voltar para home"
-						>
-							<Home className="size-4" />
-							<span>Voltar para home</span>
-						</SidebarMenuButton>
-					</SidebarMenuItem>
-				</SidebarMenu>
-			</SidebarFooter>
 
 			<SidebarRail />
 		</Sidebar>
