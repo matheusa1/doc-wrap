@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { ThemeToggle } from "@/components/ui/themeToggle";
+import { normalizePath } from "@/lib/path";
 
 type AppHeaderProps = {
 	leading?: ReactNode;
@@ -22,14 +23,6 @@ const navigationItems = [
 		path: "/docs",
 	},
 ];
-
-const normalizePath = (path: string) => {
-	if (path.length <= 1) {
-		return path;
-	}
-
-	return path.replace(/\/$/, "");
-};
 
 const isNavigationItemActive = (currentPath: string, itemPath: string) => {
 	if (itemPath === "/") {

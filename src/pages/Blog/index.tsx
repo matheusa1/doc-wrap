@@ -18,14 +18,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
-
-const normalizePath = (path: string) => {
-	if (path.length <= 1) {
-		return path;
-	}
-
-	return path.replace(/\/$/, "");
-};
+import { normalizePath } from "@/lib/path";
 
 const formatDate = (value: string) => {
 	const match = value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
