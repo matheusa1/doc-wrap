@@ -1,93 +1,60 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
+import {
+	getHashTarget,
+	getSamePageHash,
+	getScrollBehavior,
+	isModifiedClick,
+} from "./use-smooth-hash-scroll.utils";
 
-const isModifiedClick = (event: MouseEvent) =>
-	event.button !== 0 ||
-	event.altKey ||
-	event.ctrlKey ||
-	event.metaKey ||
-	event.shiftKey;
+const scrollToHashTarget = (hash: string) => {
+	const target = getHashTarget(hash);
 
-const getSamePageHash = (anchor: HTMLAnchorElement) => {
-	if (anchor.hasAttribute("download") || anchor.target) {
-		return null;
+	if (!target) {
+		return;
 	}
 
-	const href = anchor.getAttribute("href");
+	target.scrollIntoView({
+		behavior: getScrollBehavior(),
+		block: "start",
+	});
 
-	if (!href || href === "#") {
-		return null;
-	}
-
-	const url = new URL(anchor.href);
-
-	if (
-		url.origin !== window.location.origin ||
-		url.pathname !== window.location.pathname ||
-		url.search !== window.location.search ||
-		!url.hash
-	) {
-		return null;
-	}
-
-	return url.hash;
-};
-
-const decodeHash = (hash: string) => {
-	try {
-		return decodeURIComponent(hash.slice(1));
-	} catch {
-		return hash.slice(1);
-	}
-};
-
-const getHashTarget = (hash: string) => {
-	const id = decodeHash(hash);
-
-	return id ? document.getElementById(id) : null;
+	return target;
 };
 
 export const useSmoothHashScroll = () => {
-	useEffect(() => {
-		const handleClick = (event: MouseEvent) => {
-			if (event.defaultPrevented || isModifiedClick(event)) {
-				return;
-			}
+	const handleDocumentClick = useCallback((event: MouseEvent) => {
+		if (event.defaultPrevented || isModifiedClick(event)) {
+			return;
+		}
 
-			if (!(event.target instanceof Element)) {
-				return;
-			}
+		if (!(event.target instanceof Element)) {
+			return;
+		}
 
-			const anchor = event.target.closest("a[href]");
+		const anchor = event.target.closest("a[href]");
 
-			if (!(anchor instanceof HTMLAnchorElement)) {
-				return;
-			}
+		if (!(anchor instanceof HTMLAnchorElement)) {
+			return;
+		}
 
-			const hash = getSamePageHash(anchor);
+		const hash = getSamePageHash(anchor);
 
-			if (!hash) {
-				return;
-			}
+		if (!hash) {
+			return;
+		}
 
-			const target = getHashTarget(hash);
+		const target = scrollToHashTarget(hash);
 
-			if (!target) {
-				return;
-			}
+		if (!target) {
+			return;
+		}
 
-			const prefersReducedMotion = globalThis.matchMedia(
-				"(prefers-reduced-motion: reduce)",
-			).matches;
-
-			event.preventDefault();
-			target.scrollIntoView({
-				behavior: prefersReducedMotion ? "auto" : "smooth",
-				block: "start",
-			});
-		};
-
-		document.addEventListener("click", handleClick);
-
-		return () => document.removeEventListener("click", handleClick);
+		event.preventDefault();
 	}, []);
+
+	useEffect(() => {
+		document.addEventListener("click", handleDocumentClick);
+
+		return () => document.removeEventListener("click", handleDocumentClick);
+	}, [handleDocumentClick]);
 };
