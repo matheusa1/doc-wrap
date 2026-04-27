@@ -3,8 +3,10 @@ import mdx from "@mdx-js/rollup";
 import babel from "@rolldown/plugin-babel";
 import tailwindcss from "@tailwindcss/vite";
 import react, { reactCompilerPreset } from "@vitejs/plugin-react";
+import rehypeKatex from "rehype-katex";
 import rehypePrettyCode from "rehype-pretty-code";
 import remarkFrontmatter from "remark-frontmatter";
+import remarkMath from "remark-math";
 import remarkMdxFrontmatter from "remark-mdx-frontmatter";
 import { defineConfig } from "vite";
 
@@ -15,6 +17,7 @@ export default defineConfig({
 			enforce: "pre",
 			...mdx({
 				rehypePlugins: [
+					rehypeKatex,
 					[
 						rehypePrettyCode,
 						{
@@ -28,6 +31,7 @@ export default defineConfig({
 				],
 				remarkPlugins: [
 					remarkFrontmatter,
+					remarkMath,
 					[remarkMdxFrontmatter, { name: "frontmatter" }],
 				],
 			}),

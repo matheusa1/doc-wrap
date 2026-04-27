@@ -2,6 +2,7 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/geist";
+@import "katex/dist/katex.min.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -282,5 +283,27 @@
 		overflow-x: auto;
 		margin: 0.75rem 0;
 		font-size: 0.8125rem;
+	}
+
+	.mdx-content .katex {
+		font-size: 1.05em;
+	}
+
+	.mdx-content .katex-display {
+		overflow-x: auto;
+		overflow-y: hidden;
+		margin: 1.5rem 0;
+		border: 1px solid var(--border);
+		border-radius: 1rem;
+		background: var(--card);
+		padding: 1rem;
+		text-align: center;
+		box-shadow: 0 12px 30px oklch(0 0 0 / 6%);
+	}
+
+	.mdx-content .katex-display > .katex {
+		display: inline-block;
+		min-width: max-content;
+		text-align: initial;
 	}
 }
