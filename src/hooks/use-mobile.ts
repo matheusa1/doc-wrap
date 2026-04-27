@@ -7,17 +7,18 @@ export const useIsMobile = () => {
 		undefined,
 	);
 
+	const updateIsMobile = React.useCallback(() => {
+		setIsMobile(globalThis.innerWidth < MOBILE_BREAKPOINT);
+	}, []);
+
 	React.useEffect(() => {
 		const mql = globalThis.matchMedia(
 			`(max-width: ${MOBILE_BREAKPOINT - 1}px)`,
 		);
-		const onChange = () => {
-			setIsMobile(globalThis.innerWidth < MOBILE_BREAKPOINT);
-		};
-		mql.addEventListener("change", onChange);
-		setIsMobile(globalThis.innerWidth < MOBILE_BREAKPOINT);
-		return () => mql.removeEventListener("change", onChange);
-	}, []);
+		mql.addEventListener("change", updateIsMobile);
+		updateIsMobile();
+		return () => mql.removeEventListener("change", updateIsMobile);
+	}, [updateIsMobile]);
 
 	return !!isMobile;
 };
