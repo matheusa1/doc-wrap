@@ -248,4 +248,39 @@
 		font-weight: var(--shiki-dark-font-weight, inherit);
 		text-decoration: var(--shiki-dark-text-decoration, inherit);
 	}
+
+	.mdx-content .mermaid-diagram {
+		overflow-x: auto;
+		margin: 1.5rem 0;
+		border: 1px solid var(--border);
+		border-radius: 1rem;
+		background: var(--card);
+		padding: 1rem;
+		box-shadow: 0 12px 30px oklch(0 0 0 / 6%);
+	}
+
+	.mdx-content .mermaid-diagram-canvas {
+		min-width: max-content;
+	}
+
+	.mdx-content .mermaid-diagram svg {
+		display: block;
+		max-width: none;
+	}
+
+	.mdx-content .mermaid-diagram-error {
+		border-color: color-mix(in oklch, var(--destructive) 45%, var(--border));
+		background: color-mix(in oklch, var(--destructive) 8%, var(--card));
+	}
+
+	.mdx-content .mermaid-diagram-error figcaption {
+		font-weight: 700;
+		color: var(--destructive);
+	}
+
+	.mdx-content figure.mermaid-diagram-error pre {
+		overflow-x: auto;
+		margin: 0.75rem 0;
+		font-size: 0.8125rem;
+	}
 }
