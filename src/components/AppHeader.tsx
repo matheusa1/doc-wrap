@@ -45,25 +45,30 @@ export function AppHeader({ leading }: AppHeaderProps) {
 
 	return (
 		<header
-			className="sticky top-0 z-20 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80"
+			className="sticky top-0 z-20 border-b bg-background/95 backdrop-blur-sm supports-[backdrop-filter]:bg-background/80"
 			data-pagefind-ignore="all"
 		>
-			<Container className="flex h-14 max-w-6xl items-center justify-between gap-3 px-5">
-				<div className="flex min-w-0 items-center gap-3">
-					{leading ? (
-						<>
-							{leading}
-							<div className="h-4 w-px bg-border" />
-						</>
-					) : null}
-					<Link className="truncate font-semibold text-sm" to="/">
-						DocGest
-					</Link>
+			<Container className="flex min-h-14 max-w-6xl flex-col gap-2 px-4 py-2 sm:h-14 sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:px-5 sm:py-0">
+				<div className="flex min-w-0 items-center justify-between gap-3 sm:justify-start">
+					<div className="flex min-w-0 items-center gap-3">
+						{leading ? (
+							<>
+								{leading}
+								<div className="h-4 w-px bg-border" />
+							</>
+						) : null}
+						<Link className="truncate font-semibold text-sm" to="/">
+							DocGest
+						</Link>
+					</div>
+					<div className="shrink-0 sm:hidden">
+						<ThemeToggle />
+					</div>
 				</div>
 
-				<div className="flex items-center gap-1.5">
+				<div className="flex min-w-0 items-center gap-1.5 sm:w-auto">
 					<nav
-						className="flex items-center gap-1"
+						className="-mx-1 flex min-w-0 flex-1 items-center gap-1 overflow-x-auto px-1 pb-1 sm:mx-0 sm:flex-none sm:overflow-visible sm:px-0 sm:pb-0"
 						aria-label="Navegação global"
 					>
 						{navigationItems.map((item) => (
@@ -87,7 +92,9 @@ export function AppHeader({ leading }: AppHeaderProps) {
 							</Button>
 						))}
 					</nav>
-					<ThemeToggle />
+					<div className="hidden shrink-0 sm:block">
+						<ThemeToggle />
+					</div>
 				</div>
 			</Container>
 		</header>
