@@ -30,12 +30,14 @@ Cada documento deve ser criado em `src/docs`. O caminho do arquivo define a rota
 
 ```text
 src/docs/primeiros-passos/acesso-inicial.mdx
+src/docs/primeiros-passos/index.mdx
 ```
 
-Esse arquivo será acessado em:
+Esses arquivos serão acessados em:
 
 ```text
 /docs/primeiros-passos/acesso-inicial
+/docs/primeiros-passos
 ```
 
 <Callout title="Rotas automáticas" type="info">
@@ -61,8 +63,8 @@ Campos disponíveis:
 
 - `title`: nome exibido na página, sidebar e resultados de busca.
 - `description`: resumo curto do conteúdo.
-- `category`: grupo usado na navegação lateral.
-- `order`: posição do documento dentro da categoria.
+- `category`: contexto exibido no cabeçalho e útil para classificação editorial.
+- `order`: posição do documento dentro do mesmo diretório ou seção.
 - `author`: responsável pelo conteúdo.
 - `updatedAt`: data de revisão no formato `YYYY-MM-DD`.
 
@@ -101,5 +103,5 @@ import { Callout } from "@/components/docs/Callout.tsx";
 - Escreva títulos objetivos e orientados à tarefa.
 - Prefira uma página por rotina ou decisão importante.
 - Use `h2` para seções principais e `h3` para detalhes.
-- Mantenha a descrição curta, porque ela aparece na sidebar e na busca.
+- Mantenha a descrição curta, porque ela aparece na busca e no cabeçalho da página.
 - Atualize `updatedAt` sempre que revisar regras, telas ou procedimentos.

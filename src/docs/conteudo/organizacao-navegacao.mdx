@@ -16,7 +16,7 @@ export const organizacao = [
   },
   {
     title: "Controle a ordem",
-    children: "Use o campo `order` para ordenar documentos dentro da categoria. Em empate, o título é usado como critério secundário."
+    children: "Use o campo `order` para ordenar documentos dentro do mesmo nível da árvore. Em empate, o título é usado como critério secundário."
   },
   {
     title: "Revise a navegação",
@@ -26,18 +26,15 @@ export const organizacao = [
 
 ## Como a sidebar é montada
 
-A sidebar usa todos os arquivos encontrados em `src/docs`. Cada documento é agrupado pelo campo `category` e ordenado pelo campo `order`.
+A sidebar usa todos os arquivos encontrados em `src/docs`. A árvore é montada pelos diretórios, e arquivos `index.mdx` funcionam como a página raiz de cada pasta.
 
-```mdx
----
-title: Cadastro de usuários
-category: Cadastros
-order: 2
----
+```text
+src/docs/cadastros/index.mdx -> /docs/cadastros
+src/docs/cadastros/usuarios.mdx -> /docs/cadastros/usuarios
 ```
 
-<Callout title="Categorias são texto livre" type="hint">
-  Não existe uma lista fixa de categorias. Para criar um novo grupo na sidebar, use um novo valor em `category`.
+<Callout title="Pastas tambem sao paginas" type="hint">
+  Quando uma pasta possui `index.mdx`, ela aparece como item clicável e também como agrupador visual para os documentos filhos.
 </Callout>
 
 ## Como as URLs são criadas
@@ -45,8 +42,8 @@ order: 2
 O slug vem do caminho do arquivo dentro de `src/docs`.
 
 ```text
+src/docs/cadastros/index.mdx -> /docs/cadastros
 src/docs/cadastros/usuarios.mdx -> /docs/cadastros/usuarios
-src/docs/financeiro/contas.mdx -> /docs/financeiro/contas
 src/docs/introducao.mdx -> /docs/introducao
 ```
 
@@ -54,10 +51,10 @@ Ao renomear um arquivo, a URL também muda. Faça isso com cuidado se a document
 
 ## Breadcrumb
 
-O breadcrumb usa os segmentos do caminho para mostrar a localização do documento. Um arquivo em `src/docs/cadastros/usuarios.mdx` aparece como:
+O breadcrumb usa os segmentos do caminho para mostrar a localização do documento. Quando existir `index.mdx` em um diretório, esse nível também vira link. Um arquivo em `src/docs/cadastros/usuarios.mdx` aparece como:
 
 ```text
-Início / Docs / Cadastros / Cadastro de usuários
+Inicio / Docs / Cadastros / Cadastro de usuarios
 ```
 
 O último item vem do `title` do frontmatter. Os segmentos intermediários vêm do nome das pastas.

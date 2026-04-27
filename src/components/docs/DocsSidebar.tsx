@@ -1,27 +1,77 @@
-import { BookOpenText } from "lucide-react";
+import { BookOpenText, FileText, FolderTree } from "lucide-react";
+import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import {
 	Sidebar,
 	SidebarContent,
 	SidebarGroup,
 	SidebarGroupContent,
-	SidebarGroupLabel,
 	SidebarHeader,
 	SidebarMenu,
 	SidebarMenuButton,
 	SidebarMenuItem,
+	SidebarMenuSub,
+	SidebarMenuSubButton,
+	SidebarMenuSubItem,
 	SidebarRail,
 } from "@/components/ui/sidebar";
-import { docPages, groupDocPages } from "../../docs-map";
+import { docNavigation, type DocNavItem } from "../../docs-map";
 import { DocsSearch } from "./DocsSearch";
 
 type DocsSidebarProps = {
 	currentPath: string;
 };
 
-export function DocsSidebar({ currentPath }: DocsSidebarProps) {
-	const groups = groupDocPages(docPages);
+const isCurrentBranch = (item: DocNavItem, currentPath: string): boolean => {
+	if (item.path === currentPath) {
+		return true;
+	}
 
+	return item.children.some((child) => isCurrentBranch(child, currentPath));
+};
+
+const renderLabel = (item: DocNavItem): ReactNode => (
+	<>
+		{item.children.length > 0 ? (
+			<FolderTree className="size-4 text-sidebar-foreground/70" />
+		) : (
+			<FileText className="size-4 text-sidebar-foreground/70" />
+		)}
+		<span>{item.title}</span>
+	</>
+);
+
+const renderChildItems = (
+	items: DocNavItem[],
+	currentPath: string,
+): ReactNode =>
+	items.map((item) => {
+		const isExactActive = item.path === currentPath;
+		const isBranchActive = isCurrentBranch(item, currentPath);
+
+		return (
+			<SidebarMenuSubItem key={item.path ?? item.segments.join("/")}>
+				{item.path ? (
+					<SidebarMenuSubButton
+						className={isBranchActive && !isExactActive ? "bg-sidebar-accent/40" : undefined}
+						isActive={isExactActive}
+						render={<Link to={item.path} />}
+					>
+						{renderLabel(item)}
+					</SidebarMenuSubButton>
+				) : (
+					<div className="flex h-7 items-center gap-2 px-2 font-medium text-sidebar-foreground/70 text-sm">
+						{renderLabel(item)}
+					</div>
+				)}
+				{item.children.length > 0 ? (
+					<SidebarMenuSub>{renderChildItems(item.children, currentPath)}</SidebarMenuSub>
+				) : null}
+			</SidebarMenuSubItem>
+		);
+	});
+
+export const DocsSidebar: React.FC<DocsSidebarProps> = ({ currentPath }) => {
 	return (
 		<Sidebar collapsible="offcanvas" data-pagefind-ignore="all">
 			<SidebarHeader className="gap-4 border-sidebar-border border-b p-4">
@@ -51,40 +101,42 @@ export function DocsSidebar({ currentPath }: DocsSidebarProps) {
 			</SidebarHeader>
 
 			<SidebarContent>
-				{groups.map((group) => (
-					<SidebarGroup key={group.category}>
-						<SidebarGroupLabel>{group.category}</SidebarGroupLabel>
-						<SidebarGroupContent>
-							<SidebarMenu>
-								{group.pages.map((page) => {
-									const isActive = page.path === currentPath;
+				<SidebarGroup>
+					<SidebarGroupContent>
+						<SidebarMenu>
+							{docNavigation.map((item) => {
+								const isExactActive = item.path === currentPath;
+								const isBranchActive = isCurrentBranch(item, currentPath);
 
-									return (
-										<SidebarMenuItem key={page.path}>
+								return (
+									<SidebarMenuItem key={item.path ?? item.segments.join("/")}>
+										{item.path ? (
 											<SidebarMenuButton
-												className="h-auto items-start py-2"
-												isActive={isActive}
-												render={<Link to={page.path} />}
+												className={isBranchActive && !isExactActive ? "bg-sidebar-accent/40" : undefined}
+												isActive={isExactActive}
+												render={<Link to={item.path} />}
 											>
-												<span className="flex min-w-0 flex-col gap-1">
-													<span className="truncate font-medium">
-														{page.title}
-													</span>
-													<span className="line-clamp-2 text-muted-foreground text-xs leading-5">
-														{page.description}
-													</span>
-												</span>
+												{renderLabel(item)}
 											</SidebarMenuButton>
-										</SidebarMenuItem>
-									);
-								})}
-							</SidebarMenu>
-						</SidebarGroupContent>
-					</SidebarGroup>
-				))}
+										) : (
+											<div className="flex h-8 items-center gap-2 px-2 font-medium text-sidebar-foreground/70 text-sm">
+												{renderLabel(item)}
+											</div>
+										)}
+										{item.children.length > 0 ? (
+											<SidebarMenuSub>
+												{renderChildItems(item.children, currentPath)}
+											</SidebarMenuSub>
+										) : null}
+									</SidebarMenuItem>
+								);
+							})}
+						</SidebarMenu>
+					</SidebarGroupContent>
+				</SidebarGroup>
 			</SidebarContent>
 
 			<SidebarRail />
 		</Sidebar>
 	);
-}
+};

@@ -41,7 +41,7 @@ const slugifyHeading = (value: string) =>
 		.replace(/-+/g, "-");
 
 const createHeadingId = (title: string, idCounts: Map<string, number>) => {
-	const baseId = slugifyHeading(title) || "secao";
+	const baseId = slugifyHeading(title) || "seção";
 	const count = idCounts.get(baseId) ?? 0;
 
 	idCounts.set(baseId, count + 1);
@@ -53,7 +53,7 @@ const areStringArraysEqual = (left: string[], right: string[]) =>
 	left.length === right.length &&
 	left.every((item, index) => item === right[index]);
 
-export function DocsPage() {
+export const DocsPage = () => {
 	const location = useLocation();
 	const contentRef = useRef<HTMLDivElement>(null);
 	const [activeHeadingIds, setActiveHeadingIds] = useState<string[]>([]);
@@ -179,10 +179,10 @@ export function DocsPage() {
 						404
 					</p>
 					<h1 className="mt-3 font-semibold text-3xl text-foreground tracking-tight">
-						Documento nao encontrado
+						Documento não encontrado
 					</h1>
 					<p className="mt-4 text-muted-foreground leading-7">
-						Use a sidebar para acessar uma pagina disponivel da documentacao.
+						Use a sidebar para acessar uma página disponível da documentação.
 					</p>
 				</section>
 			</DocsLayout>
@@ -242,4 +242,4 @@ export function DocsPage() {
 			</article>
 		</DocsLayout>
 	);
-}
+};
