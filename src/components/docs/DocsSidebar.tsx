@@ -19,6 +19,7 @@ import { docNavigation, type DocNavItem } from "../../docs-map";
 import { DocsSearch } from "./DocsSearch";
 
 type DocsSidebarProps = {
+	className?: string;
 	currentPath: string;
 };
 
@@ -71,9 +72,16 @@ const renderChildItems = (
 		);
 	});
 
-export const DocsSidebar: React.FC<DocsSidebarProps> = ({ currentPath }) => {
+export const DocsSidebar: React.FC<DocsSidebarProps> = ({
+	className,
+	currentPath,
+}) => {
 	return (
-		<Sidebar collapsible="offcanvas" data-pagefind-ignore="all">
+		<Sidebar
+			className={className}
+			collapsible="offcanvas"
+			data-pagefind-ignore="all"
+		>
 			<SidebarHeader className="gap-4 border-sidebar-border border-b p-4">
 				<SidebarMenu>
 					<SidebarMenuItem>
