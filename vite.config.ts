@@ -3,6 +3,7 @@ import mdx from "@mdx-js/rollup";
 import babel from "@rolldown/plugin-babel";
 import tailwindcss from "@tailwindcss/vite";
 import react, { reactCompilerPreset } from "@vitejs/plugin-react";
+import rehypePrettyCode from "rehype-pretty-code";
 import remarkFrontmatter from "remark-frontmatter";
 import remarkMdxFrontmatter from "remark-mdx-frontmatter";
 import { defineConfig } from "vite";
@@ -13,6 +14,18 @@ export default defineConfig({
 		{
 			enforce: "pre",
 			...mdx({
+				rehypePlugins: [
+					[
+						rehypePrettyCode,
+						{
+							keepBackground: false,
+							theme: {
+								dark: "github-dark",
+								light: "github-light",
+							},
+						},
+					],
+				],
 				remarkPlugins: [
 					remarkFrontmatter,
 					[remarkMdxFrontmatter, { name: "frontmatter" }],

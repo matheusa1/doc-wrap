@@ -26,6 +26,7 @@
 		"react": "^19.2.5",
 		"react-dom": "^19.2.5",
 		"react-router-dom": "^7.14.2",
+		"rehype-pretty-code": "^0.14.3",
 		"remark-frontmatter": "^5.0.0",
 		"remark-mdx-frontmatter": "^5.2.0",
 		"shadcn": "^4.4.0",
