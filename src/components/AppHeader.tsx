@@ -63,7 +63,7 @@ const AppHeaderNavigation: React.FC<AppHeaderNavigationProps> = ({
 }) => {
 	return (
 		<nav
-			className="-mx-1 flex min-w-0 flex-1 items-center gap-1 overflow-x-auto px-1 pb-1 sm:mx-0 sm:flex-none sm:overflow-visible sm:px-0 sm:pb-0"
+			className="grid min-w-0 flex-1 grid-cols-1 gap-1 pb-1 min-[28rem]:grid-cols-3 sm:flex sm:flex-none sm:items-center sm:gap-1 sm:overflow-visible sm:px-0 sm:pb-0"
 			aria-label="Navegação global"
 		>
 			{navigationItems.map((item) => {
@@ -72,6 +72,7 @@ const AppHeaderNavigation: React.FC<AppHeaderNavigationProps> = ({
 				return (
 					<Button
 						aria-current={isActive ? "page" : undefined}
+						className="w-full justify-center sm:w-auto"
 						key={item.path}
 						nativeButton={false}
 						render={<Link to={item.path} />}
