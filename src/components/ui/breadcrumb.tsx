@@ -5,99 +5,96 @@ import type * as React from "react";
 
 import { cn } from "@/lib/utils";
 
-function Breadcrumb({ ...props }: React.ComponentProps<"nav">) {
+const Breadcrumb: React.FC<React.ComponentProps<"nav">> = (props) => {
 	return <nav aria-label="breadcrumb" data-slot="breadcrumb" {...props} />;
-}
+};
 
-function BreadcrumbList({ className, ...props }: React.ComponentProps<"ol">) {
+const BreadcrumbList: React.FC<React.ComponentProps<"ol">> = (props) => {
+	const { className, ...rest } = props;
 	return (
 		<ol
 			data-slot="breadcrumb-list"
 			className={cn(
-				"flex flex-wrap items-center gap-1.5 break-words text-muted-foreground text-sm sm:gap-2.5",
+				"wrap-break-word flex flex-wrap items-center gap-1.5 text-muted-foreground text-sm sm:gap-2.5",
 				className,
 			)}
-			{...props}
+			{...rest}
 		/>
 	);
-}
+};
 
-function BreadcrumbItem({ className, ...props }: React.ComponentProps<"li">) {
+const BreadcrumbItem: React.FC<React.ComponentProps<"li">> = (props) => {
+	const { className, ...rest } = props;
 	return (
 		<li
 			data-slot="breadcrumb-item"
 			className={cn("inline-flex items-center gap-1.5", className)}
-			{...props}
+			{...rest}
 		/>
 	);
-}
+};
 
-function BreadcrumbLink({
-	className,
-	render,
-	...props
-}: useRender.ComponentProps<"a"> & React.ComponentProps<"a">) {
+const BreadcrumbLink: React.FC<
+	useRender.ComponentProps<"a"> & React.ComponentProps<"a">
+> = (props) => {
+	const { className, render, ...rest } = props;
 	return useRender({
 		defaultTagName: "a",
 		props: mergeProps<"a">(
 			{
 				className: cn("transition-colors hover:text-foreground", className),
 			},
-			props,
+			rest,
 		),
 		render,
 		state: {
 			slot: "breadcrumb-link",
 		},
 	});
-}
+};
 
-function BreadcrumbPage({ className, ...props }: React.ComponentProps<"span">) {
+const BreadcrumbPage: React.FC<React.ComponentProps<"span">> = (props) => {
+	const { className, ...rest } = props;
 	return (
 		<span
 			aria-current="page"
 			data-slot="breadcrumb-page"
 			className={cn("font-medium text-foreground", className)}
-			{...props}
+			{...rest}
 		/>
 	);
-}
+};
 
-function BreadcrumbSeparator({
-	children,
-	className,
-	...props
-}: React.ComponentProps<"li">) {
+const BreadcrumbSeparator: React.FC<React.ComponentProps<"li">> = (props) => {
+	const { children, className, ...rest } = props;
 	return (
 		<li
 			aria-hidden="true"
 			data-slot="breadcrumb-separator"
 			role="presentation"
 			className={cn("[&>svg]:size-3.5", className)}
-			{...props}
+			{...rest}
 		>
 			{children ?? <ChevronRightIcon />}
 		</li>
 	);
-}
+};
 
-function BreadcrumbEllipsis({
-	className,
-	...props
-}: React.ComponentProps<"span">) {
+const BreadcrumbEllipsis: React.FC<React.ComponentProps<"span">> = (props) => {
+	const { className, ...rest } = props;
 	return (
 		<span
 			aria-hidden="true"
 			data-slot="breadcrumb-ellipsis"
 			role="presentation"
 			className={cn("flex size-9 items-center justify-center", className)}
-			{...props}
+			{...rest}
 		>
 			<MoreHorizontalIcon className="size-4" />
 			<span className="sr-only">Mais</span>
 		</span>
 	);
-}
+};
 
 export {
 	Breadcrumb,

@@ -40,19 +40,17 @@ const buttonVariants = cva(
 	},
 );
 
-function Button({
-	className,
-	variant = "default",
-	size = "default",
-	...props
-}: ButtonPrimitive.Props & VariantProps<typeof buttonVariants>) {
+const Button: React.FC<
+	ButtonPrimitive.Props & VariantProps<typeof buttonVariants>
+> = (props) => {
+	const { className, variant = "default", size = "default", ...rest } = props;
 	return (
 		<ButtonPrimitive
 			data-slot="button"
 			className={cn(buttonVariants({ variant, size, className }))}
-			{...props}
+			{...rest}
 		/>
 	);
-}
+};
 
 export { Button, buttonVariants };
