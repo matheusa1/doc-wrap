@@ -54,6 +54,38 @@ const AppHeaderBrand: React.FC<AppHeaderBrandProps> = ({ leading }) => {
 	);
 };
 
+type AppHeaderNavigationProps = {
+	currentPath: string;
+};
+
+const AppHeaderNavigation: React.FC<AppHeaderNavigationProps> = ({
+	currentPath,
+}) => {
+	return (
+		<nav
+			className="-mx-1 flex min-w-0 flex-1 items-center gap-1 overflow-x-auto px-1 pb-1 sm:mx-0 sm:flex-none sm:overflow-visible sm:px-0 sm:pb-0"
+			aria-label="Navegação global"
+		>
+			{navigationItems.map((item) => {
+				const isActive = isNavigationItemActive(currentPath, item.path);
+
+				return (
+					<Button
+						aria-current={isActive ? "page" : undefined}
+						key={item.path}
+						nativeButton={false}
+						render={<Link to={item.path} />}
+						size="sm"
+						variant={isActive ? "secondary" : "ghost"}
+					>
+						{item.label}
+					</Button>
+				);
+			})}
+		</nav>
+	);
+};
+
 export const AppHeader: React.FC<AppHeaderProps> = ({ leading }) => {
 	const location = useLocation();
 	const currentPath = normalizePath(location.pathname);
@@ -72,31 +104,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ leading }) => {
 				</div>
 
 				<div className="flex min-w-0 items-center gap-1.5 sm:w-auto">
-					<nav
-						className="-mx-1 flex min-w-0 flex-1 items-center gap-1 overflow-x-auto px-1 pb-1 sm:mx-0 sm:flex-none sm:overflow-visible sm:px-0 sm:pb-0"
-						aria-label="Navegação global"
-					>
-						{navigationItems.map((item) => (
-							<Button
-								aria-current={
-									isNavigationItemActive(currentPath, item.path)
-										? "page"
-										: undefined
-								}
-								key={item.path}
-								nativeButton={false}
-								render={<Link to={item.path} />}
-								size="sm"
-								variant={
-									isNavigationItemActive(currentPath, item.path)
-										? "secondary"
-										: "ghost"
-								}
-							>
-								{item.label}
-							</Button>
-						))}
-					</nav>
+					<AppHeaderNavigation currentPath={currentPath} />
 					<div className="hidden shrink-0 sm:block">
 						<ThemeToggle />
 					</div>
