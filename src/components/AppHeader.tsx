@@ -32,6 +32,28 @@ const isNavigationItemActive = (currentPath: string, itemPath: string) => {
 	return currentPath === itemPath || currentPath.startsWith(`${itemPath}/`);
 };
 
+type AppHeaderBrandProps = {
+	leading?: ReactNode;
+};
+
+const AppHeaderBrand: React.FC<AppHeaderBrandProps> = ({ leading }) => {
+	const leadingContent = leading ? (
+		<>
+			{leading}
+			<div className="h-4 w-px bg-border" />
+		</>
+	) : null;
+
+	return (
+		<div className="flex min-w-0 items-center gap-3">
+			{leadingContent}
+			<Link className="truncate font-semibold text-sm" to="/">
+				Central de Documentação
+			</Link>
+		</div>
+	);
+};
+
 export const AppHeader: React.FC<AppHeaderProps> = ({ leading }) => {
 	const location = useLocation();
 	const currentPath = normalizePath(location.pathname);
@@ -43,17 +65,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ leading }) => {
 		>
 			<Container className="flex min-h-14 max-w-6xl flex-col gap-2 px-4 py-2 sm:h-14 sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:px-5 sm:py-0">
 				<div className="flex min-w-0 items-center justify-between gap-3 sm:justify-start">
-					<div className="flex min-w-0 items-center gap-3">
-						{leading ? (
-							<>
-								{leading}
-								<div className="h-4 w-px bg-border" />
-							</>
-						) : null}
-						<Link className="truncate font-semibold text-sm" to="/">
-							Central de Documentação
-						</Link>
-					</div>
+					<AppHeaderBrand leading={leading} />
 					<div className="shrink-0 sm:hidden">
 						<ThemeToggle />
 					</div>
