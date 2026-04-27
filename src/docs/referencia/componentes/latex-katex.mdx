@@ -1,0 +1,36 @@
+---
+title: LaTeX/KaTeX
+description: Escreva fórmulas inline e blocos matemáticos renderizados com KaTeX.
+category: Referência
+order: 47
+author: Matheus Andrade
+updatedAt: 2026-04-27
+---
+
+## Quando usar
+
+Use LaTeX para escrever fórmulas técnicas, regras matemáticas, cálculos de negócio e expressões que precisam de notação formal.
+
+## Uso inline
+
+```mdx
+O custo médio é $C_m = \frac{C_t}{Q}$.
+```
+
+O custo médio é $C_m = \frac{C_t}{Q}$.
+
+## Uso em bloco
+
+```mdx
+$$
+\int_0^1 x^2 \, dx = \frac{1}{3}
+$$
+```
+
+$$
+\int_0^1 x^2 \, dx = \frac{1}{3}
+$$
+
+## Boa prática
+
+Quando o texto usar valores monetários com cifrão, prefira escapar o caractere ou evitar `$...$` próximo de preços para não confundir com matemática inline.

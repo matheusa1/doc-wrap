@@ -1,0 +1,34 @@
+---
+title: Mermaid
+description: Crie diagramas textuais diretamente em arquivos MDX.
+category: Referência
+order: 46
+author: Matheus Andrade
+updatedAt: 2026-04-27
+---
+
+## Quando usar
+
+Use blocos `mermaid` para criar diagramas diretamente no MDX. Eles são renderizados automaticamente e acompanham o tema claro/escuro da aplicação.
+
+## Uso
+
+````mdx
+```mermaid
+flowchart LR
+  A[Escrever MDX] --> B[Build da aplicação]
+  B --> C[Documento publicado]
+```
+````
+
+## Exemplo renderizado
+
+```mermaid
+flowchart LR
+  A[Escrever MDX] --> B[Build da aplicação]
+  B --> C[Documento publicado]
+```
+
+## Boa prática
+
+Prefira diagramas curtos e focados. Para fluxos grandes, divida a explicação em seções menores ou use mais de um diagrama.
