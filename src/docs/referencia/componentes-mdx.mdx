@@ -1,0 +1,116 @@
+---
+title: Componentes MDX e índice
+description: Referência rápida dos componentes disponíveis para escrever documentos mais claros.
+category: Referência
+order: 4
+author: Matheus Andrade
+updatedAt: 2026-04-27
+---
+import { Callout } from "@/components/docs/Callout.tsx";
+import { Steps } from "@/components/docs/Step.tsx";
+
+export const exemploSteps = [
+  {
+    title: "Descreva a ação",
+    children: "Use um verbo direto para indicar o que o leitor precisa fazer."
+  },
+  {
+    title: "Explique o resultado",
+    children: "Informe o que muda depois da ação para reduzir dúvidas durante a execução."
+  },
+  {
+    title: "Finalize com conferência",
+    children: "Mostre como o usuário pode validar se concluiu o processo corretamente."
+  }
+]
+
+## Componentes disponíveis
+
+Os arquivos MDX podem usar componentes React importados de `src/components/docs`. Eles ajudam a padronizar alertas, dicas e sequências de passos.
+
+## Callout
+
+Use `Callout` para destacar informações importantes sem interromper o fluxo do documento.
+
+```mdx
+import { Callout } from "@/components/docs/Callout.tsx";
+
+<Callout title="Antes de começar" type="hint">
+  Confirme se o usuário tem permissão para acessar esta rotina.
+</Callout>
+```
+
+### Tipos de callout
+
+- `info`: nota informativa.
+- `hint`: dica ou recomendação.
+- `warning`: aviso de atenção.
+
+<Callout title="Exemplo informativo" type="info">
+  Use notas para explicar contexto, dependências ou comportamento esperado.
+</Callout>
+
+<Callout title="Exemplo de dica" type="hint">
+  Use dicas para orientar uma forma mais eficiente de executar a tarefa.
+</Callout>
+
+<Callout title="Exemplo de atenção" type="warning">
+  Use avisos quando uma ação puder afetar dados, permissões ou disponibilidade.
+</Callout>
+
+## Steps
+
+Use `Steps` para representar um procedimento sequencial.
+
+```mdx
+import { Steps } from "@/components/docs/Step.tsx";
+
+export const passos = [
+  {
+    title: "Abra a tela",
+    children: "Acesse o menu principal e selecione a rotina desejada."
+  },
+  {
+    title: "Preencha os dados",
+    children: "Informe os campos obrigatórios antes de salvar."
+  }
+]
+
+<Steps steps={passos} />
+```
+
+### Exemplo renderizado
+
+<Steps steps={exemploSteps} />
+
+## Índice lateral
+
+O índice lateral é gerado automaticamente com os títulos `h2` e `h3` do documento. Não é necessário declarar uma lista manual de seções.
+
+### Como criar uma seção
+
+Use `##` para criar uma seção principal:
+
+```mdx
+## Configuração inicial
+```
+
+### Como criar uma subseção
+
+Use `###` para criar uma subseção:
+
+```mdx
+### Permissões necessárias
+```
+
+## Recomendações de escrita
+
+- Comece cada página explicando quando ela deve ser usada.
+- Prefira frases curtas e exemplos concretos.
+- Use componentes apenas quando eles ajudarem a leitura.
+- Evite transformar todo parágrafo em alerta.
+- Revise títulos, descrições e datas antes de publicar.
+
+## Verificação final
+
+Depois de escrever ou alterar documentos, execute `bun run build`. Esse comando valida TypeScript, gera a aplicação e cria o índice de busca usado em produção.

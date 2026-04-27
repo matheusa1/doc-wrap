@@ -37,10 +37,10 @@ export function DocsSidebar({ currentPath }: DocsSidebarProps) {
 							</span>
 							<span className="flex min-w-0 flex-col gap-0.5">
 								<span className="truncate font-semibold text-sm">
-									Central de documentação
+									Documentação do template
 								</span>
 								<span className="text-muted-foreground text-xs leading-5">
-									Guias do usuário
+									Guias de uso
 								</span>
 							</span>
 						</SidebarMenuButton>

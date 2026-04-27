@@ -1,0 +1,83 @@
+---
+title: Organização e navegação
+description: Entenda como categorias, ordem, URLs, sidebar e índice da página são montados.
+category: Conteúdo
+order: 2
+author: Matheus Andrade
+updatedAt: 2026-04-27
+---
+import { Callout } from "@/components/docs/Callout.tsx";
+import { Steps } from "@/components/docs/Step.tsx";
+
+export const organizacao = [
+  {
+    title: "Defina categorias",
+    children: "Use o campo `category` para agrupar páginas por tema, módulo ou jornada do usuário."
+  },
+  {
+    title: "Controle a ordem",
+    children: "Use o campo `order` para ordenar documentos dentro da categoria. Em empate, o título é usado como critério secundário."
+  },
+  {
+    title: "Revise a navegação",
+    children: "Depois de criar ou mover arquivos, abra `/docs` para conferir sidebar, breadcrumb, busca e índice da página."
+  }
+]
+
+## Como a sidebar é montada
+
+A sidebar usa todos os arquivos encontrados em `src/docs`. Cada documento é agrupado pelo campo `category` e ordenado pelo campo `order`.
+
+```mdx
+---
+title: Cadastro de usuários
+category: Cadastros
+order: 2
+---
+```
+
+<Callout title="Categorias são texto livre" type="hint">
+  Não existe uma lista fixa de categorias. Para criar um novo grupo na sidebar, use um novo valor em `category`.
+</Callout>
+
+## Como as URLs são criadas
+
+O slug vem do caminho do arquivo dentro de `src/docs`.
+
+```text
+src/docs/cadastros/usuarios.mdx -> /docs/cadastros/usuarios
+src/docs/financeiro/contas.mdx -> /docs/financeiro/contas
+src/docs/introducao.mdx -> /docs/introducao
+```
+
+Ao renomear um arquivo, a URL também muda. Faça isso com cuidado se a documentação já estiver publicada ou se links externos apontarem para a página antiga.
+
+## Breadcrumb
+
+O breadcrumb usa os segmentos do caminho para mostrar a localização do documento. Um arquivo em `src/docs/cadastros/usuarios.mdx` aparece como:
+
+```text
+Início / Docs / Cadastros / Cadastro de usuários
+```
+
+O último item vem do `title` do frontmatter. Os segmentos intermediários vêm do nome das pastas.
+
+## Índice da página
+
+O índice lateral é criado a partir dos títulos renderizados no corpo do documento.
+
+### Títulos principais
+
+Use `##` para seções principais. Esses títulos aparecem com mais destaque no índice lateral.
+
+### Subtítulos
+
+Use `###` para detalhes dentro de uma seção. Eles aparecem no índice com menor peso visual.
+
+<Callout title="Evite excesso" type="warning">
+  Se uma página precisa de muitas seções profundas, talvez ela deva ser dividida em documentos menores.
+</Callout>
+
+## Fluxo de revisão
+
+<Steps steps={organizacao} />

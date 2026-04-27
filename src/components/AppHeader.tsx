@@ -57,7 +57,7 @@ export function AppHeader({ leading }: AppHeaderProps) {
 						</>
 					) : null}
 					<Link className="truncate font-semibold text-sm" to="/">
-						Documentação
+						DocGest
 					</Link>
 				</div>
 
