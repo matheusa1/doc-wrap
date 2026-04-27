@@ -33,29 +33,19 @@ const calloutStyles: Record<CalloutType, { label: string; style: string }> = {
 	},
 };
 
-export function Callout({ children, title, type = "info" }: CalloutProps) {
+export function Callout({
+	children,
+	title,
+	type = "info",
+}: Readonly<CalloutProps>) {
 	const selectedStyle = calloutStyles[type];
 	const selectedIcon = icon[type];
 
 	return (
-		<Alert className={selectedStyle?.style}>
+		<Alert className={`${selectedStyle?.style} my-4`}>
 			{selectedIcon}
 			<AlertTitle>{title ?? selectedStyle.label}</AlertTitle>
 			<AlertDescription>{children}</AlertDescription>
 		</Alert>
 	);
-
-	// return (
-	// 	<aside
-	// 		className={`my-6 flex flex-col rounded-2xl border p-4 ${selectedStyle.style}`}
-	// 	>
-	// 		<header className={"flex items-center gap-4"}>
-	// 			{selectedIcon}
-	// 			<p className="m-0 font-semibold text-lg tracking-wide">
-	// 				{title ?? selectedStyle.label}
-	// 			</p>
-	// 		</header>
-	// 		<div className="text-sm leading-6">{children}</div>
-	// 	</aside>
-	// );
 }
