@@ -83,6 +83,26 @@ export const passos = [
 
 <Steps steps={exemploSteps} />
 
+## Mermaid
+
+Use blocos `mermaid` para criar diagramas diretamente no MDX. Eles são renderizados automaticamente e acompanham o tema claro/escuro da aplicação.
+
+````mdx
+```mermaid
+flowchart LR
+  A[Escrever MDX] --> B[Build da aplicação]
+  B --> C[Documento publicado]
+```
+````
+
+### Exemplo renderizado
+
+```mermaid
+flowchart LR
+  A[Escrever MDX] --> B[Build da aplicação]
+  B --> C[Documento publicado]
+```
+
 ## Índice lateral
 
 O índice lateral é gerado automaticamente com os títulos `h2` e `h3` do documento. Não é necessário declarar uma lista manual de seções.
