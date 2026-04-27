@@ -10,7 +10,8 @@ type TSteps = {
 	steps: StepProps[];
 };
 
-export function Step({ children, number, title }: StepProps) {
+export const Step: React.FC<StepProps> = (props) => {
+	const { children, number, title } = props;
 	return (
 		<section className={"flex flex-col"}>
 			<header className="flex w-full gap-4">
@@ -24,9 +25,10 @@ export function Step({ children, number, title }: StepProps) {
 			<div className="ml-12 text-foreground text-sm leading-6">{children}</div>
 		</section>
 	);
-}
+};
 
-export const Steps: React.FC<TSteps> = ({ steps = [] }) => {
+export const Steps: React.FC<TSteps> = (props) => {
+	const { steps = [] } = props;
 	const formattedSteps: StepProps[] = steps?.map((step, index) => ({
 		children: step.children,
 		title: step.title,

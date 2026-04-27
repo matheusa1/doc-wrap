@@ -33,11 +33,8 @@ const calloutStyles: Record<CalloutType, { label: string; style: string }> = {
 	},
 };
 
-export function Callout({
-	children,
-	title,
-	type = "info",
-}: Readonly<CalloutProps>) {
+export const Callout: React.FC<CalloutProps> = (props) => {
+	const { children, title, type = "info" } = props;
 	const selectedStyle = calloutStyles[type];
 	const selectedIcon = icon[type];
 
@@ -48,4 +45,4 @@ export function Callout({
 			<AlertDescription>{children}</AlertDescription>
 		</Alert>
 	);
-}
+};

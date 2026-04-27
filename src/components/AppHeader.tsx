@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import Container from "@/components/ui/container";
+import { Container } from "@/components/ui/container";
 import { ThemeToggle } from "@/components/ui/themeToggle";
 
 type AppHeaderProps = {
@@ -39,13 +39,13 @@ const isNavigationItemActive = (currentPath: string, itemPath: string) => {
 	return currentPath === itemPath || currentPath.startsWith(`${itemPath}/`);
 };
 
-export function AppHeader({ leading }: AppHeaderProps) {
+export const AppHeader: React.FC<AppHeaderProps> = ({ leading }) => {
 	const location = useLocation();
 	const currentPath = normalizePath(location.pathname);
 
 	return (
 		<header
-			className="sticky top-0 z-20 border-b bg-background/95 backdrop-blur-sm supports-[backdrop-filter]:bg-background/80"
+			className="sticky top-0 z-20 border-b bg-background/95 backdrop-blur-sm supports-backdrop-filter:bg-background/80"
 			data-pagefind-ignore="all"
 		>
 			<Container className="flex min-h-14 max-w-6xl flex-col gap-2 px-4 py-2 sm:h-14 sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:px-5 sm:py-0">
@@ -58,7 +58,7 @@ export function AppHeader({ leading }: AppHeaderProps) {
 							</>
 						) : null}
 						<Link className="truncate font-semibold text-sm" to="/">
-							DocGest
+							Central de Documentação
 						</Link>
 					</div>
 					<div className="shrink-0 sm:hidden">
@@ -99,4 +99,4 @@ export function AppHeader({ leading }: AppHeaderProps) {
 			</Container>
 		</header>
 	);
-}
+};

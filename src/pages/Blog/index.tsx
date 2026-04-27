@@ -17,7 +17,7 @@ import {
 	BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
-import Container from "@/components/ui/container";
+import { Container } from "@/components/ui/container";
 
 const normalizePath = (path: string) => {
 	if (path.length <= 1) {
@@ -46,7 +46,7 @@ type BlogBreadcrumbProps = {
 	currentPost?: BlogPost;
 };
 
-function BlogBreadcrumb({ currentPost }: BlogBreadcrumbProps) {
+const BlogBreadcrumb: React.FC<BlogBreadcrumbProps> = ({ currentPost }) => {
 	return (
 		<Breadcrumb className="mb-8">
 			<BreadcrumbList>
@@ -72,9 +72,9 @@ function BlogBreadcrumb({ currentPost }: BlogBreadcrumbProps) {
 			</BreadcrumbList>
 		</Breadcrumb>
 	);
-}
+};
 
-function BlogListPage() {
+const BlogListPage: React.FC = () => {
 	const [searchParams] = useSearchParams();
 	const selectedCategory = searchParams.get("categoria");
 	const posts = filterBlogPostsByCategory(selectedCategory);
@@ -198,13 +198,13 @@ function BlogListPage() {
 			</main>
 		</>
 	);
-}
+};
 
 type BlogPostPageProps = {
 	post: BlogPost;
 };
 
-function BlogPostPage({ post }: BlogPostPageProps) {
+const BlogPostPage: React.FC<BlogPostPageProps> = ({ post }) => {
 	const Component = post.Component;
 
 	return (
@@ -261,9 +261,9 @@ function BlogPostPage({ post }: BlogPostPageProps) {
 			</main>
 		</>
 	);
-}
+};
 
-function BlogNotFoundPage() {
+const BlogNotFoundPage: React.FC = () => {
 	return (
 		<>
 			<AppHeader />
@@ -294,9 +294,9 @@ function BlogNotFoundPage() {
 			</main>
 		</>
 	);
-}
+};
 
-export function BlogPage() {
+export const BlogPage: React.FC = () => {
 	const location = useLocation();
 	const currentPath = normalizePath(location.pathname);
 
@@ -311,4 +311,4 @@ export function BlogPage() {
 	}
 
 	return <BlogPostPage post={currentPost} />;
-}
+};

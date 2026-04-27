@@ -17,12 +17,8 @@ type DocsLayoutProps = {
 	currentPath: string;
 };
 
-export function DocsLayout({
-	aside,
-	children,
-	currentDoc,
-	currentPath,
-}: DocsLayoutProps) {
+export const DocsLayout: React.FC<DocsLayoutProps> = (props) => {
+	const { aside, children, currentDoc, currentPath } = props;
 	return (
 		<SidebarProvider style={{ "--sidebar-width": "20rem" } as CSSProperties}>
 			<DocsSidebar currentPath={currentPath} />
@@ -54,4 +50,4 @@ export function DocsLayout({
 			</SidebarInset>
 		</SidebarProvider>
 	);
-}
+};

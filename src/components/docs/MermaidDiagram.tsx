@@ -8,7 +8,7 @@ type MermaidDiagramProps = {
 const getRenderedTheme = () =>
 	document.documentElement.classList.contains("dark") ? "dark" : "default";
 
-export function MermaidDiagram({ chart }: Readonly<MermaidDiagramProps>) {
+export const MermaidDiagram: React.FC<MermaidDiagramProps> = ({ chart }) => {
 	const reactId = useId();
 	const { theme } = useTheme();
 	const [error, setError] = useState<string>();
@@ -76,4 +76,4 @@ export function MermaidDiagram({ chart }: Readonly<MermaidDiagramProps>) {
 			/>
 		</figure>
 	);
-}
+};

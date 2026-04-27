@@ -26,27 +26,22 @@ const gridColumns: Record<NonNullable<CardsRootProps["num"]>, string> = {
 
 const isExternalHref = (href: string) => /^https?:\/\//.test(href);
 
-function CardsRoot({ children, className, num = 3, ...props }: CardsRootProps) {
+const CardsRoot: React.FC<CardsRootProps> = (props) => {
+	const { children, className, num = 3, ...rest } = props;
 	return (
 		<div
 			className={cn("my-6 grid gap-3", gridColumns[num], className)}
-			{...props}
+			{...rest}
 		>
 			{children}
 		</div>
 	);
-}
+};
 
-function CardContent({
-	arrow,
-	children,
-	description,
-	icon,
-	title,
-}: Pick<
-	CardsCardProps,
-	"arrow" | "children" | "description" | "icon" | "title"
->) {
+const CardContent: React.FC<
+	Pick<CardsCardProps, "arrow" | "children" | "description" | "icon" | "title">
+> = (props) => {
+	const { arrow, children, description, icon, title } = props;
 	return (
 		<>
 			<div className="flex items-start justify-between gap-4">
@@ -74,18 +69,19 @@ function CardContent({
 			) : null}
 		</>
 	);
-}
+};
 
-function CardsCard({
-	arrow,
-	children,
-	className,
-	description,
-	href,
-	icon,
-	title,
-	...props
-}: CardsCardProps) {
+const CardsCard: React.FC<CardsCardProps> = (props) => {
+	const {
+		arrow,
+		children,
+		className,
+		description,
+		href,
+		icon,
+		title,
+		...rest
+	} = props;
 	const content = (
 		<CardContent
 			arrow={arrow}
@@ -105,7 +101,7 @@ function CardsCard({
 
 	if (!href) {
 		return (
-			<div className={cardClassName} {...props}>
+			<div className={cardClassName} {...rest}>
 				{content}
 			</div>
 		);
@@ -124,7 +120,7 @@ function CardsCard({
 			{content}
 		</Link>
 	);
-}
+};
 
 export const Cards = Object.assign(CardsRoot, {
 	Card: CardsCard,

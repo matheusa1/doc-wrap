@@ -4,7 +4,7 @@ import { BlogPage } from "./Blog";
 import { DocsPage } from "./Docs";
 import { Home } from "./Home";
 
-export default function App() {
+export const App = () => {
 	useSmoothHashScroll();
 
 	return (
@@ -15,4 +15,4 @@ export default function App() {
 			<Route element={<Navigate replace to="/" />} path="*" />
 		</Routes>
 	);
-}
+};

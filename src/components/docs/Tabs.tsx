@@ -10,18 +10,16 @@ import {
 } from "react";
 import { cn } from "@/lib/utils";
 
-type TabValue = string;
-
 type TabValueConfig = {
 	attributes?: Record<string, unknown>;
 	label: ReactNode;
-	value: TabValue;
+	value: string;
 };
 
 type TabsProps = {
 	children: ReactNode;
 	className?: string;
-	defaultValue?: TabValue | null;
+	defaultValue?: string | null;
 	groupId?: string;
 	lazy?: boolean;
 	queryString?: boolean | string;
@@ -33,14 +31,14 @@ type TabItemProps = {
 	children: ReactNode;
 	default?: boolean;
 	label?: ReactNode;
-	value: TabValue;
+	value: string;
 };
 
 type ResolvedTab = {
 	attributes: Record<string, unknown> | undefined;
 	children: ReactNode;
 	label: ReactNode;
-	value: TabValue;
+	value: string;
 };
 
 const TAB_SYNC_EVENT = "docgest:tabs-sync";
@@ -68,15 +66,15 @@ const getInitialValue = ({
 	queryParamName,
 	tabs,
 }: {
-	defaultValue?: TabValue | null;
+	defaultValue?: string | null;
 	groupId?: string;
 	queryParamName?: string;
 	tabs: ResolvedTab[];
 }) => {
 	const values = new Set(tabs.map((tab) => tab.value));
 
-	if (queryParamName && typeof window !== "undefined") {
-		const queryValue = new URLSearchParams(window.location.search).get(
+	if (queryParamName && typeof globalThis !== "undefined") {
+		const queryValue = new URLSearchParams(globalThis.location.search).get(
 			queryParamName,
 		);
 
@@ -85,8 +83,10 @@ const getInitialValue = ({
 		}
 	}
 
-	if (groupId && typeof window !== "undefined") {
-		const storedValue = window.localStorage.getItem(`docgest-tabs:${groupId}`);
+	if (groupId && typeof globalThis !== "undefined") {
+		const storedValue = globalThis.localStorage.getItem(
+			`docgest-tabs:${groupId}`,
+		);
 
 		if (storedValue && values.has(storedValue)) {
 			return storedValue;
@@ -139,15 +139,16 @@ const resolveTabs = (
 		.filter((tab): tab is ResolvedTab => tab !== null);
 };
 
-export function Tabs({
-	children,
-	className,
-	defaultValue,
-	groupId,
-	lazy = false,
-	queryString,
-	values,
-}: Readonly<TabsProps>) {
+export const Tabs: React.FC<TabsProps> = (props) => {
+	const {
+		children,
+		className,
+		defaultValue,
+		groupId,
+		lazy = false,
+		queryString,
+		values,
+	} = props;
 	const reactId = useId();
 	const tabs = resolveTabs(children, values);
 	const itemDefaults = getTabItems(children);
@@ -155,7 +156,7 @@ export function Tabs({
 	const defaultTabValue =
 		defaultValue ??
 		itemDefaults.find((item) => item.props.default)?.props.value;
-	const [selectedValue, setSelectedValue] = useState<TabValue | undefined>(() =>
+	const [selectedValue, setSelectedValue] = useState<string | undefined>(() =>
 		getInitialValue({
 			defaultValue: defaultTabValue,
 			groupId,
@@ -192,25 +193,25 @@ export function Tabs({
 			}
 		};
 
-		window.addEventListener(TAB_SYNC_EVENT, handleSync);
+		globalThis.addEventListener(TAB_SYNC_EVENT, handleSync);
 
-		return () => window.removeEventListener(TAB_SYNC_EVENT, handleSync);
+		return () => globalThis.removeEventListener(TAB_SYNC_EVENT, handleSync);
 	}, [groupId, tabs]);
 
-	const selectTab = (value: TabValue) => {
+	const selectTab = (value: string) => {
 		setSelectedValue(value);
 
 		if (groupId) {
-			window.localStorage.setItem(`docgest-tabs:${groupId}`, value);
-			window.dispatchEvent(
+			globalThis.localStorage.setItem(`docgest-tabs:${groupId}`, value);
+			globalThis.dispatchEvent(
 				new CustomEvent(TAB_SYNC_EVENT, { detail: { groupId, value } }),
 			);
 		}
 
 		if (queryParamName) {
-			const url = new URL(window.location.href);
+			const url = new URL(globalThis.location.href);
 			url.searchParams.set(queryParamName, value);
-			window.history.replaceState(null, "", url);
+			globalThis.history.replaceState(null, "", url);
 		}
 	};
 
@@ -295,8 +296,8 @@ export function Tabs({
 			</div>
 		</div>
 	);
-}
+};
 
-export function TabItem({ children }: Readonly<TabItemProps>) {
+export const TabItem: React.FC<Readonly<TabItemProps>> = ({ children }) => {
 	return <>{children}</>;
-}
+};

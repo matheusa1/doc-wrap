@@ -11,10 +11,10 @@ type DocsTableOfContentsProps = {
 	items: TableOfContentsItem[];
 };
 
-export function DocsTableOfContents({
-	activeIds,
-	items,
-}: DocsTableOfContentsProps) {
+export const DocsTableOfContents: React.FC<DocsTableOfContentsProps> = (
+	props,
+) => {
+	const { activeIds, items } = props;
 	if (items.length === 0) {
 		return null;
 	}
@@ -49,4 +49,4 @@ export function DocsTableOfContents({
 			</ol>
 		</nav>
 	);
-}
+};

@@ -36,24 +36,25 @@ const getLanguage = (node: ReactNode) => {
 	return node.props["data-language"];
 };
 
-function CodeFigure({
-	children,
-	...props
-}: ComponentPropsWithoutRef<"figure">) {
+export const CodeFigure: React.FC<ComponentPropsWithoutRef<"figure">> = (
+	props,
+) => {
+	const { children, ...rest } = props;
 	if (getLanguage(children) === "mermaid") {
 		return <MermaidDiagram chart={getNodeText(children).trim()} />;
 	}
 
-	return <figure {...props}>{children}</figure>;
-}
+	return <figure {...rest}>{children}</figure>;
+};
 
-function CodePre({ children, ...props }: CodePreProps) {
-	if (props["data-language"] === "mermaid") {
+export const CodePre: React.FC<CodePreProps> = (props) => {
+	const { children, ...rest } = props;
+	if (rest["data-language"] === "mermaid") {
 		return <MermaidDiagram chart={getNodeText(children).trim()} />;
 	}
 
-	return <pre {...props}>{children}</pre>;
-}
+	return <pre {...rest}>{children}</pre>;
+};
 
 export const mdxComponents: MDXComponents = {
 	figure: CodeFigure,

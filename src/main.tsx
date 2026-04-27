@@ -4,7 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import "./index.css";
 import { ThemeProvider } from "./context/themeProvider.tsx";
-import App from "./pages/App.tsx";
+import { App } from "./pages/App.tsx";
 
 const rootElement = document.getElementById("root");
 

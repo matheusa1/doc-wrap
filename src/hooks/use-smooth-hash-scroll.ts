@@ -46,7 +46,7 @@ const getHashTarget = (hash: string) => {
 	return id ? document.getElementById(id) : null;
 };
 
-export function useSmoothHashScroll() {
+export const useSmoothHashScroll = () => {
 	useEffect(() => {
 		const handleClick = (event: MouseEvent) => {
 			if (event.defaultPrevented || isModifiedClick(event)) {
@@ -75,7 +75,7 @@ export function useSmoothHashScroll() {
 				return;
 			}
 
-			const prefersReducedMotion = window.matchMedia(
+			const prefersReducedMotion = globalThis.matchMedia(
 				"(prefers-reduced-motion: reduce)",
 			).matches;
 
@@ -90,4 +90,4 @@ export function useSmoothHashScroll() {
 
 		return () => document.removeEventListener("click", handleClick);
 	}, []);
-}
+};

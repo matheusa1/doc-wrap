@@ -20,31 +20,30 @@ type FileTreeFileProps = ComponentPropsWithoutRef<"div"> & {
 	name: string;
 };
 
-function FileTreeRoot({ children, className, ...props }: FileTreeRootProps) {
+type TFileTreeItemContent = {
+	active?: boolean;
+	description?: string;
+	icon: ReactNode;
+	name: string;
+};
+
+const FileTreeRoot: React.FC<FileTreeRootProps> = (props) => {
+	const { children, className, ...rest } = props;
 	return (
 		<div
 			className={cn(
 				"my-6 overflow-x-auto rounded-2xl border bg-card p-3 text-card-foreground shadow-sm",
 				className,
 			)}
-			{...props}
+			{...rest}
 		>
 			<div className="min-w-max font-mono text-sm">{children}</div>
 		</div>
 	);
-}
+};
 
-function FileTreeItemContent({
-	active,
-	description,
-	icon,
-	name,
-}: {
-	active?: boolean;
-	description?: string;
-	icon: ReactNode;
-	name: string;
-}) {
+const FileTreeItemContent: React.FC<TFileTreeItemContent> = (props) => {
+	const { active, description, icon, name } = props;
 	return (
 		<div
 			className={cn(
@@ -67,21 +66,22 @@ function FileTreeItemContent({
 			</span>
 		</div>
 	);
-}
+};
 
-function FileTreeFolder({
-	active,
-	children,
-	className,
-	defaultOpen: _defaultOpen,
-	description,
-	name,
-	...props
-}: FileTreeFolderProps) {
+const FileTreeFolder: React.FC<FileTreeFolderProps> = (props) => {
+	const {
+		active,
+		children,
+		className,
+		defaultOpen: _defaultOpen,
+		description,
+		name,
+		...rest
+	} = props;
 	const icon = children ? <FolderOpen /> : <Folder />;
 
 	return (
-		<div className={cn("file-tree-folder", className)} {...props}>
+		<div className={cn("file-tree-folder", className)} {...rest}>
 			<FileTreeItemContent
 				active={active}
 				description={description}
@@ -93,17 +93,12 @@ function FileTreeFolder({
 			) : null}
 		</div>
 	);
-}
+};
 
-function FileTreeFile({
-	active,
-	className,
-	description,
-	name,
-	...props
-}: FileTreeFileProps) {
+const FileTreeFile: React.FC<FileTreeFileProps> = (props) => {
+	const { active, className, description, name, ...rest } = props;
 	return (
-		<div className={cn("file-tree-file", className)} {...props}>
+		<div className={cn("file-tree-file", className)} {...rest}>
 			<FileTreeItemContent
 				active={active}
 				description={description}
@@ -112,7 +107,7 @@ function FileTreeFile({
 			/>
 		</div>
 	);
-}
+};
 
 export const FileTree = Object.assign(FileTreeRoot, {
 	File: FileTreeFile,

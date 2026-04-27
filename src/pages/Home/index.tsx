@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { AppHeader } from "@/components/AppHeader";
 import { Button } from "@/components/ui/button";
-import Container from "@/components/ui/container";
+import { Container } from "@/components/ui/container";
 
 export const Home = () => {
 	return (

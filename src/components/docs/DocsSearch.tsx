@@ -1,11 +1,7 @@
 import { Search, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import {
-	Field,
-	FieldDescription,
-	FieldLabel,
-} from "@/components/ui/field";
+import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
 import {
 	InputGroup,
 	InputGroupAddon,
@@ -13,7 +9,11 @@ import {
 	InputGroupInput,
 } from "@/components/ui/input-group";
 import { Kbd, KbdGroup } from "@/components/ui/kbd";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from "@/components/ui/popover";
 import { searchDocPages } from "../../docs-map";
 
 type PagefindSearchResult = {
@@ -76,7 +76,7 @@ const searchWithPagefind = async (query: string): Promise<SearchResult[]> => {
 	return results;
 };
 
-export function DocsSearch() {
+export const DocsSearch = () => {
 	const inputGroupRef = useRef<HTMLDivElement>(null);
 	const inputRef = useRef<HTMLInputElement>(null);
 	const [mode, setMode] = useState<SearchMode>("idle");
@@ -85,8 +85,8 @@ export function DocsSearch() {
 	const [results, setResults] = useState<SearchResult[]>([]);
 
 	const isAppleDevice =
-		typeof window !== "undefined" &&
-		/Mac|iPhone|iPad|iPod/.test(window.navigator.platform);
+		typeof globalThis.navigator !== "undefined" &&
+		/Mac|iPhone|iPad|iPod/.test(globalThis.navigator.platform);
 
 	useEffect(() => {
 		const normalizedQuery = query.trim();
@@ -151,10 +151,10 @@ export function DocsSearch() {
 			}
 		};
 
-		window.addEventListener("keydown", handleKeyDown);
+		globalThis.addEventListener("keydown", handleKeyDown);
 
 		return () => {
-			window.removeEventListener("keydown", handleKeyDown);
+			globalThis.removeEventListener("keydown", handleKeyDown);
 		};
 	}, [query]);
 
@@ -300,4 +300,4 @@ export function DocsSearch() {
 			<FieldDescription className="text-xs">{statusText}</FieldDescription>
 		</Field>
 	);
-}
+};
