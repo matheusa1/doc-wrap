@@ -10,6 +10,7 @@ import { Navigate, useLocation } from "react-router-dom";
 import { DocsArticle } from "./components/DocsArticle";
 import { DocsNotFound } from "./components/DocsNotFound";
 import { DocsPageAside } from "./components/DocsPageAside";
+import { DocsTechnicalProblemModal } from "./components/DocsTechnicalProblemModal";
 import { useActiveDocHeadings } from "./hooks/use-active-doc-headings";
 import { useDocsScrollToTopOnNavigation } from "./hooks/use-docs-scroll-to-top-on-navigation";
 import { useDocsTableOfContents } from "./hooks/use-docs-table-of-contents";
@@ -56,6 +57,10 @@ export const DocsPage = () => {
 				formattedUpdatedAt={formattedUpdatedAt}
 				nextDoc={nextDoc}
 				previousDoc={previousDoc}
+			/>
+			<DocsTechnicalProblemModal
+				activeHeadingIds={activeHeadingIds}
+				currentDoc={currentDoc}
 			/>
 		</DocsLayout>
 	);
