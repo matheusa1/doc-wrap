@@ -1,80 +1,51 @@
 ---
 title: Organização e navegação
-description: Entenda como categorias, ordem, URLs, sidebar e índice da página são montados.
+description: Entenda como diretórios, frontmatter, headings e busca se combinam para montar a experiência final de `/docs`.
 category: Conteúdo
 order: 2
 author: Matheus Andrade
-updatedAt: 2026-04-27
+updatedAt: 2026-04-28
 ---
 import { Callout } from "@presentation/components/docs/Callout.tsx";
-import { Steps } from "@presentation/components/docs/Step.tsx";
 
-export const organizacao = [
-  {
-    title: "Defina categorias",
-    children: "Use o campo `category` para agrupar páginas por tema, módulo ou jornada do usuário."
-  },
-  {
-    title: "Controle a ordem",
-    children: "Use o campo `order` para ordenar documentos dentro do mesmo nível da árvore. Em empate, o título é usado como critério secundário."
-  },
-  {
-    title: "Revise a navegação",
-    children: "Depois de criar ou mover arquivos, abra `/docs` para conferir sidebar, breadcrumb, busca e índice da página."
-  }
-]
+## A rota nasce do arquivo
 
-## Como a sidebar é montada
-
-A sidebar usa todos os arquivos encontrados em `src/docs`. A árvore é montada pelos diretórios, e arquivos `index.mdx` funcionam como a página raiz de cada pasta.
+Em `/docs`, a URL pública é derivada do caminho relativo dentro de `src/@content/docs`. Isso vale tanto para páginas isoladas quanto para seções com `index.mdx`.
 
 ```text
-src/docs/cadastros/index.mdx -> /docs/cadastros
-src/docs/cadastros/usuarios.mdx -> /docs/cadastros/usuarios
+src/@content/docs/conteudo/index.mdx -> /docs/conteudo
+src/@content/docs/conteudo/criando-documentos.mdx -> /docs/conteudo/criando-documentos
+src/@content/docs/referencia/componentes/callout.mdx -> /docs/referencia/componentes/callout
 ```
 
-<Callout title="Pastas tambem sao paginas" type="hint">
-  Quando uma pasta possui `index.mdx`, ela aparece como item clicável e também como agrupador visual para os documentos filhos.
+Renomear ou mover um arquivo também altera a URL correspondente, então essa operação deve ser feita com cuidado quando a base já estiver publicada ou referenciada por links externos.
+
+## Como a navegação da sidebar é montada
+
+`src/@presentation/docs-map.ts` lê todos os documentos com `import.meta.glob`, transforma o frontmatter em metadados e monta uma árvore a partir dos segmentos do caminho. Pastas funcionam como agrupadores visuais, e um `index.mdx` permite que aquele nível também seja clicável como página.
+
+O campo `order` controla a ordenação principal dentro do mesmo nível da árvore. Em caso de empate, o template usa o `title` como critério secundário. O campo `category` complementa a classificação editorial, mas a estrutura da sidebar continua nascendo do caminho dos arquivos.
+
+## Breadcrumb e contexto da página
+
+O breadcrumb reflete os segmentos da rota atual e usa o título real da página no último item. Isso ajuda a manter nomes legíveis mesmo quando o slug do arquivo é mais técnico ou resumido.
+
+Os metadados `title`, `description`, `author` e `updatedAt` também aparecem no cabeçalho do documento, então o frontmatter não serve apenas para organização interna. Ele participa diretamente da leitura da página.
+
+## Índice lateral e headings
+
+O índice lateral da página atual é extraído do conteúdo renderizado. `##` vira seção principal e `###` vira subseção. Quanto melhor esses títulos estiverem escritos, melhor será a navegação semântica da página.
+
+<Callout title="Boa prática" type="hint">
+  Se um documento exige muitos subtítulos ou seções profundas demais, normalmente é sinal de que ele deveria ser quebrado em páginas menores.
 </Callout>
 
-## Como as URLs são criadas
+## Busca
 
-O slug vem do caminho do arquivo dentro de `src/docs`.
+Durante o desenvolvimento, a busca usa os metadados já carregados em memória. No build de produção, o projeto gera páginas estáticas da documentação e então executa o Pagefind para montar o índice final. Por isso, título e descrição curtos e específicos ajudam tanto na listagem quanto na encontrabilidade.
 
-```text
-src/docs/cadastros/index.mdx -> /docs/cadastros
-src/docs/cadastros/usuarios.mdx -> /docs/cadastros/usuarios
-src/docs/introducao.mdx -> /docs/introducao
-```
+## Diferença entre `/docs` e `/blog`
 
-Ao renomear um arquivo, a URL também muda. Faça isso com cuidado se a documentação já estiver publicada ou se links externos apontarem para a página antiga.
+`/docs` organiza conteúdo por árvore de navegação, com foco em consulta contínua. Já `/blog` usa `src/@content/blog/**/*.mdx` e um mapa separado, em `src/@presentation/blog-map.ts`, para ordenar publicações principalmente por `publishedAt`.
 
-## Breadcrumb
-
-O breadcrumb usa os segmentos do caminho para mostrar a localização do documento. Quando existir `index.mdx` em um diretório, esse nível também vira link. Um arquivo em `src/docs/cadastros/usuarios.mdx` aparece como:
-
-```text
-Inicio / Docs / Cadastros / Cadastro de usuarios
-```
-
-O último item vem do `title` do frontmatter. Os segmentos intermediários vêm do nome das pastas.
-
-## Índice da página
-
-O índice lateral é criado a partir dos títulos renderizados no corpo do documento.
-
-### Títulos principais
-
-Use `##` para seções principais. Esses títulos aparecem com mais destaque no índice lateral.
-
-### Subtítulos
-
-Use `###` para detalhes dentro de uma seção. Eles aparecem no índice com menor peso visual.
-
-<Callout title="Evite excesso" type="warning">
-  Se uma página precisa de muitas seções profundas, talvez ela deva ser dividida em documentos menores.
-</Callout>
-
-## Fluxo de revisão
-
-<Steps steps={organizacao} />
+Em outras palavras, documentos são escritos para permanecer e evoluir. Publicações são escritas para comunicar algo em um momento específico e manter o histórico desse anúncio.

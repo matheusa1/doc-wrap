@@ -1,79 +1,45 @@
 ---
 title: Criando publicações
-description: Veja como publicar notas de versão, avisos, comunicados e manutenções usando o blog do template.
+description: Publique notas de versão, avisos e comunicados em `src/@content/blog` com a estrutura atual do template.
 category: Publicações
 order: 3
 author: Matheus Andrade
-updatedAt: 2026-04-27
+updatedAt: 2026-04-28
 ---
 import { Callout } from "@presentation/components/docs/Callout.tsx";
-import { Steps } from "@presentation/components/docs/Step.tsx";
 
-export const fluxoPublicacao = [
-  {
-    title: "Crie o post",
-    children: "Adicione um arquivo `.mdx` em `src/blog`. O nome do arquivo define a URL da publicação."
-  },
-  {
-    title: "Classifique por categoria",
-    children: "Use categorias como `Novidades`, `Avisos` ou `Manutenção` para permitir filtros na listagem."
-  },
-  {
-    title: "Publique com data clara",
-    children: "Use `publishedAt` para ordenar posts e `eventAt` quando houver uma data futura relacionada ao comunicado."
-  }
-]
+## Onde as publicações vivem
 
-## Para que servem as publicações
-
-A área de publicações é indicada para conteúdos com data, como notas de versão, avisos de manutenção, comunicados de produto e mudanças operacionais. Diferente da documentação, posts são organizados por data de publicação.
-
-## Estrutura de arquivo
-
-Crie arquivos em `src/blog`:
+As publicações ficam em `src/@content/blog/**/*.mdx`. Cada arquivo vira uma rota pública em `/blog`, e o carregamento é automático pelo mapa em `src/@presentation/blog-map.ts`.
 
 ```text
-src/blog/nota-de-versao-abril.mdx
+src/@content/blog/nota-de-versao-abril.mdx -> /blog/nota-de-versao-abril
 ```
 
-Esse post será acessado em:
+Ao contrário de `/docs`, a organização principal do blog não depende de uma árvore de navegação lateral. O foco está na listagem, nos filtros por categoria e na ordenação por data de publicação.
 
-```text
-/blog/nota-de-versao-abril
-```
+## Frontmatter esperado
 
-## Frontmatter de post
-
-Use este formato:
+O frontmatter das publicações segue a estrutura usada hoje pelo blog do template.
 
 ```mdx
 ---
 title: Nota de versão de abril
 description: Resumo das principais melhorias liberadas neste ciclo.
 category: Novidades
-publishedAt: 2026-04-27
+publishedAt: 2026-04-28
 eventAt: 2026-05-02
 ---
 ```
 
-Campos disponíveis:
+`title`, `description` e `category` alimentam cabeçalho, listagem e filtros. `publishedAt` controla a ordenação principal. `eventAt` é opcional e faz sentido quando o post comunica uma data futura relevante, como uma manutenção programada.
 
-- `title`: título da publicação.
-- `description`: resumo exibido na listagem e no cabeçalho do post.
-- `category`: categoria usada pelos filtros.
-- `publishedAt`: data da publicação no formato `YYYY-MM-DD`.
-- `eventAt`: data opcional de evento relacionado.
+## Quando usar publicação e quando usar documento
 
-<Callout title="Quando usar eventAt" type="hint">
-  Use `eventAt` para manutenções programadas, treinamentos, viradas de versão ou qualquer comunicado que tenha uma data futura relevante.
+Escreva um post quando o conteúdo precisar registrar uma novidade, um aviso ou um evento de data marcada. Escreva um documento quando o conteúdo precisar servir como referência contínua para uso, operação ou implantação do sistema.
+
+Essa distinção ajuda o template a manter duas experiências diferentes. `/docs` é pensado para consulta permanente. `/blog` é pensado para acompanhar o histórico de comunicação do produto ou da operação.
+
+<Callout title="Regra prática" type="hint">
+  Se o texto continua útil meses depois como guia operacional, ele provavelmente pertence a `/docs`. Se o valor principal está no momento da comunicação, ele provavelmente pertence a `/blog`.
 </Callout>
-
-## Fluxo recomendado
-
-<Steps steps={fluxoPublicacao} />
-
-## Diferença entre documentos e publicações
-
-Documentos explicam como usar o sistema e tendem a ser atualizados com o tempo. Publicações comunicam algo em uma data específica e preservam o histórico do que foi anunciado.
-
-Use `src/docs` para guias permanentes. Use `src/blog` para novidades, avisos e agendamentos.
