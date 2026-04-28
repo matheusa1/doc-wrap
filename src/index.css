@@ -3,6 +3,7 @@
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/geist";
 @import "katex/dist/katex.min.css";
+@import "./styles/mdx/typography.css";
 
 @custom-variant dark (&:is(.dark *));
 
