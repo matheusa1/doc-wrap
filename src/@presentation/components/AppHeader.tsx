@@ -3,7 +3,8 @@ import { Container } from "@presentation/components/ui/container";
 import { ThemeToggle } from "@presentation/components/ui/themeToggle";
 import { normalizePath } from "@presentation/lib/path";
 import { cn } from "@presentation/lib/utils";
-import type { ReactNode } from "react";
+import { Menu, X } from "lucide-react";
+import { type ReactNode, useId, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 type AppHeaderProps = {
@@ -96,6 +97,61 @@ const AppHeaderNavigation: React.FC<AppHeaderNavigationProps> = ({
 	);
 };
 
+type AppHeaderMobileNavigationProps = {
+	currentPath: string;
+	leading?: ReactNode;
+};
+
+const AppHeaderMobileNavigation: React.FC<AppHeaderMobileNavigationProps> = ({
+	currentPath,
+	leading,
+}) => {
+	const navigationId = useId();
+	const [isMobileNavigationOpen, setIsMobileNavigationOpen] = useState(false);
+
+	return (
+		<>
+			<div className="flex min-w-0 items-center justify-between gap-3 sm:justify-start">
+				<AppHeaderBrand leading={leading} />
+				<div className="flex shrink-0 items-center gap-1 sm:hidden">
+					<ThemeToggle />
+					<Button
+						aria-controls={navigationId}
+						aria-expanded={isMobileNavigationOpen}
+						aria-label={
+							isMobileNavigationOpen
+								? "Fechar navegação global"
+								: "Abrir navegação global"
+						}
+						onClick={() =>
+							setIsMobileNavigationOpen((currentState) => !currentState)
+						}
+						size="icon"
+						variant="outline"
+					>
+						{isMobileNavigationOpen ? <X /> : <Menu />}
+					</Button>
+				</div>
+			</div>
+
+			<div
+				id={navigationId}
+				className={cn(
+					"overflow-hidden transition-[max-height,opacity,margin-top] duration-200 ease-out sm:hidden",
+					isMobileNavigationOpen
+						? "mt-1 max-h-40 opacity-100"
+						: "mt-0 max-h-0 opacity-0",
+				)}
+			>
+				<AppHeaderNavigation
+					currentPath={currentPath}
+					onNavigate={() => setIsMobileNavigationOpen(false)}
+				/>
+			</div>
+		</>
+	);
+};
+
 export const AppHeader: React.FC<AppHeaderProps> = ({ leading }) => {
 	const location = useLocation();
 	const currentPath = normalizePath(location.pathname);
@@ -105,15 +161,14 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ leading }) => {
 			className="sticky top-0 z-20 border-b bg-background/95 backdrop-blur-sm supports-backdrop-filter:bg-background/80"
 			data-pagefind-ignore="all"
 		>
-			<Container className="flex min-h-14 max-w-6xl flex-col gap-2 px-4 py-2 sm:h-14 sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:px-5 sm:py-0">
-				<div className="flex min-w-0 items-center justify-between gap-3 sm:justify-start">
-					<AppHeaderBrand leading={leading} />
-					<div className="shrink-0 sm:hidden">
-						<ThemeToggle />
-					</div>
-				</div>
+			<Container className="flex h-fit max-w-6xl flex-col gap-0 px-4 py-1.5 sm:h-14 sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:px-5 sm:py-0">
+				<AppHeaderMobileNavigation
+					currentPath={currentPath}
+					key={currentPath}
+					leading={leading}
+				/>
 
-				<div className="flex min-w-0 items-center gap-1.5 sm:w-auto">
+				<div className="hidden min-w-0 items-center gap-1.5 sm:flex sm:w-auto">
 					<AppHeaderNavigation currentPath={currentPath} />
 					<div className="hidden shrink-0 sm:block">
 						<ThemeToggle />
