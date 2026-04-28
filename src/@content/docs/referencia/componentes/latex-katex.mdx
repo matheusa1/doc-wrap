@@ -4,14 +4,18 @@ description: Escreva fórmulas inline e blocos matemáticos renderizados com KaT
 category: Referência
 order: 47
 author: Matheus Andrade
-updatedAt: 2026-04-27
+updatedAt: 2026-04-28
 ---
 
 ## Quando usar
 
-Use LaTeX para escrever fórmulas técnicas, regras matemáticas, cálculos de negócio e expressões que precisam de notação formal.
+Use LaTeX quando o documento precisar registrar fórmulas, regras matemáticas, cálculos financeiros ou qualquer expressão que fique ambígua demais em texto puro.
 
-## Uso inline
+## Como funciona neste template
+
+Também não é necessário importar componente. O suporte vem do pipeline de MDX configurado em `vite.config.ts`, com `remark-math` e `rehype-katex`.
+
+## Exemplo inline
 
 ```mdx
 O custo médio é $C_m = \frac{C_t}{Q}$.
@@ -19,7 +23,7 @@ O custo médio é $C_m = \frac{C_t}{Q}$.
 
 O custo médio é $C_m = \frac{C_t}{Q}$.
 
-## Uso em bloco
+## Exemplo em bloco
 
 ```mdx
 $$
@@ -33,4 +37,4 @@ $$
 
 ## Boa prática
 
-Quando o texto usar valores monetários com cifrão, prefira escapar o caractere ou evitar `$...$` próximo de preços para não confundir com matemática inline.
+Quando o texto também trouxer valores monetários, revise o uso do caractere `$` para não misturar cifrão com matemática inline por engano.

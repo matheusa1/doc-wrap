@@ -4,31 +4,35 @@ description: Crie diagramas textuais diretamente em arquivos MDX.
 category: Referência
 order: 46
 author: Matheus Andrade
-updatedAt: 2026-04-27
+updatedAt: 2026-04-28
 ---
 
 ## Quando usar
 
-Use blocos `mermaid` para criar diagramas diretamente no MDX. Eles são renderizados automaticamente e acompanham o tema claro/escuro da aplicação.
+Use Mermaid para fluxos, relações entre módulos, timelines curtas e diagramas que mudam com frequência. Como o diagrama é escrito em texto, ele costuma ser mais fácil de revisar junto com o documento do que uma imagem estática.
 
-## Uso
+## Como funciona neste template
+
+Não é preciso importar componente no topo do `.mdx`. O projeto intercepta blocos `pre` e `figure` marcados com linguagem `mermaid` por meio de `src/@presentation/components/docs/mdx-components.tsx`, e então renderiza o gráfico com `MermaidDiagram`.
+
+## Exemplo
 
 ````mdx
 ```mermaid
 flowchart LR
-  A[Escrever MDX] --> B[Build da aplicação]
-  B --> C[Documento publicado]
+  A["Escrever MDX"] --> B["Executar build"]
+  B --> C["Publicar documentação"]
 ```
 ````
 
-## Exemplo renderizado
+## Resultado
 
 ```mermaid
 flowchart LR
-  A[Escrever MDX] --> B[Build da aplicação]
-  B --> C[Documento publicado]
+  A["Escrever MDX"] --> B["Executar build"]
+  B --> C["Publicar documentação"]
 ```
 
 ## Boa prática
 
-Prefira diagramas curtos e focados. Para fluxos grandes, divida a explicação em seções menores ou use mais de um diagrama.
+Prefira diagramas curtos, com uma ideia principal por bloco. Quando o fluxo cresce demais, costuma ser melhor dividir a explicação em dois diagramas menores e acompanhá-los com texto.

@@ -4,7 +4,7 @@ description: Represente procedimentos e fluxos sequenciais em documentos operaci
 category: Referência
 order: 42
 author: Matheus Andrade
-updatedAt: 2026-04-27
+updatedAt: 2026-04-28
 ---
 import { Steps } from "@presentation/components/docs/Step.tsx";
 
@@ -19,19 +19,27 @@ export const exemploSteps = [
   },
   {
     title: "Finalize com conferência",
-    children: "Mostre como o usuário pode validar se concluiu o processo corretamente."
+    children: "Mostre como validar se o processo terminou corretamente."
   }
-]
+];
 
 ## Quando usar
 
-Use `Steps` para representar um procedimento sequencial, como cadastro, configuração, revisão ou publicação.
+Use `Steps` quando a ordem das ações fizer parte da compreensão do conteúdo. É um bom formato para cadastro, configuração, revisão, publicação e qualquer fluxo em que pular etapas possa gerar erro.
 
-## Uso
+## Import
 
 ```mdx
 import { Steps } from "@presentation/components/docs/Step.tsx";
+```
 
+## API disponível hoje
+
+`Steps` recebe uma prop `steps`, que é uma lista de itens com `title`, `children` e `number` opcional. Quando o número não é informado, o componente numera automaticamente os passos em sequência.
+
+## Exemplo
+
+```mdx
 export const passos = [
   {
     title: "Abra a tela",
@@ -39,13 +47,11 @@ export const passos = [
   },
   {
     title: "Preencha os dados",
-    children: "Informe os campos obrigatórios antes de salvar."
+    children: "Revise as informações obrigatórias antes de salvar."
   }
-]
+];
 
 <Steps steps={passos} />
 ```
-
-## Exemplo renderizado
 
 <Steps steps={exemploSteps} />

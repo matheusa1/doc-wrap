@@ -4,22 +4,31 @@ description: Crie links visuais para guias relacionados, módulos e próximos pa
 category: Referência
 order: 43
 author: Matheus Andrade
-updatedAt: 2026-04-27
+updatedAt: 2026-04-28
 ---
 import { Cards } from "@presentation/components/docs/Cards.tsx";
-import { Blocks, GitBranch, Network } from "lucide-react";
+import { Blocks, Network } from "lucide-react";
 
 ## Quando usar
 
-Use `Cards` para destacar links importantes, áreas de documentação ou pontos de entrada para guias relacionados. Cada card aceita ícone, título, descrição opcional, link e seta visual.
+Use `Cards` para sugerir próximas leituras, agrupar atalhos por assunto ou organizar páginas-hub. Ele funciona melhor quando o documento precisa apontar caminhos e não apenas explicar um único fluxo linear.
 
-## Uso em grupo
+## Import
 
 ```mdx
 import { Cards } from "@presentation/components/docs/Cards.tsx";
-import { Blocks, GitBranch, Network } from "lucide-react";
+```
 
-<Cards num={3}>
+## API disponível hoje
+
+`Cards` recebe a quantidade de colunas em `num`. Cada `Cards.Card` aceita `title`, `description`, `href`, `icon`, `arrow` e conteúdo opcional. Links internos usam `react-router-dom`, enquanto URLs externas são abertas como `<a>`.
+
+## Exemplo
+
+```mdx
+import { Blocks, Network } from "lucide-react";
+
+<Cards num={2}>
   <Cards.Card
     icon={<Blocks />}
     title="Módulos"
@@ -32,49 +41,24 @@ import { Blocks, GitBranch, Network } from "lucide-react";
     title="Integrações"
     description="Veja contratos, eventos e dependências externas."
     href="/docs/arquitetura/integracoes"
-    arrow
-  />
-  <Cards.Card
-    icon={<GitBranch />}
-    title="Fluxos críticos"
-    description="Entenda os caminhos principais entre interface, API e persistência."
-    href="/docs/arquitetura/fluxos"
     arrow
   />
 </Cards>
 ```
 
-## Exemplo renderizado
-
-<Cards num={3}>
+<Cards num={2}>
   <Cards.Card
     icon={<Blocks />}
     title="Módulos"
     description="Conheça os domínios e limites de responsabilidade do sistema."
-    href="/docs/arquitetura/modulos"
+    href="/docs/introducao"
     arrow
   />
   <Cards.Card
     icon={<Network />}
     title="Integrações"
-    description="Veja contratos, eventos e dependências externas."
-    href="/docs/arquitetura/integracoes"
-    arrow
-  />
-  <Cards.Card
-    icon={<GitBranch />}
-    title="Fluxos críticos"
-    description="Entenda os caminhos principais entre interface, API e persistência."
-    href="/docs/arquitetura/fluxos"
+    description="Use cards para apontar seções relacionadas ou próximos passos."
+    href="/docs/conteudo/desenvolvendo-template"
     arrow
   />
 </Cards>
-
-## Card isolado
-
-<Cards.Card
-  title="Checklist de arquitetura"
-  description="Use este card fora do grid quando houver apenas um próximo passo recomendado."
-  href="/docs/arquitetura/checklist"
-  arrow
-/>

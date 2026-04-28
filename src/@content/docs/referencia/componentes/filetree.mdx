@@ -4,44 +4,47 @@ description: Represente visualmente estruturas de pastas e arquivos em documento
 category: Referência
 order: 44
 author: Matheus Andrade
-updatedAt: 2026-04-27
+updatedAt: 2026-04-28
 ---
 import { FileTree } from "@presentation/components/docs/FileTree.tsx";
 
 ## Quando usar
 
-Use `FileTree` para representar estruturas de pastas e arquivos em documentos de arquitetura, organização de módulos ou convenções do projeto. O componente é apenas visual e não possui interação.
+Use `FileTree` para explicar organização de projeto, limites entre módulos ou a posição de arquivos importantes dentro do template. Ele é especialmente útil em documentação técnica, onboarding e guias de manutenção.
 
-## Uso
+## Import
 
 ```mdx
 import { FileTree } from "@presentation/components/docs/FileTree.tsx";
+```
 
+## API disponível hoje
+
+O componente é composto por `FileTree`, `FileTree.Folder` e `FileTree.File`. Pastas e arquivos aceitam `name`, `description` e `active`, e a pasta também aceita `defaultOpen`, embora a renderização atual seja estática e trate esse campo mais como semântica do exemplo do que como interação real.
+
+## Exemplo
+
+```mdx
 <FileTree>
   <FileTree.Folder name="src" defaultOpen>
-    <FileTree.Folder name="modules">
-      <FileTree.Folder name="billing" description="Contexto de cobrança">
-        <FileTree.File name="billing.controller.ts" />
-        <FileTree.File name="billing.service.ts" active />
-        <FileTree.File name="billing.repository.ts" />
+    <FileTree.Folder name="@content">
+      <FileTree.Folder name="docs">
+        <FileTree.File name="introducao.mdx" active />
       </FileTree.Folder>
     </FileTree.Folder>
-    <FileTree.File name="main.tsx" />
   </FileTree.Folder>
 </FileTree>
 ```
 
-## Exemplo renderizado
-
 <FileTree>
   <FileTree.Folder name="src" defaultOpen>
-    <FileTree.Folder name="modules">
-      <FileTree.Folder name="billing" description="Contexto de cobrança">
-        <FileTree.File name="billing.controller.ts" />
-        <FileTree.File name="billing.service.ts" active />
-        <FileTree.File name="billing.repository.ts" />
+    <FileTree.Folder name="@content">
+      <FileTree.Folder name="docs">
+        <FileTree.File name="introducao.mdx" active />
+      </FileTree.Folder>
+      <FileTree.Folder name="blog">
+        <FileTree.File name="nota-de-versao-exemplo.mdx" />
       </FileTree.Folder>
     </FileTree.Folder>
-    <FileTree.File name="main.tsx" />
   </FileTree.Folder>
 </FileTree>
