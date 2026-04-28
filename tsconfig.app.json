@@ -21,7 +21,9 @@
 		"erasableSyntaxOnly": true,
 		"noFallthroughCasesInSwitch": true,
 		"paths": {
-			"@/*": ["./src/*"]
+			"@/*": ["./src/*"],
+			"@presentation/*": ["./src/@presentation/*"],
+			"@content/*": ["./src/@content/*"]
 		}
 	},
 	"include": ["src"]
