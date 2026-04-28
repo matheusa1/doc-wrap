@@ -3,7 +3,7 @@ import { dirname, join, relative, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const rootDir = join(dirname(fileURLToPath(import.meta.url)), "..");
-const docsDir = join(rootDir, "src", "docs");
+const docsDir = join(rootDir, "src", "@content", "docs");
 const distDir = join(rootDir, "dist");
 const indexHtmlPath = join(distDir, "index.html");
 
