@@ -1,0 +1,79 @@
+---
+title: Criando publicações
+description: Veja como publicar notas de versão, avisos, comunicados e manutenções usando o blog do template.
+category: Publicações
+order: 3
+author: Matheus Andrade
+updatedAt: 2026-04-27
+---
+import { Callout } from "@presentation/components/docs/Callout.tsx";
+import { Steps } from "@presentation/components/docs/Step.tsx";
+
+export const fluxoPublicacao = [
+  {
+    title: "Crie o post",
+    children: "Adicione um arquivo `.mdx` em `src/blog`. O nome do arquivo define a URL da publicação."
+  },
+  {
+    title: "Classifique por categoria",
+    children: "Use categorias como `Novidades`, `Avisos` ou `Manutenção` para permitir filtros na listagem."
+  },
+  {
+    title: "Publique com data clara",
+    children: "Use `publishedAt` para ordenar posts e `eventAt` quando houver uma data futura relacionada ao comunicado."
+  }
+]
+
+## Para que servem as publicações
+
+A área de publicações é indicada para conteúdos com data, como notas de versão, avisos de manutenção, comunicados de produto e mudanças operacionais. Diferente da documentação, posts são organizados por data de publicação.
+
+## Estrutura de arquivo
+
+Crie arquivos em `src/blog`:
+
+```text
+src/blog/nota-de-versao-abril.mdx
+```
+
+Esse post será acessado em:
+
+```text
+/blog/nota-de-versao-abril
+```
+
+## Frontmatter de post
+
+Use este formato:
+
+```mdx
+---
+title: Nota de versão de abril
+description: Resumo das principais melhorias liberadas neste ciclo.
+category: Novidades
+publishedAt: 2026-04-27
+eventAt: 2026-05-02
+---
+```
+
+Campos disponíveis:
+
+- `title`: título da publicação.
+- `description`: resumo exibido na listagem e no cabeçalho do post.
+- `category`: categoria usada pelos filtros.
+- `publishedAt`: data da publicação no formato `YYYY-MM-DD`.
+- `eventAt`: data opcional de evento relacionado.
+
+<Callout title="Quando usar eventAt" type="hint">
+  Use `eventAt` para manutenções programadas, treinamentos, viradas de versão ou qualquer comunicado que tenha uma data futura relevante.
+</Callout>
+
+## Fluxo recomendado
+
+<Steps steps={fluxoPublicacao} />
+
+## Diferença entre documentos e publicações
+
+Documentos explicam como usar o sistema e tendem a ser atualizados com o tempo. Publicações comunicam algo em uma data específica e preservam o histórico do que foi anunciado.
+
+Use `src/docs` para guias permanentes. Use `src/blog` para novidades, avisos e agendamentos.

@@ -1,0 +1,78 @@
+---
+title: Tabs
+description: Organize variações de conteúdo em abas sincronizáveis e acessíveis.
+category: Referência
+order: 45
+author: Matheus Andrade
+updatedAt: 2026-04-27
+---
+import { Tabs, TabItem } from "@presentation/components/docs/Tabs.tsx";
+
+## Quando usar
+
+Use `Tabs` e `TabItem` para alternar entre variações de um mesmo procedimento, como comandos por ambiente, exemplos por framework ou visões por perfil de usuário.
+
+## Uso básico
+
+```mdx
+import { Tabs, TabItem } from "@presentation/components/docs/Tabs.tsx";
+
+<Tabs defaultValue="api">
+  <TabItem value="api" label="API">
+    Use esta aba para documentar contratos, endpoints e integrações.
+  </TabItem>
+  <TabItem value="web" label="Web">
+    Use esta aba para documentar telas, componentes e fluxos do frontend.
+  </TabItem>
+  <TabItem value="mobile" label="Mobile">
+    Use esta aba para documentar comportamentos específicos do app.
+  </TabItem>
+</Tabs>
+```
+
+## Exemplo renderizado
+
+<Tabs defaultValue="api">
+  <TabItem value="api" label="API">
+    Use esta aba para documentar contratos, endpoints e integrações.
+  </TabItem>
+  <TabItem value="web" label="Web">
+    Use esta aba para documentar telas, componentes e fluxos do frontend.
+  </TabItem>
+  <TabItem value="mobile" label="Mobile">
+    Use esta aba para documentar comportamentos específicos do app.
+  </TabItem>
+</Tabs>
+
+## Abas sincronizadas
+
+Use `groupId` para sincronizar escolhas entre grupos de abas relacionados. O valor escolhido é salvo no navegador.
+
+<Tabs groupId="ambiente" defaultValue="dev">
+  <TabItem value="dev" label="Desenvolvimento">
+    Execute `bun run dev` para iniciar o ambiente local.
+  </TabItem>
+  <TabItem value="prod" label="Produção">
+    Execute `bun run build` antes de publicar a aplicação.
+  </TabItem>
+</Tabs>
+
+<Tabs groupId="ambiente" defaultValue="dev">
+  <TabItem value="dev" label="Desenvolvimento">
+    Use variáveis locais e serviços de homologação.
+  </TabItem>
+  <TabItem value="prod" label="Produção">
+    Use variáveis protegidas e serviços produtivos.
+  </TabItem>
+</Tabs>
+
+## Query string
+
+Use `queryString` para refletir a aba selecionada na URL.
+
+```mdx
+<Tabs groupId="ambiente" queryString>
+  <TabItem value="dev" label="Desenvolvimento">...</TabItem>
+  <TabItem value="prod" label="Produção">...</TabItem>
+</Tabs>
+```

@@ -1,0 +1,57 @@
+---
+title: Introdução ao template
+description: Entenda a proposta do projeto e como transformar esta base em uma central de documentação.
+category: Primeiros passos
+order: 0
+author: Matheus Andrade
+updatedAt: 2026-04-27
+---
+import { Steps } from "@presentation/components/docs/Step.tsx";
+import { Callout } from "@presentation/components/docs/Callout.tsx";
+
+export const primeirosPassos = [
+  {
+    title: "Personalize a identidade",
+    children: "Ajuste nome, textos globais, cores e componentes para refletir o sistema que será documentado."
+  },
+  {
+    title: "Substitua os conteúdos de exemplo",
+    children: "Crie documentos em `src/docs` e publicações em `src/blog`. As rotas são geradas automaticamente."
+  },
+  {
+    title: "Valide busca e build",
+    children: "Execute `bun run build` para gerar a aplicação, as páginas estáticas usadas pelo Pagefind e o índice de busca."
+  }
+]
+
+## O que é o DocGest
+
+DocGest é um template para criar centrais de documentação e publicações de um sistema. Ele combina React, Vite, MDX, Tailwind CSS e Pagefind para entregar uma base pronta para guias de uso, manuais internos, notas de versão e comunicados.
+
+<Callout title="Ideia principal" type="info">
+  O conteúdo fica em arquivos MDX. Ao adicionar um arquivo em `src/docs` ou `src/blog`, o projeto carrega o conteúdo e cria a rota correspondente sem cadastro manual de páginas.
+</Callout>
+
+## Quando usar
+
+- Central de ajuda para usuários finais.
+- Manual operacional para equipes internas.
+- Base de conhecimento para implantação e suporte.
+- Área de publicações para notas de versão, avisos e manutenções.
+
+## Fluxo recomendado
+
+<Steps steps={primeirosPassos} />
+
+## Partes principais
+
+- `src/docs`: documentos exibidos em `/docs`.
+- `src/blog`: publicações exibidas em `/blog`.
+- `src/docs-map.ts`: leitura automática dos documentos.
+- `src/blog-map.ts`: leitura automática das publicações.
+- `src/components/docs`: componentes reutilizáveis em MDX, como `Callout` e `Steps`.
+- `scripts/build-pagefind-docs.mjs`: geração de páginas estáticas usadas pelo índice de busca.
+
+## O que personalizar primeiro
+
+Comece pelos textos globais da aplicação, pelas cores em `src/index.css` e pelos conteúdos de exemplo. Depois, ajuste componentes e layout somente quando houver uma necessidade real do produto documentado.
