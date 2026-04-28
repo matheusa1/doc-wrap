@@ -28,6 +28,11 @@ export type DocGroup = {
 	pages: DocPage[];
 };
 
+export type AdjacentDocPages = {
+	nextDoc?: DocPage;
+	previousDoc?: DocPage;
+};
+
 export type DocNavItem = {
 	children: DocNavItem[];
 	description: string;
@@ -145,6 +150,20 @@ const buildDocNavigation = (pages: DocPage[]): DocNavItem[] => {
 	return Array.from(roots.values()).sort(compareNavItems).map(finalizeNavItem);
 };
 
+const flattenDocNavigationPaths = (items: DocNavItem[]): string[] => {
+	const paths: string[] = [];
+
+	for (const item of items) {
+		if (item.path) {
+			paths.push(item.path);
+		}
+
+		paths.push(...flattenDocNavigationPaths(item.children));
+	}
+
+	return paths;
+};
+
 const createDocPage = ([filePath, module]: [string, DocModule]): DocPage => {
 	const slug = normalizeDocSlug(filePath);
 	const fallbackTitle = slug.split("/").at(-1)
@@ -184,10 +203,27 @@ export const docPagesByPath = new Map(
 
 export const docNavigation = buildDocNavigation(docPages);
 
+const docPathsInNavigationOrder = flattenDocNavigationPaths(docNavigation);
+
 export const firstDocPath =
 	docPages.find((page) => page.slug === "introdução")?.path ??
 	docPages[0]?.path ??
 	"/docs";
+
+export const getAdjacentDocPages = (currentDoc: DocPage): AdjacentDocPages => {
+	const currentDocIndex = docPathsInNavigationOrder.indexOf(currentDoc.path);
+
+	if (currentDocIndex === -1) {
+		return {};
+	}
+
+	return {
+		nextDoc: docPagesByPath.get(docPathsInNavigationOrder[currentDocIndex + 1]),
+		previousDoc: docPagesByPath.get(
+			docPathsInNavigationOrder[currentDocIndex - 1],
+		),
+	};
+};
 
 export const groupDocPages = (pages: DocPage[]): DocGroup[] => {
 	const groups = new Map<string, DocPage[]>();
