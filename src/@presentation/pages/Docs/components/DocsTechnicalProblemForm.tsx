@@ -87,7 +87,7 @@ export const DocsTechnicalProblemForm: React.FC<
 					</Field>
 
 					<Field data-invalid={Boolean(attachmentError)}>
-						<FieldLabel>Evidencias</FieldLabel>
+						<FieldLabel>Evidências</FieldLabel>
 						<DocsTechnicalProblemEvidenceUpload
 							disabled={isSubmitting}
 							files={files}
