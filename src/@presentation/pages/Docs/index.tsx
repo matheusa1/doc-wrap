@@ -11,6 +11,7 @@ import { DocsArticle } from "./components/DocsArticle";
 import { DocsNotFound } from "./components/DocsNotFound";
 import { DocsPageAside } from "./components/DocsPageAside";
 import { useActiveDocHeadings } from "./hooks/use-active-doc-headings";
+import { useDocsScrollToTopOnNavigation } from "./hooks/use-docs-scroll-to-top-on-navigation";
 import { useDocsTableOfContents } from "./hooks/use-docs-table-of-contents";
 import { formatDocumentDate } from "./utils";
 
@@ -23,6 +24,7 @@ export const DocsPage = () => {
 	const { activeHeadingIds, setActiveHeadingIds, tableOfContents } =
 		useDocsTableOfContents({ contentRef, currentDoc });
 
+	useDocsScrollToTopOnNavigation({ currentDocPath: currentDoc?.path });
 	useActiveDocHeadings({ setActiveHeadingIds, tableOfContents });
 
 	if (currentPath === "/docs") {
