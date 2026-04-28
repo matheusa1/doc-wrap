@@ -1,5 +1,9 @@
 import { DocsLayout } from "@presentation/components/docs/DocsLayout";
-import { docPagesByPath, firstDocPath } from "@presentation/docs-map";
+import {
+	docPagesByPath,
+	firstDocPath,
+	getAdjacentDocPages,
+} from "@presentation/docs-map";
 import { normalizePath } from "@presentation/lib/path";
 import { useRef } from "react";
 import { Navigate, useLocation } from "react-router-dom";
@@ -30,6 +34,7 @@ export const DocsPage = () => {
 	}
 
 	const formattedUpdatedAt = formatDocumentDate(currentDoc.updatedAt);
+	const { nextDoc, previousDoc } = getAdjacentDocPages(currentDoc);
 
 	return (
 		<DocsLayout
@@ -47,6 +52,8 @@ export const DocsPage = () => {
 				contentRef={contentRef}
 				currentDoc={currentDoc}
 				formattedUpdatedAt={formattedUpdatedAt}
+				nextDoc={nextDoc}
+				previousDoc={previousDoc}
 			/>
 		</DocsLayout>
 	);

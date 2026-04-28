@@ -4,17 +4,22 @@ import type { MDXComponents } from "mdx/types";
 import type { RefObject } from "react";
 import { DocsArticleContent } from "./DocsArticleContent";
 import { DocsArticleHeader } from "./DocsArticleHeader";
+import { DocsArticlePagination } from "./DocsArticlePagination";
 
 type DocsArticleProps = {
 	contentRef: RefObject<HTMLDivElement | null>;
 	currentDoc: DocPage;
 	formattedUpdatedAt: string;
+	nextDoc?: DocPage;
+	previousDoc?: DocPage;
 };
 
 export const DocsArticle: React.FC<DocsArticleProps> = ({
 	contentRef,
 	currentDoc,
 	formattedUpdatedAt,
+	nextDoc,
+	previousDoc,
 }) => {
 	const Component = currentDoc.Component;
 
@@ -32,6 +37,7 @@ export const DocsArticle: React.FC<DocsArticleProps> = ({
 				Component={getArticleComponent}
 				contentRef={contentRef}
 			/>
+			<DocsArticlePagination nextDoc={nextDoc} previousDoc={previousDoc} />
 		</article>
 	);
 };
