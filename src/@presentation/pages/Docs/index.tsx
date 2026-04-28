@@ -1,8 +1,8 @@
-import { useRef } from "react";
-import { Navigate, useLocation } from "react-router-dom";
 import { DocsLayout } from "@presentation/components/docs/DocsLayout";
 import { docPagesByPath, firstDocPath } from "@presentation/docs-map";
 import { normalizePath } from "@presentation/lib/path";
+import { useRef } from "react";
+import { Navigate, useLocation } from "react-router-dom";
 import { DocsArticle } from "./components/DocsArticle";
 import { DocsNotFound } from "./components/DocsNotFound";
 import { DocsPageAside } from "./components/DocsPageAside";
@@ -36,6 +36,7 @@ export const DocsPage = () => {
 			aside={
 				<DocsPageAside
 					activeHeadingIds={activeHeadingIds}
+					currentDoc={currentDoc}
 					tableOfContents={tableOfContents}
 				/>
 			}
