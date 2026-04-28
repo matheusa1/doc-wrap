@@ -2,6 +2,7 @@ import { Button } from "@presentation/components/ui/button";
 import { Container } from "@presentation/components/ui/container";
 import { ThemeToggle } from "@presentation/components/ui/themeToggle";
 import { normalizePath } from "@presentation/lib/path";
+import { cn } from "@presentation/lib/utils";
 import type { ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
 
@@ -56,14 +57,21 @@ const AppHeaderBrand: React.FC<AppHeaderBrandProps> = ({ leading }) => {
 
 type AppHeaderNavigationProps = {
 	currentPath: string;
+	className?: string;
+	onNavigate?: () => void;
 };
 
 const AppHeaderNavigation: React.FC<AppHeaderNavigationProps> = ({
+	className,
 	currentPath,
+	onNavigate,
 }) => {
 	return (
 		<nav
-			className="grid min-w-0 flex-1 grid-cols-1 gap-1 pb-1 sm:flex sm:flex-none sm:items-center sm:gap-1 sm:overflow-visible sm:px-0 sm:pb-0 min-[28rem]:grid-cols-3"
+			className={cn(
+				"grid min-w-0 flex-1 grid-cols-1 gap-1 pb-1 sm:flex sm:flex-none sm:items-center sm:gap-1 sm:overflow-visible sm:px-0 sm:pb-0 min-[28rem]:grid-cols-3",
+				className,
+			)}
 			aria-label="Navegação global"
 		>
 			{navigationItems.map((item) => {
@@ -75,6 +83,7 @@ const AppHeaderNavigation: React.FC<AppHeaderNavigationProps> = ({
 						className="w-full justify-center sm:w-auto"
 						key={item.path}
 						nativeButton={false}
+						onClick={onNavigate}
 						render={<Link to={item.path} />}
 						size="sm"
 						variant={isActive ? "secondary" : "ghost"}
