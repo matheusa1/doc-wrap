@@ -21,7 +21,7 @@ export const DocsArticleHeader: React.FC<DocsArticleHeaderProps> = ({
 				{currentDoc.title}
 			</h1>
 			<p
-				className="mt-4 text-lg text-muted-foreground leading-8"
+				className="mt-4 text-muted-foreground text-sm leading-8"
 				data-pagefind-meta="description"
 			>
 				{currentDoc.description}
