@@ -1,8 +1,8 @@
+import { Button } from "@presentation/components/ui/button";
 import type { DocPage } from "@presentation/docs-map";
 import { cn } from "@presentation/lib/utils";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Button } from "@/@presentation/components/ui/button";
 
 type DocsArticlePaginationProps = {
 	nextDoc?: DocPage;
@@ -42,6 +42,7 @@ const DocsPaginationLink: React.FC<DocsPaginationLinkProps> = ({
 
 	return (
 		<Button
+			nativeButton={false}
 			render={
 				<Link
 					className={cn(
@@ -51,7 +52,7 @@ const DocsPaginationLink: React.FC<DocsPaginationLinkProps> = ({
 					to={doc.path}
 				/>
 			}
-			variant={"ghost"}
+			variant="ghost"
 		>
 			<div className="flex items-center gap-2 text-muted-foreground text-sm">
 				{previousIcon}
