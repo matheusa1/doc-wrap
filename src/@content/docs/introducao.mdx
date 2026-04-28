@@ -1,57 +1,68 @@
 ---
 title: Introdução ao template
-description: Entenda a proposta do projeto e como transformar esta base em uma central de documentação.
+description: Entenda o que o template entrega hoje e por onde começar a adaptar a base para outro sistema.
 category: Primeiros passos
 order: 0
 author: Matheus Andrade
-updatedAt: 2026-04-27
+updatedAt: 2026-04-28
 ---
-import { Steps } from "@presentation/components/docs/Step.tsx";
 import { Callout } from "@presentation/components/docs/Callout.tsx";
+import { Cards } from "@presentation/components/docs/Cards.tsx";
+import { Blocks, FileText, Settings2, Sparkles } from "lucide-react";
 
-export const primeirosPassos = [
-  {
-    title: "Personalize a identidade",
-    children: "Ajuste nome, textos globais, cores e componentes para refletir o sistema que será documentado."
-  },
-  {
-    title: "Substitua os conteúdos de exemplo",
-    children: "Crie documentos em `src/docs` e publicações em `src/blog`. As rotas são geradas automaticamente."
-  },
-  {
-    title: "Valide busca e build",
-    children: "Execute `bun run build` para gerar a aplicação, as páginas estáticas usadas pelo Pagefind e o índice de busca."
-  }
-]
+## O que este projeto entrega
 
-## O que é
+Este template foi montado para publicar duas trilhas de conteúdo a partir de arquivos MDX. A primeira é a central `/docs`, pensada para guias permanentes, documentação funcional e material de implantação. A segunda é a área `/blog`, voltada a notas de versão, comunicados operacionais e publicações com contexto de data.
 
-A central de Documentação é um template para criar centrais de documentação e publicações de um sistema. Ele combina React, Vite, MDX, Tailwind CSS e Pagefind para entregar uma base pronta para guias de uso, manuais internos, notas de versão e comunicados.
+O conteúdo fica em `src/@content`, enquanto a aplicação React, o layout, os componentes de MDX e os mapas de navegação vivem em `src/@presentation`. Essa separação ajuda a evoluir o template sem misturar regras visuais, carregamento de conteúdo e escrita editorial.
 
-<Callout title="Ideia principal" type="info">
-  O conteúdo fica em arquivos MDX. Ao adicionar um arquivo em `src/docs` ou `src/blog`, o projeto carrega o conteúdo e cria a rota correspondente sem cadastro manual de páginas.
+<Callout title="Fonte de verdade" type="info">
+  O projeto atual usa `src/@content/docs/**/*.mdx` para documentos e `src/@content/blog/**/*.mdx` para publicações. Referências antigas a `src/docs` ou `src/blog` não representam mais a estrutura real do template.
 </Callout>
 
-## Quando usar
+## Como a base funciona
 
-- Central de ajuda para usuários finais.
-- Manual operacional para equipes internas.
-- Base de conhecimento para implantação e suporte.
-- Área de publicações para notas de versão, avisos e manutenções.
+O carregamento das páginas é automático com `import.meta.glob`, então a rota pública nasce do caminho do arquivo. A documentação também já entrega sidebar, breadcrumb, índice lateral com `h2` e `h3`, tema claro e escuro, busca local no desenvolvimento e índice Pagefind no build de produção.
 
-## Fluxo recomendado
+O suporte a MDX inclui componentes visuais prontos, blocos `mermaid` renderizados automaticamente e fórmulas com KaTeX. Isso permite manter a escrita em Markdown na maior parte dos casos e recorrer a componentes apenas quando eles realmente deixam a explicação mais clara.
 
-<Steps steps={primeirosPassos} />
+## Guias principais
 
-## Partes principais
+<Cards num={2}>
+  <Cards.Card
+    icon={<Settings2 />}
+    title="Desenvolvendo o template"
+    description="Onde alterar layout, configuração, conteúdo, mapas de navegação e build."
+    href="/docs/conteudo/desenvolvendo-template"
+    arrow
+  />
+  <Cards.Card
+    icon={<FileText />}
+    title="Escrevendo documentos"
+    description="Como criar MDX em `/docs`, preencher frontmatter e seguir a convenção editorial."
+    href="/docs/conteudo/criando-documentos"
+    arrow
+  />
+  <Cards.Card
+    icon={<Sparkles />}
+    title="Escrevendo publicações"
+    description="Quando usar `/blog`, quais campos existem e como diferenciar posts de documentação."
+    href="/docs/publicacoes/criando-publicacoes"
+    arrow
+  />
+  <Cards.Card
+    icon={<Blocks />}
+    title="Componentes MDX"
+    description="Catálogo dos blocos visuais e recursos já prontos para uso em MDX."
+    href="/docs/referencia/componentes"
+    arrow
+  />
+</Cards>
 
-- `src/docs`: documentos exibidos em `/docs`.
-- `src/blog`: publicações exibidas em `/blog`.
-- `src/docs-map.ts`: leitura automática dos documentos.
-- `src/blog-map.ts`: leitura automática das publicações.
-- `src/components/docs`: componentes reutilizáveis em MDX, como `Callout` e `Steps`.
-- `scripts/build-pagefind-docs.mjs`: geração de páginas estáticas usadas pelo índice de busca.
+## Quando personalizar o quê
 
-## O que personalizar primeiro
+Se a mudança for editorial, trabalhe primeiro em `src/@content`. Se a mudança for de layout, navegação, tema ou comportamento da interface, o ponto de entrada costuma estar em `src/@presentation`. Se a necessidade for enriquecer a escrita com novos blocos, o lugar certo é `src/@presentation/components/docs`.
 
-Comece pelos textos globais da aplicação, pelas cores em `src/index.css` e pelos conteúdos de exemplo. Depois, ajuste componentes e layout somente quando houver uma necessidade real do produto documentado.
+<Callout title="Primeiro passo recomendado" type="hint">
+  Antes de mudar estrutura ou componentes, substitua os conteúdos de exemplo pela documentação real do sistema. Isso costuma revelar com mais clareza quais ajustes o template realmente precisa.
+</Callout>
