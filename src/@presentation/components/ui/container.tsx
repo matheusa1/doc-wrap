@@ -9,7 +9,7 @@ type TContainer = HTMLProps<HTMLDivElement> & {
 const Container: FC<TContainer> = (props) => {
 	const { children, className, ...rest } = props;
 	return (
-		<div className={cn("mx-auto max-w-3xl", className)} {...rest}>
+		<div className={cn("mx-auto max-w-7xl", className)} {...rest}>
 			{children}
 		</div>
 	);

@@ -1,5 +1,4 @@
 import { Button } from "@presentation/components/ui/button";
-import { Container } from "@presentation/components/ui/container";
 import { ThemeToggle } from "@presentation/components/ui/themeToggle";
 import { normalizePath } from "@presentation/lib/path";
 import { cn } from "@presentation/lib/utils";
@@ -161,7 +160,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ leading }) => {
 			className="sticky top-0 z-20 border-b bg-background/95 backdrop-blur-sm supports-backdrop-filter:bg-background/80"
 			data-pagefind-ignore="all"
 		>
-			<Container className="flex h-fit max-w-6xl flex-col gap-0 px-4 py-1.5 sm:h-14 sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:px-5 sm:py-0">
+			<div className="flex h-fit flex-col gap-0 px-4 py-1.5 sm:h-14 sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:px-5 sm:py-0">
 				<AppHeaderMobileNavigation
 					currentPath={currentPath}
 					key={currentPath}
@@ -174,7 +173,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ leading }) => {
 						<ThemeToggle />
 					</div>
 				</div>
-			</Container>
+			</div>
 		</header>
 	);
 };

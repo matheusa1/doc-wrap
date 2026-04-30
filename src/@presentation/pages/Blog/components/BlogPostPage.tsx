@@ -16,7 +16,7 @@ export const BlogPostPage: React.FC<BlogPostPageProps> = ({ post }) => {
 		<>
 			<AppHeader />
 			<main className="px-5 py-8 sm:px-8 lg:px-12">
-				<Container className="max-w-3xl">
+				<Container >
 					<BlogBreadcrumb currentPost={post} />
 					<article>
 						<BlogPostHeader post={post} />

@@ -21,16 +21,20 @@ export const DocsPageAside: React.FC<DocsPageAsideProps> = ({
 	}
 
 	return (
-		<div>
-			<DocsTableOfContents
-				activeIds={activeHeadingIds}
-				items={tableOfContents}
-			/>
-			<DocsFeedbackModal
-				activeHeadingIds={activeHeadingIds}
-				currentDoc={currentDoc}
-				tableOfContents={tableOfContents}
-			/>
+		<div className="flex h-full min-h-0 flex-col">
+			<div className="min-h-0 flex-1 overflow-y-auto pr-2">
+				<DocsTableOfContents
+					activeIds={activeHeadingIds}
+					items={tableOfContents}
+				/>
+			</div>
+			<div className="border-border border-t pt-4">
+				<DocsFeedbackModal
+					activeHeadingIds={activeHeadingIds}
+					currentDoc={currentDoc}
+					tableOfContents={tableOfContents}
+				/>
+			</div>
 		</div>
 	);
 };

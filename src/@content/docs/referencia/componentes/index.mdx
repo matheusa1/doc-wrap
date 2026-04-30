@@ -4,10 +4,10 @@ description: Catálogo dos componentes e recursos já disponíveis para escrita 
 category: Referência
 order: 40
 author: Matheus Andrade
-updatedAt: 2026-04-28
+updatedAt: 2026-04-30
 ---
 import { Cards } from "@presentation/components/docs/Cards.tsx";
-import { Blocks, FileText, FolderTree, GitBranch, Info, ListChecks, Rows3 } from "lucide-react";
+import { Blocks, FileText, FolderTree, GitBranch, Info, ListChecks, Rows3, Table2 } from "lucide-react";
 
 ## O que já existe hoje
 
@@ -54,6 +54,13 @@ Além dos componentes importados, o template também já oferece dois recursos a
     arrow
   />
   <Cards.Card
+    icon={<Table2 />}
+    title="DataTable"
+    description="Tabelas de dados responsivas para comparar registros e resumir informações."
+    href="/docs/referencia/componentes/data-table"
+    arrow
+  />
+  <Cards.Card
     icon={<GitBranch />}
     title="Mermaid"
     description="Diagramas textuais renderizados automaticamente a partir de blocos de código."
@@ -71,6 +78,6 @@ Além dos componentes importados, o template também já oferece dois recursos a
 
 ## Imports e recursos automáticos
 
-Componentes como `Callout`, `Cards`, `Steps`, `FileTree`, `Tabs` e `TabItem` exigem import explícito com o alias `@presentation`. Já Mermaid e KaTeX entram pelo pipeline configurado em `vite.config.ts`, então não dependem de um componente importado no topo do arquivo.
+Componentes como `Callout`, `Cards`, `Steps`, `FileTree`, `Tabs`, `TabItem` e `DataTable` exigem import explícito com o alias `@presentation`. Já Mermaid e KaTeX entram pelo pipeline configurado em `vite.config.ts`, então não dependem de um componente importado no topo do arquivo.
 
 Essa distinção é importante para manter os exemplos corretos e evitar imports desnecessários em MDX.

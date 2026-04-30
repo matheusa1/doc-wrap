@@ -9,7 +9,7 @@ export const BlogNotFound = () => {
 		<>
 			<AppHeader />
 			<main className="px-5 py-8 sm:px-8 lg:px-12">
-				<Container className="max-w-3xl">
+				<Container>
 					<BlogBreadcrumb />
 					<section className="rounded-lg border bg-card p-8 text-card-foreground shadow-sm">
 						<p className="font-semibold text-primary text-sm uppercase tracking-wide">

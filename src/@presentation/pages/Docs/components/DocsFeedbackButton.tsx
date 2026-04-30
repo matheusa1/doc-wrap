@@ -12,7 +12,7 @@ export const DocsFeedbackButton = ({
 }: DocsFeedbackButtonProps) => {
 	return (
 		<Button
-			className={cn("mt-4 w-full justify-start", className)}
+			className={cn("w-full justify-start", className)}
 			size="lg"
 			variant="ghost"
 			{...props}

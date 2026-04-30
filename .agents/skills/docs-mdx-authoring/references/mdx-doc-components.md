@@ -125,6 +125,32 @@ import { TabItem, Tabs } from "@presentation/components/docs/Tabs.tsx";
 
 Se a diferença entre as variações for pequena, prefira explicar isso em um ou dois parágrafos corridos.
 
+## DataTable
+
+Use `DataTable` quando o documento precisar comparar registros, resumir propriedades ou apresentar uma matriz pequena de informações que dependa de leitura por coluna. Para texto corrido, checklists simples ou conteúdo sem relação tabular clara, prefira parágrafos ou listas comuns.
+
+```mdx
+import { DataTable } from "@presentation/components/docs/DataTable.tsx";
+
+export const colunas = [
+  { key: "campo", header: "Campo" },
+  { key: "descricao", header: "Descrição" },
+  { key: "obrigatorio", header: "Obrigatório", align: "center" }
+];
+
+export const linhas = [
+  {
+    campo: "nome",
+    descricao: "Nome público exibido na documentação.",
+    obrigatorio: "Sim"
+  }
+];
+
+<DataTable columns={colunas} rows={linhas} />
+```
+
+Use `caption` quando a tabela precisar de contexto adicional e `render` apenas para pequenas transformações visuais. Se a tabela precisar de filtro, ordenação ou paginação, trate como uma interface específica em vez de forçar tudo dentro do MDX.
+
 ## Mermaid
 
 Use Mermaid quando um fluxo, relação ou arquitetura ficar mais claro como diagrama. Como a renderização já é tratada globalmente pelo projeto, basta usar um bloco de código com linguagem `mermaid`.

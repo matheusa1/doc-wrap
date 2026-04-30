@@ -4,9 +4,9 @@ import {
 	SidebarProvider,
 	SidebarTrigger,
 } from "@presentation/components/ui/sidebar";
-import { cn } from "@presentation/lib/utils";
 import type { CSSProperties, ReactNode } from "react";
 import type { DocPage } from "../../docs-map";
+import { Container } from "../ui/container";
 import { DocsBreadcrumb } from "./DocsBreadcrumb";
 import { DocsSidebar } from "./DocsSidebar";
 
@@ -31,14 +31,11 @@ export const DocsLayout: React.FC<DocsLayoutProps> = (props) => {
 					currentPath={currentPath}
 				/>
 				<SidebarInset>
-					<div className="min-w-0 flex-1 px-5 py-8 sm:px-8 lg:px-12">
+					<Container className="min-w-0 flex-1 px-5 py-8 sm:px-8">
 						<div
-							className={cn(
-								"mx-auto grid grid-cols-1",
-								aside
-									? "max-w-6xl gap-10 xl:grid-cols-[minmax(0,48rem)_16rem] xl:items-start xl:justify-center"
-									: "max-w-3xl",
-							)}
+							className={
+								"grid w-full grid-cols-1 gap-10 xl:grid-cols-[minmax(0,1fr)_16rem] xl:items-start"
+							}
 						>
 							<main className="min-w-0">
 								<DocsBreadcrumb currentDoc={currentDoc} />
@@ -46,13 +43,13 @@ export const DocsLayout: React.FC<DocsLayoutProps> = (props) => {
 							</main>
 							{aside ? (
 								<aside className="hidden w-64 xl:block">
-									<div className="fixed top-20 max-h-[calc(100vh-6rem)] w-64 overflow-y-auto pb-8">
+									<div className="fixed top-20 h-[calc(100svh-6rem)] w-64 pb-8">
 										{aside}
 									</div>
 								</aside>
 							) : null}
 						</div>
-					</div>
+					</Container>
 				</SidebarInset>
 			</div>
 		</SidebarProvider>
