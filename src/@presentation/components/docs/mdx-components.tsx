@@ -104,7 +104,7 @@ const CodeBlockToolbar: React.FC<{
 		<div className="mdx-code-block-toolbar">
 			<div className="flex gap-4 items-center">
 
-			<Code />
+			<Code className="text-muted-foreground" />
 			{language ? (
 				<span className="mdx-code-block-language">
 					{formatLanguageLabel(language)}
@@ -115,7 +115,7 @@ const CodeBlockToolbar: React.FC<{
 			</div>
 
 			<Button
-				aria-label={copied ? "Codigo copiado" : "Copiar codigo"}
+				aria-label={copied ? "Código copiado" : "Copiar código"}
 				className="mdx-code-block-copy"
 				onClick={handleCopy}
 				size="sm"
