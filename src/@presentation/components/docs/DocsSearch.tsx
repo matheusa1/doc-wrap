@@ -56,6 +56,16 @@ const createLocalResults = (query: string): SearchResult[] =>
 		url: page.path,
 	}));
 
+const normalizeSearchResultUrl = (url: string) => {
+	if (!url.startsWith("/")) {
+		return url;
+	}
+
+	const normalizedUrl = url.replace(/\/index\/?$/, "");
+
+	return normalizedUrl || "/";
+};
+
 const searchWithPagefind = async (query: string): Promise<SearchResult[]> => {
 	const pagefindPath = "/pagefind/pagefind.js";
 	const pagefind = (await import(
@@ -76,7 +86,7 @@ const searchWithPagefind = async (query: string): Promise<SearchResult[]> => {
 			return {
 				excerpt: stripHtml(excerpt),
 				title: data.meta?.title ?? data.url,
-				url: data.url,
+				url: normalizeSearchResultUrl(data.url),
 			};
 		}),
 	);
