@@ -1,6 +1,6 @@
 @layer components {
 	.mdx-content {
-		color: var(--muted-foreground);
+		color: var(--foreground);
 	}
 
 	.mdx-content a {

@@ -46,7 +46,7 @@ export const Callout: React.FC<CalloutProps> = (props) => {
 		<Alert className={`${selectedStyle?.style} my-4`}>
 			{selectedIcon}
 			<AlertTitle>{title ?? selectedStyle.label}</AlertTitle>
-			<AlertDescription>{children}</AlertDescription>
+			<AlertDescription className="text-foreground">{children}</AlertDescription>
 		</Alert>
 	);
 };

@@ -267,7 +267,7 @@ export const Tabs: React.FC<TabsProps> = (props) => {
 				})}
 			</div>
 
-			<div className="p-4 text-muted-foreground leading-7">
+			<div className="p-4 leading-7">
 				{lazy ? (
 					<div
 						aria-labelledby={`${reactId}-${selectedTab?.value}-tab`}

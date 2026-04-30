@@ -56,7 +56,7 @@ const CardContent: React.FC<
 					</h3>
 				</div>
 				{arrow ? (
-					<ArrowRight className="mt-1 size-4 shrink-0 text-muted-foreground transition-transform group-hover/card:translate-x-0.5 group-focus-visible/card:translate-x-0.5" />
+					<ArrowRight className="mt-1 size-4 shrink-0 text-foreground transition-transform group-hover/card:translate-x-0.5 group-focus-visible/card:translate-x-0.5" />
 				) : null}
 			</div>
 			{description ? (
