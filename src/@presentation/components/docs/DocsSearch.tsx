@@ -270,6 +270,7 @@ export const DocsSearch = () => {
 							</PopoverTrigger>
 						</InputGroupAddon>
 						<InputGroupInput
+							className="docs-search-input"
 							id="docs-search"
 							onChange={(event) => handleQueryChange(event.target.value)}
 							onFocus={() => {

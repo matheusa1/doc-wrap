@@ -10,4 +10,12 @@
 	html {
 		@apply font-sans;
 	}
+
+	.docs-search-input::-webkit-search-cancel-button,
+	.docs-search-input::-webkit-search-decoration,
+	.docs-search-input::-webkit-search-results-button,
+	.docs-search-input::-webkit-search-results-decoration {
+		-webkit-appearance: none;
+		appearance: none;
+	}
 }
