@@ -13,7 +13,8 @@
 		"lint:fix": "biome lint --write --unsafe .",
 		"check": "biome check .",
 		"check:fix": "biome check --write --unsafe .",
-		"preview": "vite preview --host"
+		"preview": "vite preview --host",
+		"prepare": "husky"
 	},
 	"dependencies": {
 		"@base-ui/react": "^1.4.1",
@@ -54,6 +55,7 @@
 		"@types/react-dom": "^19.2.3",
 		"@vitejs/plugin-react": "^6.0.1",
 		"babel-plugin-react-compiler": "^1.0.0",
+		"husky": "^9.1.7",
 		"pagefind": "^1.5.2",
 		"typescript": "~6.0.2",
 		"vite": "^8.0.10"
