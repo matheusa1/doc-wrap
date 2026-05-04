@@ -4,7 +4,7 @@ description: Entenda o que o template entrega hoje e por onde começar a adaptar
 category: Primeiros passos
 order: 0
 author: Matheus Andrade
-updatedAt: 2026-04-28
+updatedAt: 2026-05-04
 ---
 import { Callout } from "@presentation/components/docs/Callout.tsx";
 import { Cards } from "@presentation/components/docs/Cards.tsx";
@@ -14,7 +14,7 @@ import { Blocks, FileText, Settings2, Sparkles } from "lucide-react";
 
 Este template foi montado para publicar duas trilhas de conteúdo a partir de arquivos MDX. A primeira é a central `/docs`, pensada para guias permanentes, documentação funcional e material de implantação. A segunda é a área `/blog`, voltada a notas de versão, comunicados operacionais e publicações com contexto de data.
 
-O conteúdo fica em `src/@content`, enquanto a aplicação React, o layout, os componentes de MDX e os mapas de navegação vivem em `src/@presentation`. Essa separação ajuda a evoluir o template sem misturar regras visuais, carregamento de conteúdo e escrita editorial.
+Hoje a base está organizada em três camadas principais. `src/@content` concentra os arquivos publicados, `src/@presentation` concentra a aplicação React e a experiência de navegação, e `src/@service` concentra integrações e side effects consumidos pela interface. Essa separação ajuda a evoluir o template sem misturar escrita editorial, apresentação e pontos de integração.
 
 <Callout title="Fonte de verdade" type="info">
   O projeto atual usa `src/@content/docs/**/*.mdx` para documentos e `src/@content/blog/**/*.mdx` para publicações. Referências antigas a `src/docs` ou `src/blog` não representam mais a estrutura real do template.
@@ -23,6 +23,8 @@ O conteúdo fica em `src/@content`, enquanto a aplicação React, o layout, os c
 ## Como a base funciona
 
 O carregamento das páginas é automático com `import.meta.glob`, então a rota pública nasce do caminho do arquivo. A documentação também já entrega sidebar, breadcrumb, índice lateral com `h2` e `h3`, tema claro e escuro, busca local no desenvolvimento e índice Pagefind no build de produção.
+
+No bootstrap da aplicação, `src/main.tsx` registra `QueryClientProvider`, `BrowserRouter`, `ThemeProvider` e `TooltipProvider`. Em cima dessa base, o template combina MDX, React Router, Tailwind CSS, shadcn/ui, Mermaid, KaTeX e Pagefind para montar a experiência final.
 
 O suporte a MDX inclui componentes visuais prontos, blocos `mermaid` renderizados automaticamente e fórmulas com KaTeX. Isso permite manter a escrita em Markdown na maior parte dos casos e recorrer a componentes apenas quando eles realmente deixam a explicação mais clara.
 
@@ -61,7 +63,7 @@ O suporte a MDX inclui componentes visuais prontos, blocos `mermaid` renderizado
 
 ## Quando personalizar o quê
 
-Se a mudança for editorial, trabalhe primeiro em `src/@content`. Se a mudança for de layout, navegação, tema ou comportamento da interface, o ponto de entrada costuma estar em `src/@presentation`. Se a necessidade for enriquecer a escrita com novos blocos, o lugar certo é `src/@presentation/components/docs`.
+Se a mudança for editorial, trabalhe primeiro em `src/@content`. Se a mudança for de layout, navegação, tema, formulários, busca ou comportamento da interface, o ponto de entrada costuma estar em `src/@presentation`. Se a necessidade for conectar envios, integrações ou efeitos externos do template, o lugar certo tende a ser `src/@service`. Se o objetivo for enriquecer a escrita com novos blocos, use `src/@presentation/components/docs`.
 
 <Callout title="Primeiro passo recomendado" type="hint">
   Antes de mudar estrutura ou componentes, substitua os conteúdos de exemplo pela documentação real do sistema. Isso costuma revelar com mais clareza quais ajustes o template realmente precisa.
