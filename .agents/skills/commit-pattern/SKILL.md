@@ -1,6 +1,6 @@
 ---
 name: commit-pattern
-description: Use esta skill quando o usuário pedir para fazer commit, separar mudanças em commits lógicos, seguir o padrão de commit do projeto ou ajustar mensagens de commit. Ela orienta como agrupar alterações por intenção e como escrever mensagens no formato obrigatório `<tipo>(<escopo>): <emoji> <titulo>`.
+description: "Use esta skill quando o usuário pedir para fazer commit, separar mudanças em commits lógicos, seguir o padrão de commit do projeto ou ajustar mensagens de commit. Ela orienta como agrupar alterações por intenção e como escrever mensagens no formato obrigatório `<tipo>(<escopo>): <emoji> <titulo>`."
 ---
 
 # Commit Pattern
