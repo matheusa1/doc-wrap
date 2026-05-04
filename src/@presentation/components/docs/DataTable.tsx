@@ -66,7 +66,7 @@ export const DataTable: React.FC<DataTableProps> = (props) => {
 	return (
 		<div
 			className={cn(
-				"my-6 overflow-hidden rounded-2xl border bg-card shadow-sm pb-4",
+				"my-6 overflow-hidden rounded-2xl border bg-card pb-4 shadow-sm",
 				className,
 			)}
 			{...rest}

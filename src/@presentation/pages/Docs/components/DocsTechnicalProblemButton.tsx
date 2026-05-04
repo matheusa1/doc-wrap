@@ -13,7 +13,7 @@ export const DocsTechnicalProblemButton = ({
 	return (
 		<Button
 			className={cn(
-				"fixed right-5 bottom-5 shadow-lg sm:right-4 sm:bottom-4 z-10",
+				"fixed right-5 bottom-5 z-10 shadow-lg sm:right-4 sm:bottom-4",
 				className,
 			)}
 			size="lg"

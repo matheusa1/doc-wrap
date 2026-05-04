@@ -78,6 +78,13 @@ const CodeBlockToolbar: React.FC<{
 	language?: string;
 }> = ({ code, language }) => {
 	const [copied, setCopied] = useState(false);
+	const languageLabel = language ? (
+		<span className="mdx-code-block-language">
+			{formatLanguageLabel(language)}
+		</span>
+	) : (
+		<span />
+	);
 
 	useEffect(() => {
 		if (!copied) {
@@ -102,16 +109,9 @@ const CodeBlockToolbar: React.FC<{
 
 	return (
 		<div className="mdx-code-block-toolbar">
-			<div className="flex gap-4 items-center">
-
-			<Code className="text-muted-foreground" />
-			{language ? (
-				<span className="mdx-code-block-language">
-					{formatLanguageLabel(language)}
-				</span>
-			) : (
-				<span />
-			)}
+			<div className="flex items-center gap-4">
+				<Code className="text-muted-foreground" />
+				{languageLabel}
 			</div>
 
 			<Button

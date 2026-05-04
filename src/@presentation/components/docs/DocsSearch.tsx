@@ -81,7 +81,7 @@ const searchWithPagefind = async (query: string): Promise<SearchResult[]> => {
 			const excerpt =
 				data.meta?.description && data.meta.description.trim().length > 0
 					? data.meta.description
-					: data.excerpt ?? "";
+					: (data.excerpt ?? "");
 
 			return {
 				excerpt: stripHtml(excerpt),
@@ -309,7 +309,7 @@ export const DocsSearch = () => {
 				<PopoverContent
 					align="start"
 					anchor={inputGroupRef}
-					className="max-h-80 min-w-(--anchor-width) max-w-[calc(100vw-2rem)] w-96 overflow-y-auto p-1"
+					className="max-h-80 w-96 min-w-(--anchor-width) max-w-[calc(100vw-2rem)] overflow-y-auto p-1"
 					initialFocus={false}
 					sideOffset={6}
 				>
