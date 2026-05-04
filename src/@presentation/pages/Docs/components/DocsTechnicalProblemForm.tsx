@@ -1,8 +1,3 @@
-import {
-	Alert,
-	AlertDescription,
-	AlertTitle,
-} from "@presentation/components/ui/alert";
 import { Button } from "@presentation/components/ui/button";
 import {
 	Field,
@@ -22,13 +17,11 @@ type DocsTechnicalProblemFormProps = {
 	files: File[];
 	form: UseFormReturn<DocsTechnicalProblemFormValues>;
 	isSubmitting: boolean;
-	isSuccess: boolean;
 	onCancel: () => void;
 	onFileReject: (file: File, message: string) => void;
 	onFileValidate: (file: File) => string | null;
 	onFilesChange: (files: File[]) => void;
 	onSubmit: () => void;
-	submitError: string | null;
 };
 
 export const DocsTechnicalProblemForm: React.FC<
@@ -38,13 +31,11 @@ export const DocsTechnicalProblemForm: React.FC<
 	files,
 	form,
 	isSubmitting,
-	isSuccess,
 	onCancel,
 	onFileReject,
 	onFileValidate,
 	onFilesChange,
 	onSubmit,
-	submitError,
 }) => {
 	const {
 		formState: { errors },
@@ -54,19 +45,6 @@ export const DocsTechnicalProblemForm: React.FC<
 	return (
 		<form className="contents" onSubmit={onSubmit}>
 			<div className="flex max-h-[min(68svh,42rem)] flex-col gap-5 overflow-y-auto px-6 pb-6">
-				{isSuccess && (
-					<Alert variant="default">
-						<AlertTitle>Problema técnico registrado com sucesso</AlertTitle>
-					</Alert>
-				)}
-
-				{submitError && (
-					<Alert variant="destructive">
-						<AlertTitle>Não foi possível registrar o problema</AlertTitle>
-						<AlertDescription>{submitError}</AlertDescription>
-					</Alert>
-				)}
-
 				<FieldGroup>
 					<Field data-invalid={Boolean(errors.description)}>
 						<FieldLabel htmlFor="docs-technical-problem-description">

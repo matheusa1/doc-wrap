@@ -1,7 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { DocPage } from "@presentation/docs-map";
+import { docsService } from "@service/docs";
+import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 import {
 	buildDocsTechnicalProblemPayload,
@@ -9,7 +12,6 @@ import {
 	getTechnicalProblemFilesTotalSize,
 	getTechnicalProblemFileValidationMessage,
 	normalizeTechnicalProblemRejectionMessage,
-	submitDocsTechnicalProblem,
 	TECHNICAL_PROBLEM_MAX_FILES,
 	TECHNICAL_PROBLEM_MAX_TOTAL_SIZE_BYTES,
 } from "../technical-problem";
@@ -31,25 +33,40 @@ const defaultValues: DocsTechnicalProblemFormValues = {
 	description: "",
 };
 
+const DOCS_TECHNICAL_PROBLEM_SUBMIT_ERROR_MESSAGE =
+	"Nao foi possível registrar o problema técnico. Tente novamente em instantes.";
+const DOCS_TECHNICAL_PROBLEM_SUBMIT_SUCCESS_MESSAGE =
+	"Problema técnico registrado com sucesso.";
+
 export const useDocTechnicalProblemForm = ({
 	activeHeadingIds,
 	currentDoc,
 }: UseDocTechnicalProblemFormProps) => {
 	const [attachmentError, setAttachmentError] = useState<string | null>(null);
 	const [files, setFiles] = useState<File[]>([]);
-	const [isSuccess, setIsSuccess] = useState(false);
-	const [submitError, setSubmitError] = useState<string | null>(null);
 	const form = useForm<DocsTechnicalProblemFormValues>({
 		defaultValues,
 		resolver: zodResolver(docsTechnicalProblemSchema),
+	});
+	const submitDocsTechnicalProblemMutation = useMutation({
+		onError: () => {
+			toast.error(DOCS_TECHNICAL_PROBLEM_SUBMIT_ERROR_MESSAGE);
+		},
+		onSuccess: () => {
+			form.reset(defaultValues);
+			setAttachmentError(null);
+			setFiles([]);
+			toast.success(DOCS_TECHNICAL_PROBLEM_SUBMIT_SUCCESS_MESSAGE);
+		},
+		mutationFn: docsService.submitTechnicalProblem,
+		mutationKey: ["docs", "technical-problem", currentDoc.path],
 	});
 
 	const resetTechnicalProblemForm = () => {
 		form.reset(defaultValues);
 		setAttachmentError(null);
 		setFiles([]);
-		setIsSuccess(false);
-		setSubmitError(null);
+		submitDocsTechnicalProblemMutation.reset();
 	};
 
 	const onFilesChange = (nextFiles: File[]) => {
@@ -82,41 +99,28 @@ export const useDocTechnicalProblemForm = ({
 	};
 
 	const onSubmit = form.handleSubmit(async (values) => {
-		setIsSuccess(false);
-		setSubmitError(null);
+		submitDocsTechnicalProblemMutation.reset();
 
-		try {
-			const payload = buildDocsTechnicalProblemPayload({
-				activeHeadingIds,
-				currentDoc,
-				files,
-				values,
-			});
+		const payload = buildDocsTechnicalProblemPayload({
+			activeHeadingIds,
+			currentDoc,
+			files,
+			values,
+		});
 
-			await submitDocsTechnicalProblem(payload);
-
-			form.reset(defaultValues);
-			setAttachmentError(null);
-			setFiles([]);
-			setIsSuccess(true);
-		} catch {
-			setSubmitError(
-				"Nao foi possível registrar o problema técnico. Tente novamente em instantes.",
-			);
-		}
+		await submitDocsTechnicalProblemMutation.mutateAsync(payload);
 	});
 
 	return {
 		attachmentError,
 		files,
 		form,
-		isSubmitting: form.formState.isSubmitting,
-		isSuccess,
+		isSubmitting: submitDocsTechnicalProblemMutation.isPending,
+		isSuccess: submitDocsTechnicalProblemMutation.isSuccess,
 		onFileReject,
 		onFileValidate,
 		onFilesChange,
 		onSubmit,
 		resetTechnicalProblemForm,
-		submitError,
 	};
 };

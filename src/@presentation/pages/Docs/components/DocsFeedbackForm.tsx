@@ -1,4 +1,3 @@
-import { Alert, AlertTitle } from "@presentation/components/ui/alert";
 import { Button } from "@presentation/components/ui/button";
 import {
 	Field,
@@ -15,7 +14,6 @@ import type { DocsFeedbackFormValues } from "../feedback";
 type DocsFeedbackFormProps = {
 	form: UseFormReturn<DocsFeedbackFormValues>;
 	isSubmitting: boolean;
-	isSuccess: boolean;
 	onCancel: () => void;
 	onSubmit: () => void;
 };
@@ -23,7 +21,6 @@ type DocsFeedbackFormProps = {
 export const DocsFeedbackForm: React.FC<DocsFeedbackFormProps> = ({
 	form,
 	isSubmitting,
-	isSuccess,
 	onCancel,
 	onSubmit,
 }) => {
@@ -35,12 +32,6 @@ export const DocsFeedbackForm: React.FC<DocsFeedbackFormProps> = ({
 	return (
 		<form className="contents" onSubmit={onSubmit}>
 			<div className="space-y-5 px-6 pb-6">
-				{isSuccess && (
-					<Alert variant={"default"}>
-						<AlertTitle>Feedback registrado</AlertTitle>
-					</Alert>
-				)}
-
 				<FieldGroup>
 					<Field data-invalid={Boolean(errors.subject)}>
 						<FieldLabel htmlFor="docs-feedback-subject">Assunto</FieldLabel>

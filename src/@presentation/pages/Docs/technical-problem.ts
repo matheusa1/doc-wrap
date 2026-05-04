@@ -118,10 +118,3 @@ export const buildDocsTechnicalProblemPayload = ({
 		type: file.type,
 	})),
 });
-
-export const submitDocsTechnicalProblem = async (
-	payload: DocsTechnicalProblemPayload,
-) => {
-	await Promise.resolve();
-	console.info("Docs technical problem submitted", payload);
-};

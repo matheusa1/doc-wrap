@@ -37,12 +37,8 @@ export const DocsFeedbackModal: React.FC<DocsFeedbackModalProps> = ({
 			return;
 		}
 
-		const timeoutId = globalThis.setTimeout(() => {
-			setOpen(false);
-			resetFeedbackForm();
-		}, 1200);
-
-		return () => globalThis.clearTimeout(timeoutId);
+		setOpen(false);
+		resetFeedbackForm();
 	}, [isSuccess, resetFeedbackForm]);
 
 	const handleOpenChange = (nextOpen: boolean) => {
@@ -69,7 +65,6 @@ export const DocsFeedbackModal: React.FC<DocsFeedbackModalProps> = ({
 				<DocsFeedbackForm
 					form={form}
 					isSubmitting={isSubmitting}
-					isSuccess={isSuccess}
 					onCancel={() => handleOpenChange(false)}
 					onSubmit={onSubmit}
 				/>

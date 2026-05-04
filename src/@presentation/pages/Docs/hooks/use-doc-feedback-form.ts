@@ -1,8 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { TableOfContentsItem } from "@presentation/components/docs/DocsTableOfContents";
 import type { DocPage } from "@presentation/docs-map";
-import { useState } from "react";
+import { docsService } from "@service/docs";
+import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 import {
 	buildDocsFeedbackPayload,
@@ -37,24 +39,38 @@ const defaultValues: DocsFeedbackFormValues = {
 	subject: "",
 };
 
+const DOCS_FEEDBACK_SUBMIT_ERROR_MESSAGE =
+	"Nao foi possível registrar o feedback. Tente novamente em instantes.";
+const DOCS_FEEDBACK_SUBMIT_SUCCESS_MESSAGE = "Feedback registrado com sucesso.";
+
 export const useDocFeedbackForm = ({
 	activeHeadingIds,
 	currentDoc,
 	tableOfContents,
 }: UseDocFeedbackFormProps) => {
-	const [isSuccess, setIsSuccess] = useState(false);
 	const form = useForm<DocsFeedbackFormValues>({
 		defaultValues,
 		resolver: zodResolver(docsFeedbackSchema),
 	});
+	const submitDocsFeedbackMutation = useMutation({
+		onError: () => {
+			toast.error(DOCS_FEEDBACK_SUBMIT_ERROR_MESSAGE);
+		},
+		onSuccess: () => {
+			form.reset(defaultValues);
+			toast.success(DOCS_FEEDBACK_SUBMIT_SUCCESS_MESSAGE);
+		},
+		mutationFn: docsService.submitFeedback,
+		mutationKey: ["docs", "feedback", currentDoc.path],
+	});
 
 	const resetFeedbackForm = () => {
 		form.reset(defaultValues);
-		setIsSuccess(false);
+		submitDocsFeedbackMutation.reset();
 	};
 
 	const onSubmit = form.handleSubmit(async (values) => {
-		setIsSuccess(false);
+		submitDocsFeedbackMutation.reset();
 
 		const payload = buildDocsFeedbackPayload({
 			activeHeadingIds,
@@ -63,17 +79,13 @@ export const useDocFeedbackForm = ({
 			values,
 		});
 
-		await Promise.resolve();
-		console.info("Docs feedback submitted", payload);
-
-		form.reset(defaultValues);
-		setIsSuccess(true);
+		await submitDocsFeedbackMutation.mutateAsync(payload);
 	});
 
 	return {
 		form,
-		isSubmitting: form.formState.isSubmitting,
-		isSuccess,
+		isSubmitting: submitDocsFeedbackMutation.isPending,
+		isSuccess: submitDocsFeedbackMutation.isSuccess,
 		onSubmit,
 		resetFeedbackForm,
 	};

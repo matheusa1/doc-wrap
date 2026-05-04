@@ -32,7 +32,6 @@ export const DocsTechnicalProblemModal: React.FC<
 		onFilesChange,
 		onSubmit,
 		resetTechnicalProblemForm,
-		submitError,
 	} = useDocTechnicalProblemForm({
 		activeHeadingIds,
 		currentDoc,
@@ -43,12 +42,8 @@ export const DocsTechnicalProblemModal: React.FC<
 			return;
 		}
 
-		const timeoutId = globalThis.setTimeout(() => {
-			setOpen(false);
-			resetTechnicalProblemForm();
-		}, 1200);
-
-		return () => globalThis.clearTimeout(timeoutId);
+		setOpen(false);
+		resetTechnicalProblemForm();
 	}, [isSuccess, resetTechnicalProblemForm]);
 
 	const handleOpenChange = (nextOpen: boolean) => {
@@ -77,13 +72,11 @@ export const DocsTechnicalProblemModal: React.FC<
 					files={files}
 					form={form}
 					isSubmitting={isSubmitting}
-					isSuccess={isSuccess}
 					onCancel={() => handleOpenChange(false)}
 					onFileReject={onFileReject}
 					onFileValidate={onFileValidate}
 					onFilesChange={onFilesChange}
 					onSubmit={onSubmit}
-					submitError={submitError}
 				/>
 			</DialogContent>
 		</Dialog>
