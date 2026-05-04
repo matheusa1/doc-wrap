@@ -1,6 +1,8 @@
 import { TooltipProvider } from "@presentation/components/ui/tooltip";
 import { ThemeProvider } from "@presentation/context/themeProvider.tsx";
+import { queryClient } from "@presentation/lib/query-client";
 import { App } from "@presentation/pages/App.tsx";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
@@ -14,12 +16,14 @@ if (!rootElement) {
 
 createRoot(rootElement).render(
 	<StrictMode>
-		<BrowserRouter>
-			<ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-				<TooltipProvider>
-					<App />
-				</TooltipProvider>
-			</ThemeProvider>
-		</BrowserRouter>
+		<QueryClientProvider client={queryClient}>
+			<BrowserRouter>
+				<ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+					<TooltipProvider>
+						<App />
+					</TooltipProvider>
+				</ThemeProvider>
+			</BrowserRouter>
+		</QueryClientProvider>
 	</StrictMode>,
 );

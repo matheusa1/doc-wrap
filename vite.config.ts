@@ -45,6 +45,7 @@ export default defineConfig({
 			"@": path.resolve(__dirname, "./src"),
 			"@presentation": path.resolve(__dirname, "./src/@presentation"),
 			"@content": path.resolve(__dirname, "./src/@content"),
+			"@service": path.resolve(__dirname, "./src/@service"),
 		},
 	},
 });
