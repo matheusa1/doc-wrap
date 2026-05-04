@@ -4,20 +4,22 @@ description: Veja onde alterar layout, configuração, conteúdo e busca na base
 category: Conteúdo
 order: 0
 author: Matheus Andrade
-updatedAt: 2026-04-28
+updatedAt: 2026-05-04
 ---
 import { Callout } from "@presentation/components/docs/Callout.tsx";
 import { FileTree } from "@presentation/components/docs/FileTree.tsx";
 
 ## Visão geral da stack
 
-O template usa React com Vite, Tailwind CSS, MDX, React Router e Pagefind. O conteúdo fica em arquivos `.mdx`, mas o carregamento, a navegação e o layout são definidos pela camada de apresentação em `src/@presentation`.
+O template usa React 19 com TypeScript e Vite como base da aplicação. Em volta disso, a experiência final combina MDX, React Router, Tailwind CSS v4, shadcn/ui, TanStack Query, React Hook Form, Zod, Mermaid, KaTeX, Sonner e Pagefind.
+
+O conteúdo continua em arquivos `.mdx`, mas a arquitetura já não se resume apenas a conteúdo e apresentação. Hoje a base se apoia em `src/@content` para o material publicado, `src/@presentation` para a interface e `src/@service` para integrações consumidas pelas páginas e hooks.
 
 O fluxo local do dia a dia passa por três comandos. `bun run dev` sobe a aplicação para desenvolvimento. `bun run build` valida TypeScript, gera a aplicação, cria as páginas estáticas da documentação e monta o índice de busca. `bun run preview` serve o resultado final para uma revisão próxima de produção.
 
 ## Onde alterar cada parte
 
-Quando a mudança for textual ou estrutural no conteúdo publicado, trabalhe em `src/@content`. Quando a mudança afetar interface, layout, tema, navegação ou comportamento da aplicação, o ponto de entrada costuma estar em `src/@presentation`.
+Quando a mudança for textual ou estrutural no conteúdo publicado, trabalhe em `src/@content`. Quando a mudança afetar interface, layout, tema, navegação, busca, formulários ou comportamento da aplicação, o ponto de entrada costuma estar em `src/@presentation`. Quando a mudança representar integração, envio de payloads ou outro side effect do template, concentre isso em `src/@service`.
 
 <FileTree>
   <FileTree.Folder name="src" defaultOpen>
@@ -26,10 +28,17 @@ Quando a mudança for textual ou estrutural no conteúdo publicado, trabalhe em 
       <FileTree.Folder name="blog" description="Conteúdo exibido em /blog" />
     </FileTree.Folder>
     <FileTree.Folder name="@presentation" description="Aplicação React" defaultOpen>
-      <FileTree.Folder name="components/docs" description="Blocos reutilizáveis em MDX" />
-      <FileTree.File name="docs-map.ts" description="Leitura e navegação dos documentos" />
+      <FileTree.Folder name="components/docs" description="Layout e blocos reutilizáveis da experiência de documentação" />
+      <FileTree.Folder name="components/ui" description="Base visual compartilhada da aplicação" />
+      <FileTree.Folder name="context" description="Providers como tema" />
+      <FileTree.Folder name="hooks" description="Hooks compartilhados de apresentação" />
+      <FileTree.Folder name="lib" description="Utilitários e apoio da camada de UI" />
+      <FileTree.File name="docs-map.ts" description="Leitura, navegação e busca local dos documentos" />
       <FileTree.File name="blog-map.ts" description="Leitura e listagem das publicações" />
-      <FileTree.Folder name="pages" description="Páginas e composição da interface" />
+      <FileTree.Folder name="pages" description="Páginas React com composição e blocos locais por tela" />
+    </FileTree.Folder>
+    <FileTree.Folder name="@service" description="Integrações e side effects do template" defaultOpen>
+      <FileTree.Folder name="docs" description="Serviços usados pelos fluxos da documentação" />
     </FileTree.Folder>
   </FileTree.Folder>
   <FileTree.File name="vite.config.ts" description="Aliases, MDX e plugins" />
@@ -38,9 +47,15 @@ Quando a mudança for textual ou estrutural no conteúdo publicado, trabalhe em 
 
 ## Configuração de MDX e aliases
 
-`vite.config.ts` é a peça que conecta o pipeline de conteúdo. Ali estão os aliases `@content` e `@presentation`, o suporte a frontmatter no MDX, KaTeX para fórmulas, o `rehype-pretty-code` para blocos de código e o plugin de React que também cobre arquivos `.mdx`.
+`vite.config.ts` é a peça que conecta o pipeline de conteúdo. Ali estão os aliases `@`, `@content`, `@presentation` e `@service`, o suporte a frontmatter no MDX, KaTeX para fórmulas, o `rehype-pretty-code` para blocos de código e o plugin de React que também cobre arquivos `.mdx`.
 
 Isso significa que a maior parte da customização editorial do projeto não depende de uma camada extra de roteamento manual. O arquivo MDX entra no glob, vira módulo e passa a fazer parte da navegação.
+
+## Bootstrap e providers da aplicação
+
+`src/main.tsx` monta o shell principal da aplicação. Hoje ele registra `QueryClientProvider`, `BrowserRouter`, `ThemeProvider` e `TooltipProvider` antes de renderizar `App`.
+
+Essa composição dá suporte a busca e navegação, tema persistido, tooltips e mutações assíncronas. Em outras palavras, a base do template já está pronta para telas que precisam mais do que renderização estática de MDX.
 
 ## Como os documentos e publicações são carregados
 
@@ -48,8 +63,14 @@ Isso significa que a maior parte da customização editorial do projeto não dep
 
 `src/@presentation/blog-map.ts` faz o mesmo para `src/@content/blog/**/*.mdx`, mas com uma lógica editorial diferente. Em `/blog`, a ordenação principal é por `publishedAt`, porque o objetivo é preservar o histórico de publicações e não montar uma árvore de consulta permanente como em `/docs`.
 
+## O papel da camada `@service`
+
+`src/@service` existe para concentrar integrações consumidas pela apresentação. Hoje ela já abriga `docsService`, usado pelos hooks da página de documentação para enviar feedbacks e relatos de problema técnico.
+
+Na prática, a camada de apresentação coleta dados com `react-hook-form`, valida com `zod`, coordena mutações com `@tanstack/react-query` e delega o side effect para `@service`. Isso evita que páginas e componentes precisem conhecer detalhes do envio.
+
 <Callout title="Limite de responsabilidade" type="info">
-  Se a mudança é sobre como o conteúdo é escrito ou organizado, ela deve acontecer no MDX. Se a mudança é sobre como o conteúdo é carregado, apresentado ou indexado, ela pertence ao template.
+  Se a mudança é sobre como o conteúdo é escrito ou organizado, ela deve acontecer no MDX. Se a mudança é sobre como o conteúdo é carregado, apresentado ou indexado, ela pertence ao template. Se a mudança é sobre integração ou side effect, ela deve passar por `@service`.
 </Callout>
 
 ## Busca e build
@@ -60,6 +81,6 @@ Ao alterar o template, trate `bun run build` como verificação obrigatória. El
 
 ## O que faz parte do template e o que faz parte do conteúdo
 
-A base visual, a página de docs, o layout, os componentes MDX, a busca e os mapas automáticos fazem parte do template. Guias, procedimentos, notas de versão e referências funcionais fazem parte do conteúdo do sistema documentado.
+A base visual, os providers, a página de docs, os componentes MDX, a busca, os mapas automáticos e os serviços consumidos pela interface fazem parte do template. Guias, procedimentos, notas de versão e referências funcionais fazem parte do conteúdo do sistema documentado.
 
 Manter essa fronteira clara evita que mudanças editoriais peçam alterações desnecessárias em React, e também impede que o template absorva regras de negócio que deveriam viver apenas nos documentos.

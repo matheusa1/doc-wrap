@@ -4,7 +4,7 @@ description: Entenda como diretórios, frontmatter, headings e busca se combinam
 category: Conteúdo
 order: 2
 author: Matheus Andrade
-updatedAt: 2026-04-28
+updatedAt: 2026-05-04
 ---
 import { Callout } from "@presentation/components/docs/Callout.tsx";
 
@@ -42,7 +42,7 @@ O índice lateral da página atual é extraído do conteúdo renderizado. `##` v
 
 ## Busca
 
-Durante o desenvolvimento, a busca usa os metadados já carregados em memória. No build de produção, o projeto gera páginas estáticas da documentação e então executa o Pagefind para montar o índice final. Por isso, título e descrição curtos e específicos ajudam tanto na listagem quanto na encontrabilidade.
+Durante o desenvolvimento, a busca usa os metadados já carregados em memória por `src/@presentation/docs-map.ts`. No build de produção, o projeto gera páginas estáticas da documentação com `scripts/build-pagefind-docs.mjs` e então executa o Pagefind para montar o índice final. Por isso, título e descrição curtos e específicos ajudam tanto na listagem quanto na encontrabilidade.
 
 ## Diferença entre `/docs` e `/blog`
 
