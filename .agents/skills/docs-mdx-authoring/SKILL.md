@@ -35,6 +35,8 @@ Garantir que novos documentos e atualizações na central de docs:
 - Abra a página explicando contexto, objetivo ou quando usar aquela orientação.
 - Prefira seções com títulos orientados à tarefa ou decisão do usuário.
 - Mantenha exemplos de MDX curtos e reaproveitáveis.
+- Nunca use caminhos absolutos locais, como `/Users/...`, em links ou referências dentro dos documentos.
+- Sempre prefira links MDX válidos no ambiente publicado ou caminhos textuais portáveis, como `.agents/skills/docs-mdx-authoring/SKILL.md`, quando não existir uma rota pública para o destino.
 
 ## Componentes e Estrutura
 
