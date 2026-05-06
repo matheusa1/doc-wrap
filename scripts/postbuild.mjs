@@ -9,14 +9,18 @@ if (!projectConfig.hasDocs) {
 }
 
 const commands = [
-	["node", ["scripts/build-pagefind-docs.mjs"]],
-	["pagefind", ["--site", "dist", "--force-language", "pt"]],
+	{ command: "node", args: ["scripts/build-pagefind-docs.mjs"] },
+	{
+		command: "pagefind --site dist --force-language pt",
+		shell: true,
+	},
 ];
 
-for (const [command, args] of commands) {
+for (const { command, args, shell = false } of commands) {
 	const result = spawnSync(command, args, {
 		cwd: rootDir,
 		encoding: "utf8",
+		shell,
 		stdio: "inherit",
 	});
 
