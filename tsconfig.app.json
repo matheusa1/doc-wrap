@@ -9,6 +9,7 @@
 
 		/* Bundler mode */
 		"moduleResolution": "bundler",
+		"resolveJsonModule": true,
 		"allowImportingTsExtensions": true,
 		"verbatimModuleSyntax": true,
 		"moduleDetection": "force",
@@ -22,6 +23,12 @@
 		"noFallthroughCasesInSwitch": true,
 		"paths": {
 			"@/*": ["./src/*"],
+			"@presentation/feature-routes/blog": [
+				"./src/@presentation/pages/Blog/index.tsx"
+			],
+			"@presentation/feature-routes/docs": [
+				"./src/@presentation/pages/Docs/index.tsx"
+			],
 			"@presentation/*": ["./src/@presentation/*"],
 			"@content/*": ["./src/@content/*"],
 			"@service/*": ["./src/@service/*"]
