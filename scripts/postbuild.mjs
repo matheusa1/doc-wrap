@@ -3,11 +3,14 @@ import { join } from "node:path";
 import { readProjectConfig, rootDir } from "./project-config.mjs";
 
 const projectConfig = await readProjectConfig();
-const pagefindBinary = join(
+const nodeExecutable = process.execPath;
+const pagefindRunner = join(
 	rootDir,
 	"node_modules",
-	".bin",
-	process.platform === "win32" ? "pagefind.cmd" : "pagefind",
+	"pagefind",
+	"lib",
+	"runner",
+	"bin.cjs",
 );
 
 if (!projectConfig.hasDocs) {
@@ -16,20 +19,17 @@ if (!projectConfig.hasDocs) {
 }
 
 const commands = [
-	{ command: "node", args: ["scripts/build-pagefind-docs.mjs"] },
+	{ command: nodeExecutable, args: ["scripts/build-pagefind-docs.mjs"] },
 	{
-		command: pagefindBinary,
-		args: ["--site", "dist", "--force-language", "pt"],
-		// Windows installs Pagefind as a .cmd wrapper, which spawnSync needs a shell to execute.
-		shell: process.platform === "win32",
+		command: nodeExecutable,
+		args: [pagefindRunner, "--site", "dist", "--force-language", "pt"],
 	},
 ];
 
-for (const { command, args, shell = false } of commands) {
+for (const { command, args } of commands) {
 	const result = spawnSync(command, args, {
 		cwd: rootDir,
 		encoding: "utf8",
-		shell,
 		stdio: "inherit",
 	});
 
