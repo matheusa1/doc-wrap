@@ -12,6 +12,7 @@ import {
 	SidebarMenuSubItem,
 	SidebarRail,
 } from "@presentation/components/ui/sidebar";
+import { projectConfig } from "@presentation/config/project";
 import { BookOpenText, FileText, FolderTree } from "lucide-react";
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
@@ -101,10 +102,10 @@ export const DocsSidebar: React.FC<DocsSidebarProps> = ({
 							</span>
 							<span className="flex min-w-0 flex-col gap-0.5">
 								<span className="truncate font-semibold text-sm">
-									Documentação do template
+									{projectConfig.name}
 								</span>
 								<span className="text-muted-foreground text-xs leading-5">
-									Guias de uso
+									Documentação
 								</span>
 							</span>
 						</SidebarMenuButton>

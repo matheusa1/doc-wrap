@@ -9,43 +9,61 @@ import remarkFrontmatter from "remark-frontmatter";
 import remarkMath from "remark-math";
 import remarkMdxFrontmatter from "remark-mdx-frontmatter";
 import { defineConfig } from "vite";
+import { rootDir } from "./scripts/project-config.mjs";
+
+const resolvePath = (relativePath: string) =>
+	path.resolve(rootDir, relativePath);
 
 // https://vite.dev/config/
-export default defineConfig({
-	plugins: [
-		{
-			enforce: "pre",
-			...mdx({
-				rehypePlugins: [
-					rehypeKatex,
-					[
-						rehypePrettyCode,
-						{
-							keepBackground: false,
-							theme: {
-								dark: "github-dark",
-								light: "github-light",
+export default defineConfig(() => {
+	return {
+		plugins: [
+			{
+				enforce: "pre",
+				...mdx({
+					rehypePlugins: [
+						rehypeKatex,
+						[
+							rehypePrettyCode,
+							{
+								keepBackground: false,
+								theme: {
+									dark: "github-dark",
+									light: "github-light",
+								},
 							},
-						},
+						],
 					],
-				],
-				remarkPlugins: [
-					remarkFrontmatter,
-					remarkMath,
-					[remarkMdxFrontmatter, { name: "frontmatter" }],
-				],
-			}),
+					remarkPlugins: [
+						remarkFrontmatter,
+						remarkMath,
+						[remarkMdxFrontmatter, { name: "frontmatter" }],
+					],
+				}),
+			},
+			react({ include: /\.(mdx|js|jsx|ts|tsx)$/ }),
+			babel({ presets: [reactCompilerPreset()] }),
+			tailwindcss(),
+		],
+		resolve: {
+			alias: [
+				{
+					find: "@",
+					replacement: resolvePath("./src"),
+				},
+				{
+					find: "@presentation",
+					replacement: resolvePath("./src/@presentation"),
+				},
+				{
+					find: "@content",
+					replacement: resolvePath("./src/@content"),
+				},
+				{
+					find: "@service",
+					replacement: resolvePath("./src/@service"),
+				},
+			],
 		},
-		react({ include: /\.(mdx|js|jsx|ts|tsx)$/ }),
-		babel({ presets: [reactCompilerPreset()] }),
-		tailwindcss(),
-	],
-	resolve: {
-		alias: {
-			"@": path.resolve(__dirname, "./src"),
-			"@presentation": path.resolve(__dirname, "./src/@presentation"),
-			"@content": path.resolve(__dirname, "./src/@content"),
-			"@service": path.resolve(__dirname, "./src/@service"),
-		},
-	},
+	};
 });

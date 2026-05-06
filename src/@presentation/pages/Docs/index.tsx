@@ -1,9 +1,11 @@
 import { DocsLayout } from "@presentation/components/docs/DocsLayout";
+import { buildPageTitle } from "@presentation/config/project";
 import {
 	docPagesByPath,
 	firstDocPath,
 	getAdjacentDocPages,
 } from "@presentation/docs-map";
+import { useDocumentTitle } from "@presentation/hooks/use-document-title";
 import { normalizePath } from "@presentation/lib/path";
 import { useRef } from "react";
 import { Navigate, useLocation } from "react-router-dom";
@@ -22,9 +24,14 @@ export const DocsPage = () => {
 	const currentPath = normalizePath(location.pathname);
 	const currentDoc =
 		currentPath === "/docs" ? undefined : docPagesByPath.get(currentPath);
+	const documentTitle =
+		currentPath === "/docs"
+			? buildPageTitle("Documentação")
+			: buildPageTitle(currentDoc?.title ?? "Página não encontrada");
 	const { activeHeadingIds, setActiveHeadingIds, tableOfContents } =
 		useDocsTableOfContents({ contentRef, currentDoc });
 
+	useDocumentTitle(documentTitle);
 	useDocsScrollToTopOnNavigation({ currentDocPath: currentDoc?.path });
 	useActiveDocHeadings({ setActiveHeadingIds, tableOfContents });
 

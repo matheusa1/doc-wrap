@@ -112,6 +112,10 @@ No bootstrap da aplicação, `src/main.tsx` registra `QueryClientProvider`, `Bro
 
 Durante o desenvolvimento, a busca usa os metadados já carregados em memória. Em produção, a aplicação usa o índice gerado em `dist/pagefind`.
 
+`hasDocs` e `hasBlog`, definidos em `project.config.json`, controlam a presença dessas trilhas na navegação e no roteamento da aplicação. Eles não tornam o código-fonte dessas páginas opcional para TypeScript ou para o bundle. Em outras palavras, esconder uma feature não autoriza remover `src/@presentation/pages/Docs` ou `src/@presentation/pages/Blog` do projeto.
+
+Existe uma exceção prática para `hasDocs`: quando ele está `false`, o pós-build pula a geração estática das páginas de documentação e a indexação do Pagefind. Isso evita gerar artefatos de busca para uma trilha que não será exposta na interface.
+
 ## Onde editar
 
 - Conteúdo permanente da documentação: `src/@content/docs`

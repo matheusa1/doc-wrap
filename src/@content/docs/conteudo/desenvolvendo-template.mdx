@@ -51,6 +51,8 @@ Quando a mudança for textual ou estrutural no conteúdo publicado, trabalhe em 
 
 Isso significa que a maior parte da customização editorial do projeto não depende de uma camada extra de roteamento manual. O arquivo MDX entra no glob, vira módulo e passa a fazer parte da navegação.
 
+Os flags `hasDocs` e `hasBlog`, definidos em `project.config.json`, servem para esconder essas trilhas da navegação e do roteamento da aplicação. Eles não removem as páginas do type-check nem transformam o código-fonte dessas áreas em dependência opcional do template.
+
 ## Bootstrap e providers da aplicação
 
 `src/main.tsx` monta o shell principal da aplicação. Hoje ele registra `QueryClientProvider`, `BrowserRouter`, `ThemeProvider` e `TooltipProvider` antes de renderizar `App`.
@@ -76,6 +78,8 @@ Na prática, a camada de apresentação coleta dados com `react-hook-form`, vali
 ## Busca e build
 
 Durante o desenvolvimento, a busca se apoia nos metadados já carregados pela aplicação. No build de produção, `bun run build` executa `vite build`, depois `scripts/build-pagefind-docs.mjs` e por fim `pagefind --site dist`. Esse fluxo gera páginas estáticas dos documentos e cria o índice usado pela busca final.
+
+Quando `hasDocs` está `false`, o pós-build pula essa etapa de páginas estáticas e a indexação do Pagefind. A intenção não é tornar a página de documentação opcional para compilação, e sim evitar gerar artefatos de busca para uma trilha que não será exibida.
 
 Ao alterar o template, trate `bun run build` como verificação obrigatória. Ele confirma que a aplicação continua compilando, que os arquivos MDX são válidos e que a indexação ainda consegue percorrer a estrutura final.
 

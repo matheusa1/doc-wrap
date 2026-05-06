@@ -16,7 +16,7 @@ export const BlogEmptyState = () => {
 					render={<Link to="/blog" />}
 					variant="outline"
 				>
-					Ver todos os posts
+					Ver todo o blog
 				</Button>
 			</div>
 		</section>

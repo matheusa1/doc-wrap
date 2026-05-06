@@ -1,11 +1,18 @@
 import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join, relative, sep } from "node:path";
 import { fileURLToPath } from "node:url";
+import { readProjectConfig } from "./project-config.mjs";
 
 const rootDir = join(dirname(fileURLToPath(import.meta.url)), "..");
 const docsDir = join(rootDir, "src", "@content", "docs");
 const distDir = join(rootDir, "dist");
 const indexHtmlPath = join(distDir, "index.html");
+const projectConfig = await readProjectConfig();
+
+if (!projectConfig.hasDocs) {
+	console.log("Skipping docs static generation because hasDocs is disabled.");
+	process.exit(0);
+}
 
 const collectMdxFiles = async (directory) => {
 	const entries = await readdir(directory, { withFileTypes: true });

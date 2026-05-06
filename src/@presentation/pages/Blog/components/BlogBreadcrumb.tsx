@@ -35,7 +35,7 @@ export const BlogBreadcrumb: React.FC<BlogBreadcrumbProps> = ({
 		<Breadcrumb className="mb-8">
 			<BreadcrumbList>
 				<BreadcrumbItem>
-					<BreadcrumbLink render={<Link to="/" />}>Inicio</BreadcrumbLink>
+					<BreadcrumbLink render={<Link to="/" />}>Início</BreadcrumbLink>
 				</BreadcrumbItem>
 				<BreadcrumbSeparator />
 				<BreadcrumbItem>{blogItem}</BreadcrumbItem>
