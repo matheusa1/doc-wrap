@@ -1,5 +1,5 @@
-import { projectConfig } from "@presentation/config/project";
 import { TooltipProvider } from "@presentation/components/ui/tooltip";
+import { projectConfig } from "@presentation/config/project";
 import { ThemeProvider } from "@presentation/context/themeProvider.tsx";
 import { queryClient } from "@presentation/lib/query-client";
 import { App } from "@presentation/pages/App.tsx";

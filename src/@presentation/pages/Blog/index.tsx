@@ -1,5 +1,5 @@
-import { buildPageTitle } from "@presentation/config/project";
 import { blogPostsByPath } from "@presentation/blog-map";
+import { buildPageTitle } from "@presentation/config/project";
 import { useDocumentTitle } from "@presentation/hooks/use-document-title";
 import { normalizePath } from "@presentation/lib/path";
 import { useLocation } from "react-router-dom";

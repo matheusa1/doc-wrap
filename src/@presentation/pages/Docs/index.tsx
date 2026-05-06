@@ -1,11 +1,11 @@
 import { DocsLayout } from "@presentation/components/docs/DocsLayout";
 import { buildPageTitle } from "@presentation/config/project";
-import { useDocumentTitle } from "@presentation/hooks/use-document-title";
 import {
 	docPagesByPath,
 	firstDocPath,
 	getAdjacentDocPages,
 } from "@presentation/docs-map";
+import { useDocumentTitle } from "@presentation/hooks/use-document-title";
 import { normalizePath } from "@presentation/lib/path";
 import { useRef } from "react";
 import { Navigate, useLocation } from "react-router-dom";
