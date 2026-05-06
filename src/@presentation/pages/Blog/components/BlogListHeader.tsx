@@ -8,16 +8,15 @@ export const BlogListHeader: React.FC<BlogListHeaderProps> = ({
 	return (
 		<section className="border-b pb-8">
 			<p className="font-semibold text-primary text-sm uppercase tracking-wide">
-				Publicações
+				Blog
 			</p>
 			<div className="mt-3 grid gap-4 lg:grid-cols-[minmax(0,1fr)_16rem] lg:items-end">
 				<div>
 					<h1 className="font-semibold text-4xl text-foreground tracking-tight">
-						Publicações do template
+						Blog
 					</h1>
 					<p className="mt-4 max-w-2xl text-lg text-muted-foreground leading-8">
-						Exemplos de notas de versão, avisos e agendamentos que podem ser
-						publicados junto da documentação.
+						Posts, notas de versão e comunicados publicados para o projeto.
 					</p>
 				</div>
 				<p className="text-muted-foreground text-sm lg:text-right">

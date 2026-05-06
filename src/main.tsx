@@ -1,3 +1,4 @@
+import { projectConfig } from "@presentation/config/project";
 import { TooltipProvider } from "@presentation/components/ui/tooltip";
 import { ThemeProvider } from "@presentation/context/themeProvider.tsx";
 import { queryClient } from "@presentation/lib/query-client";
@@ -14,11 +15,16 @@ if (!rootElement) {
 	throw new Error("Root element not found");
 }
 
+document.title = projectConfig.name;
+
 createRoot(rootElement).render(
 	<StrictMode>
 		<QueryClientProvider client={queryClient}>
 			<BrowserRouter>
-				<ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+				<ThemeProvider
+					defaultTheme={projectConfig.defaultTheme}
+					storageKey="vite-ui-theme"
+				>
 					<TooltipProvider>
 						<App />
 					</TooltipProvider>

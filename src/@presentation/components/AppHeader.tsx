@@ -1,5 +1,6 @@
 import { Button } from "@presentation/components/ui/button";
 import { ThemeToggle } from "@presentation/components/ui/themeToggle";
+import { projectConfig } from "@presentation/config/project";
 import { normalizePath } from "@presentation/lib/path";
 import { cn } from "@presentation/lib/utils";
 import { Menu, X } from "lucide-react";
@@ -10,20 +11,26 @@ type AppHeaderProps = {
 	leading?: ReactNode;
 };
 
-const navigationItems = [
+const navigationItems: Array<{ label: string; path: string }> = [
 	{
 		label: "Início",
 		path: "/",
 	},
-	{
-		label: "Publicações",
+];
+
+if (projectConfig.hasBlog) {
+	navigationItems.push({
+		label: "Blog",
 		path: "/blog",
-	},
-	{
+	});
+}
+
+if (projectConfig.hasDocs) {
+	navigationItems.push({
 		label: "Documentação",
 		path: "/docs",
-	},
-];
+	});
+}
 
 const isNavigationItemActive = (currentPath: string, itemPath: string) => {
 	if (itemPath === "/") {
@@ -49,7 +56,7 @@ const AppHeaderBrand: React.FC<AppHeaderBrandProps> = ({ leading }) => {
 		<div className="flex min-w-0 items-center gap-3">
 			{leadingContent}
 			<Link className="truncate font-semibold text-sm" to="/">
-				Central de Documentação
+				{projectConfig.name}
 			</Link>
 		</div>
 	);

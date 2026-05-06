@@ -27,7 +27,7 @@ export const BlogNotFound = () => {
 								render={<Link to="/blog" />}
 								variant="outline"
 							>
-								Ver posts
+								Ver blog
 							</Button>
 						</div>
 					</section>
