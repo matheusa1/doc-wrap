@@ -1,4 +1,3 @@
-import { readFile } from "node:fs/promises";
 import path from "node:path";
 import mdx from "@mdx-js/rollup";
 import babel from "@rolldown/plugin-babel";
@@ -10,38 +9,10 @@ import remarkFrontmatter from "remark-frontmatter";
 import remarkMath from "remark-math";
 import remarkMdxFrontmatter from "remark-mdx-frontmatter";
 import { defineConfig } from "vite";
-
-type ProjectConfig = {
-	defaultTheme: "dark" | "light" | "system";
-	description: string;
-	hasBlog: boolean;
-	hasDocs: boolean;
-	name: string;
-};
-
-const defaultProjectConfig: ProjectConfig = {
-	defaultTheme: "dark",
-	description: "",
-	hasBlog: false,
-	hasDocs: true,
-	name: "Projeto",
-};
+import { readProjectConfig, rootDir } from "./scripts/project-config.mjs";
 
 const resolvePath = (relativePath: string) =>
-	path.resolve(__dirname, relativePath);
-
-const readProjectConfig = async (): Promise<ProjectConfig> => {
-	const configContent = await readFile(
-		resolvePath("./project.config.json"),
-		"utf8",
-	);
-	const parsedConfig = JSON.parse(configContent) as Partial<ProjectConfig>;
-
-	return {
-		...defaultProjectConfig,
-		...parsedConfig,
-	};
-};
+	path.resolve(rootDir, relativePath);
 
 // https://vite.dev/config/
 export default defineConfig(async () => {

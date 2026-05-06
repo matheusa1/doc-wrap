@@ -4,17 +4,14 @@ import { fileURLToPath } from "node:url";
 
 const rootDir = join(dirname(fileURLToPath(import.meta.url)), "..");
 const projectConfigPath = join(rootDir, "project.config.json");
-
-const defaultProjectConfig = {
-	defaultTheme: "dark",
-	description: "",
-	hasBlog: false,
-	hasDocs: true,
-	name: "Projeto",
-};
+const defaultProjectConfigPath = join(rootDir, "project-config.defaults.json");
 
 export const readProjectConfig = async () => {
-	const configContent = await readFile(projectConfigPath, "utf8");
+	const [defaultConfigContent, configContent] = await Promise.all([
+		readFile(defaultProjectConfigPath, "utf8"),
+		readFile(projectConfigPath, "utf8"),
+	]);
+	const defaultProjectConfig = JSON.parse(defaultConfigContent);
 	const parsedConfig = JSON.parse(configContent);
 
 	return {

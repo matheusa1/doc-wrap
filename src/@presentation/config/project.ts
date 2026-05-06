@@ -1,4 +1,5 @@
 import projectConfigJson from "../../../project.config.json";
+import defaultProjectConfigJson from "../../../project-config.defaults.json";
 
 export type ProjectTheme = "dark" | "light" | "system";
 
@@ -18,14 +19,7 @@ export type ProjectConfig = {
 	name: string;
 };
 
-const defaultProjectConfig: ProjectConfig = {
-	defaultTheme: "dark",
-	description: "",
-	hasBlog: true,
-	hasDocs: true,
-	name: "Projeto",
-};
-
+const defaultProjectConfig = defaultProjectConfigJson as ProjectConfig;
 const rawProjectConfig = projectConfigJson as ProjectConfigInput;
 
 export const projectConfig: ProjectConfig = {
