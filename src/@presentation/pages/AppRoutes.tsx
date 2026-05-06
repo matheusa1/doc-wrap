@@ -1,6 +1,6 @@
 import { projectConfig } from "@presentation/config/project";
-import { BlogPage } from "@presentation/feature-routes/blog";
-import { DocsPage } from "@presentation/feature-routes/docs";
+import { BlogPage } from "@presentation/pages/Blog";
+import { DocsPage } from "@presentation/pages/Docs";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { Home } from "./Home";
 
