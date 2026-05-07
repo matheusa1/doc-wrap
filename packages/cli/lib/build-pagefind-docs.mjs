@@ -1,5 +1,6 @@
 import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join, relative, sep } from "node:path";
+import { resolveOutDir } from "./out-dir.mjs";
 
 const collectMdxFiles = async (directory) => {
 	const entries = await readdir(directory, { withFileTypes: true });
@@ -172,9 +173,12 @@ const injectSearchBody = (template, searchBody, indexHtmlPath) => {
 	);
 };
 
-export const buildPagefindDocs = async (rootDir) => {
+export const buildPagefindDocs = async (
+	rootDir,
+	{ outDir = "dist" } = {},
+) => {
 	const docsDir = join(rootDir, "src", "@content", "docs");
-	const distDir = join(rootDir, "dist");
+	const distDir = resolveOutDir(rootDir, outDir);
 	const indexHtmlPath = join(distDir, "index.html");
 	const indexTemplate = await readFile(indexHtmlPath, "utf8");
 	const mdxFiles = await collectMdxFiles(docsDir);

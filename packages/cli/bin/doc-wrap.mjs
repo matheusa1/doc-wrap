@@ -5,6 +5,23 @@ import { run } from "../lib/run.mjs";
 
 const rootDir = process.cwd();
 const [, , command, ...args] = process.argv;
+const defaultOutDir = "dist";
+
+const resolveOutDir = (commandArgs) => {
+	for (let index = 0; index < commandArgs.length; index += 1) {
+		const arg = commandArgs[index];
+
+		if (arg === "--outDir") {
+			return commandArgs[index + 1] ?? defaultOutDir;
+		}
+
+		if (arg.startsWith("--outDir=")) {
+			return arg.slice("--outDir=".length) || defaultOutDir;
+		}
+	}
+
+	return defaultOutDir;
+};
 
 const help = `Uso: doc-wrap <comando> [opcoes]
 
@@ -22,13 +39,15 @@ const commandAliases = new Set(["--help", "-h", "help"]);
 const commands = {
 	dev: () => run(rootDir, "vite", ["--host", ...args]),
 	build: async () => {
+		const outDir = resolveOutDir(args);
+
 		run(rootDir, "tsc", ["-b"]);
 		run(rootDir, "vite", ["build", ...args]);
-		await runPostbuild(rootDir);
+		await runPostbuild(rootDir, { outDir });
 	},
 	preview: () => run(rootDir, "vite", ["preview", "--host", ...args]),
 	check: () => run(rootDir, "biome", ["check", ".", ...args]),
-	"docs:index": () => runDocsIndex(rootDir),
+	"docs:index": () => runDocsIndex(rootDir, { outDir: resolveOutDir(args) }),
 };
 
 if (!command || commandAliases.has(command)) {

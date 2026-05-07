@@ -2,6 +2,7 @@ import { existsSync } from "node:fs";
 import { dirname, join, parse } from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildPagefindDocs } from "./build-pagefind-docs.mjs";
+import { defaultOutDir, resolveOutDir } from "./out-dir.mjs";
 import { readProjectConfig } from "./project-config.mjs";
 import { run } from "./run.mjs";
 
@@ -29,17 +30,25 @@ const resolvePagefindRunner = () => {
 	throw new Error("Could not find Pagefind runner from @doc-wrap/cli.");
 };
 
-export const runPagefindIndex = (rootDir) => {
+export const runPagefindIndex = (
+	rootDir,
+	{ outDir = defaultOutDir } = {},
+) => {
+	const resolvedOutDir = resolveOutDir(rootDir, outDir);
+
 	run(rootDir, process.execPath, [
 		resolvePagefindRunner(),
 		"--site",
-		"dist",
+		resolvedOutDir,
 		"--force-language",
 		"pt",
 	]);
 };
 
-export const runDocsIndex = async (rootDir) => {
+export const runDocsIndex = async (
+	rootDir,
+	{ outDir = defaultOutDir } = {},
+) => {
 	const projectConfig = await readProjectConfig(rootDir);
 
 	if (!projectConfig.hasDocs) {
@@ -47,10 +56,13 @@ export const runDocsIndex = async (rootDir) => {
 		return;
 	}
 
-	await buildPagefindDocs(rootDir);
+	await buildPagefindDocs(rootDir, { outDir });
 };
 
-export const runPostbuild = async (rootDir) => {
+export const runPostbuild = async (
+	rootDir,
+	{ outDir = defaultOutDir } = {},
+) => {
 	const projectConfig = await readProjectConfig(rootDir);
 
 	if (!projectConfig.hasDocs) {
@@ -58,6 +70,6 @@ export const runPostbuild = async (rootDir) => {
 		return;
 	}
 
-	await buildPagefindDocs(rootDir);
-	runPagefindIndex(rootDir);
+	await buildPagefindDocs(rootDir, { outDir });
+	runPagefindIndex(rootDir, { outDir });
 };
