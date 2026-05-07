@@ -4,7 +4,7 @@ import { z } from "zod";
 
 const supportedThemes = ["dark", "light", "system"];
 
-const projectConfigSchema = z
+export const projectConfigSchema = z
 	.object({
 		defaultTheme: z.enum(supportedThemes),
 		description: z.string(),
@@ -15,6 +15,14 @@ const projectConfigSchema = z
 	.strict();
 
 const projectConfigOverrideSchema = projectConfigSchema.partial().strict();
+
+export const projectConfigDefaults = {
+	defaultTheme: "dark",
+	description: "",
+	hasBlog: true,
+	hasDocs: true,
+	name: "Projeto",
+};
 
 const formatIssuePath = (issue) => {
 	if (issue.path.length === 0) {
@@ -32,9 +40,7 @@ const formatZodError = (filename, error) => {
 	return `Invalid project config in ${filename}:\n${issues}`;
 };
 
-const parseProjectConfigFile = async (filePath, schema) => {
-	const filename = basename(filePath);
-	const content = await readFile(filePath, "utf8");
+const parseJsonContent = (content, filename) => {
 	let parsedContent;
 
 	try {
@@ -47,7 +53,41 @@ const parseProjectConfigFile = async (filePath, schema) => {
 		});
 	}
 
-	const result = schema.safeParse(parsedContent);
+	return parsedContent;
+};
+
+const parseProjectConfig = (content, filename, schema) => {
+	const result = schema.safeParse(content);
+
+	if (!result.success) {
+		throw new Error(formatZodError(filename, result.error), {
+			cause: result.error,
+		});
+	}
+
+	return result.data;
+};
+
+const parseProjectConfigFile = async (filePath, schema) => {
+	const filename = basename(filePath);
+	const content = await readFile(filePath, "utf8");
+	const parsedContent = parseJsonContent(content, filename);
+
+	return parseProjectConfig(parsedContent, filename, schema);
+};
+
+export const resolveProjectConfig = (overrides = {}) => {
+	const filename = "project.config.json";
+	const parsedOverrides = parseProjectConfig(
+		overrides,
+		filename,
+		projectConfigOverrideSchema,
+	);
+
+	const result = projectConfigSchema.safeParse({
+		...projectConfigDefaults,
+		...parsedOverrides,
+	});
 
 	if (!result.success) {
 		throw new Error(formatZodError(filename, result.error), {
@@ -59,31 +99,11 @@ const parseProjectConfigFile = async (filePath, schema) => {
 };
 
 export const readProjectConfig = async (rootDir) => {
-	const defaultProjectConfigPath = join(
-		rootDir,
-		"project-config.defaults.json",
-	);
 	const projectConfigPath = join(rootDir, "project.config.json");
-	const [defaultProjectConfig, parsedConfig] = await Promise.all([
-		parseProjectConfigFile(defaultProjectConfigPath, projectConfigSchema),
-		parseProjectConfigFile(projectConfigPath, projectConfigOverrideSchema),
-	]);
-	const mergedConfig = {
-		...defaultProjectConfig,
-		...parsedConfig,
-	};
-	const result = projectConfigSchema.safeParse(mergedConfig);
+	const parsedConfig = await parseProjectConfigFile(
+		projectConfigPath,
+		projectConfigOverrideSchema,
+	);
 
-	if (!result.success) {
-		throw new Error(
-			`Invalid merged project config:\n${result.error.issues
-				.map((issue) => `- ${formatIssuePath(issue)}: ${issue.message}`)
-				.join("\n")}`,
-			{
-				cause: result.error,
-			},
-		);
-	}
-
-	return result.data;
+	return resolveProjectConfig(parsedConfig);
 };

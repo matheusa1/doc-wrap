@@ -10,15 +10,39 @@ import remarkFrontmatter from "remark-frontmatter";
 import remarkMath from "remark-math";
 import remarkMdxFrontmatter from "remark-mdx-frontmatter";
 import { defineConfig } from "vite";
+import { readProjectConfig } from "./packages/cli/lib/project-config.mjs";
 
 const rootDir = path.dirname(fileURLToPath(import.meta.url));
 const resolvePath = (relativePath: string) =>
 	path.resolve(rootDir, relativePath);
+const virtualProjectConfigId = "virtual:doc-wrap/project-config";
+const resolvedVirtualProjectConfigId = `\0${virtualProjectConfigId}`;
+
+const createProjectConfigPlugin = (projectConfig: unknown) => ({
+	name: "doc-wrap-project-config",
+	resolveId(source: string) {
+		if (source === virtualProjectConfigId) {
+			return resolvedVirtualProjectConfigId;
+		}
+
+		return undefined;
+	},
+	load(id: string) {
+		if (id === resolvedVirtualProjectConfigId) {
+			return `export default ${JSON.stringify(projectConfig)};`;
+		}
+
+		return undefined;
+	},
+});
 
 // https://vite.dev/config/
-export default defineConfig(() => {
+export default defineConfig(async () => {
+	const projectConfig = await readProjectConfig(rootDir);
+
 	return {
 		plugins: [
+			createProjectConfigPlugin(projectConfig),
 			{
 				enforce: "pre",
 				...mdx({
