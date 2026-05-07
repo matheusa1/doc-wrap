@@ -3,17 +3,20 @@
 	"private": true,
 	"version": "0.0.0",
 	"type": "module",
+	"workspaces": [
+		"packages/*"
+	],
 	"scripts": {
-		"dev": "vite --host",
-		"build": "tsc -b && vite build && node scripts/postbuild.mjs",
+		"dev": "doc-wrap dev",
+		"build": "doc-wrap build",
 		"docs:index": "node scripts/build-pagefind-docs.mjs",
 		"pagefind:index": "pagefind --site dist --force-language pt",
 		"format": "biome format --write .",
 		"lint": "biome lint .",
 		"lint:fix": "biome lint --write --unsafe .",
-		"check": "biome check .",
-		"check:fix": "biome check --write --unsafe .",
-		"preview": "vite preview --host",
+		"check": "doc-wrap check",
+		"check:fix": "doc-wrap check --write --unsafe",
+		"preview": "doc-wrap preview",
 		"prepare": "husky"
 	},
 	"dependencies": {
@@ -54,6 +57,7 @@
 		"@types/react": "^19.2.14",
 		"@types/react-dom": "^19.2.3",
 		"@vitejs/plugin-react": "^6.0.1",
+		"@doc-wrap/cli": "workspace:*",
 		"babel-plugin-react-compiler": "^1.0.0",
 		"husky": "^9.1.7",
 		"pagefind": "^1.5.2",
