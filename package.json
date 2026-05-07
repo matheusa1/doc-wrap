@@ -10,6 +10,7 @@
 		"dev": "node packages/cli/bin/doc-wrap.mjs dev",
 		"build": "node packages/cli/bin/doc-wrap.mjs build",
 		"docs:index": "node packages/cli/bin/doc-wrap.mjs docs:index",
+		"test": "bun test",
 		"format": "biome format --write .",
 		"lint": "biome lint .",
 		"lint:fix": "biome lint --write --unsafe .",
