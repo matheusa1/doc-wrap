@@ -1,18 +1,5 @@
 import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join, relative, sep } from "node:path";
-import { fileURLToPath } from "node:url";
-import { readProjectConfig } from "./project-config.mjs";
-
-const rootDir = join(dirname(fileURLToPath(import.meta.url)), "..");
-const docsDir = join(rootDir, "src", "@content", "docs");
-const distDir = join(rootDir, "dist");
-const indexHtmlPath = join(distDir, "index.html");
-const projectConfig = await readProjectConfig();
-
-if (!projectConfig.hasDocs) {
-	console.log("Skipping docs static generation because hasDocs is disabled.");
-	process.exit(0);
-}
 
 const collectMdxFiles = async (directory) => {
 	const entries = await readdir(directory, { withFileTypes: true });
@@ -172,7 +159,7 @@ const titleFromSlug = (slug) => {
 		.replaceAll(/\b\w/g, (letter) => letter.toUpperCase());
 };
 
-const injectSearchBody = (template, searchBody) => {
+const injectSearchBody = (template, searchBody, indexHtmlPath) => {
 	const rootElement = '<div id="root"></div>';
 
 	if (!template.includes(rootElement)) {
@@ -185,32 +172,42 @@ const injectSearchBody = (template, searchBody) => {
 	);
 };
 
-const indexTemplate = await readFile(indexHtmlPath, "utf8");
-const mdxFiles = await collectMdxFiles(docsDir);
+export const buildPagefindDocs = async (rootDir) => {
+	const docsDir = join(rootDir, "src", "@content", "docs");
+	const distDir = join(rootDir, "dist");
+	const indexHtmlPath = join(distDir, "index.html");
+	const indexTemplate = await readFile(indexHtmlPath, "utf8");
+	const mdxFiles = await collectMdxFiles(docsDir);
 
-await Promise.all(
-	mdxFiles.map(async (filePath) => {
-		const source = await readFile(filePath, "utf8");
-		const { content, frontmatter } = parseFrontmatter(source);
-		const slug = relative(docsDir, filePath)
-			.replaceAll(sep, "/")
-			.replace(/\.mdx$/, "");
-		const title = frontmatter.title ?? titleFromSlug(slug);
-		const description = frontmatter.description ?? "";
-		const category = frontmatter.category ?? "Documentacao";
-		const searchBody = `
+	await Promise.all(
+		mdxFiles.map(async (filePath) => {
+			const source = await readFile(filePath, "utf8");
+			const { content, frontmatter } = parseFrontmatter(source);
+			const slug = relative(docsDir, filePath)
+				.replaceAll(sep, "/")
+				.replace(/\.mdx$/, "");
+			const title = frontmatter.title ?? titleFromSlug(slug);
+			const description = frontmatter.description ?? "";
+			const category = frontmatter.category ?? "Documentacao";
+			const searchBody = `
 <article data-pagefind-body>
 	<p data-pagefind-meta="category">${escapeHtml(category)}</p>
 	<h1 data-pagefind-meta="title">${escapeHtml(title)}</h1>
 	<p data-pagefind-meta="description">${escapeHtml(description)}</p>
 	${mdxToSearchHtml(content)}
 </article>`.trim();
-		const html = injectSearchBody(indexTemplate, searchBody);
-		const outputPath = join(distDir, "docs", ...slug.split("/"), "index.html");
+			const html = injectSearchBody(indexTemplate, searchBody, indexHtmlPath);
+			const outputPath = join(
+				distDir,
+				"docs",
+				...slug.split("/"),
+				"index.html",
+			);
 
-		await mkdir(dirname(outputPath), { recursive: true });
-		await writeFile(outputPath, html);
-	}),
-);
+			await mkdir(dirname(outputPath), { recursive: true });
+			await writeFile(outputPath, html);
+		}),
+	);
 
-console.log(`Generated ${mdxFiles.length} static docs pages for Pagefind.`);
+	console.log(`Generated ${mdxFiles.length} static docs pages for Pagefind.`);
+};

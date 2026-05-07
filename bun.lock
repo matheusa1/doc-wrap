@@ -45,7 +45,6 @@
         "@vitejs/plugin-react": "^6.0.1",
         "babel-plugin-react-compiler": "^1.0.0",
         "husky": "^9.1.7",
-        "pagefind": "^1.5.2",
         "typescript": "~6.0.2",
         "vite": "^8.0.10",
       },
@@ -55,6 +54,10 @@
       "version": "0.0.0",
       "bin": {
         "doc-wrap": "./bin/doc-wrap.mjs",
+      },
+      "dependencies": {
+        "pagefind": "^1.5.2",
+        "zod": "^4.3.6",
       },
     },
   },
