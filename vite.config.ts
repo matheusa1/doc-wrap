@@ -9,16 +9,17 @@ import rehypePrettyCode from "rehype-pretty-code";
 import remarkFrontmatter from "remark-frontmatter";
 import remarkMath from "remark-math";
 import remarkMdxFrontmatter from "remark-mdx-frontmatter";
-import { defineConfig } from "vite";
+import { defineConfig, type HmrContext, type Plugin } from "vite";
 import { readProjectConfig } from "./packages/cli/lib/project-config.mjs";
 
 const rootDir = path.dirname(fileURLToPath(import.meta.url));
 const resolvePath = (relativePath: string) =>
 	path.resolve(rootDir, relativePath);
+const projectConfigPath = resolvePath("./project.config.json");
 const virtualProjectConfigId = "virtual:doc-wrap/project-config";
 const resolvedVirtualProjectConfigId = `\0${virtualProjectConfigId}`;
 
-const createProjectConfigPlugin = (projectConfig: unknown) => ({
+const createProjectConfigPlugin = (): Plugin => ({
 	name: "doc-wrap-project-config",
 	resolveId(source: string) {
 		if (source === virtualProjectConfigId) {
@@ -27,22 +28,40 @@ const createProjectConfigPlugin = (projectConfig: unknown) => ({
 
 		return undefined;
 	},
-	load(id: string) {
+	async load(id: string) {
 		if (id === resolvedVirtualProjectConfigId) {
+			this.addWatchFile(projectConfigPath);
+			const projectConfig = await readProjectConfig(rootDir);
+
 			return `export default ${JSON.stringify(projectConfig)};`;
 		}
 
 		return undefined;
 	},
+	handleHotUpdate({ file, server }: HmrContext) {
+		if (path.resolve(file) !== projectConfigPath) {
+			return undefined;
+		}
+
+		const projectConfigModule = server.moduleGraph.getModuleById(
+			resolvedVirtualProjectConfigId,
+		);
+
+		if (projectConfigModule) {
+			server.moduleGraph.invalidateModule(projectConfigModule);
+		}
+
+		server.ws.send({ type: "full-reload" });
+
+		return [];
+	},
 });
 
 // https://vite.dev/config/
-export default defineConfig(async () => {
-	const projectConfig = await readProjectConfig(rootDir);
-
+export default defineConfig(() => {
 	return {
 		plugins: [
-			createProjectConfigPlugin(projectConfig),
+			createProjectConfigPlugin(),
 			{
 				enforce: "pre",
 				...mdx({
