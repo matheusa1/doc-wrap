@@ -42,7 +42,7 @@ Quando a mudança for textual ou estrutural no conteúdo publicado, trabalhe em 
     </FileTree.Folder>
   </FileTree.Folder>
   <FileTree.File name="vite.config.ts" description="Aliases, MDX e plugins" />
-  <FileTree.File name="scripts/build-pagefind-docs.mjs" description="Páginas estáticas para indexação" />
+  <FileTree.Folder name="packages/cli" description="Comandos do template, build e pós-build" />
 </FileTree>
 
 ## Configuração de MDX e aliases
@@ -77,7 +77,7 @@ Na prática, a camada de apresentação coleta dados com `react-hook-form`, vali
 
 ## Busca e build
 
-Durante o desenvolvimento, a busca se apoia nos metadados já carregados pela aplicação. No build de produção, `bun run build` executa `vite build`, depois `scripts/build-pagefind-docs.mjs` e por fim `pagefind --site dist`. Esse fluxo gera páginas estáticas dos documentos e cria o índice usado pela busca final.
+Durante o desenvolvimento, a busca se apoia nos metadados já carregados pela aplicação. No build de produção, `bun run build` passa pelo `doc-wrap build`, que executa `vite build`, gera as páginas estáticas dos documentos no pós-build e roda o Pagefind para criar o índice usado pela busca final.
 
 Quando `hasDocs` está `false`, o pós-build pula essa etapa de páginas estáticas e a indexação do Pagefind. A intenção não é tornar a página de documentação opcional para compilação, e sim evitar gerar artefatos de busca para uma trilha que não será exibida.
 

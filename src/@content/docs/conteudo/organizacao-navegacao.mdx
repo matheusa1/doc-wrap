@@ -42,7 +42,7 @@ O índice lateral da página atual é extraído do conteúdo renderizado. `##` v
 
 ## Busca
 
-Durante o desenvolvimento, a busca usa os metadados já carregados em memória por `src/@presentation/docs-map.ts`. No build de produção, o projeto gera páginas estáticas da documentação com `scripts/build-pagefind-docs.mjs` e então executa o Pagefind para montar o índice final. Por isso, título e descrição curtos e específicos ajudam tanto na listagem quanto na encontrabilidade.
+Durante o desenvolvimento, a busca usa os metadados já carregados em memória por `src/@presentation/docs-map.ts`. No build de produção, `doc-wrap build` gera páginas estáticas da documentação no pós-build e então executa o Pagefind para montar o índice final. Por isso, título e descrição curtos e específicos ajudam tanto na listagem quanto na encontrabilidade.
 
 ## Diferença entre `/docs` e `/blog`
 
