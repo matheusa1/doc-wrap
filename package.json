@@ -3,17 +3,19 @@
 	"private": true,
 	"version": "0.0.0",
 	"type": "module",
+	"workspaces": [
+		"packages/*"
+	],
 	"scripts": {
-		"dev": "vite --host",
-		"build": "tsc -b && vite build && node scripts/postbuild.mjs",
-		"docs:index": "node scripts/build-pagefind-docs.mjs",
-		"pagefind:index": "pagefind --site dist --force-language pt",
+		"dev": "node packages/cli/bin/doc-wrap.mjs dev",
+		"build": "node packages/cli/bin/doc-wrap.mjs build",
+		"docs:index": "node packages/cli/bin/doc-wrap.mjs docs:index",
 		"format": "biome format --write .",
 		"lint": "biome lint .",
 		"lint:fix": "biome lint --write --unsafe .",
-		"check": "biome check .",
-		"check:fix": "biome check --write --unsafe .",
-		"preview": "vite preview --host",
+		"check": "node packages/cli/bin/doc-wrap.mjs check",
+		"check:fix": "node packages/cli/bin/doc-wrap.mjs check --write --unsafe",
+		"preview": "node packages/cli/bin/doc-wrap.mjs preview",
 		"prepare": "husky"
 	},
 	"dependencies": {
@@ -54,9 +56,9 @@
 		"@types/react": "^19.2.14",
 		"@types/react-dom": "^19.2.3",
 		"@vitejs/plugin-react": "^6.0.1",
+		"@doc-wrap/cli": "workspace:*",
 		"babel-plugin-react-compiler": "^1.0.0",
 		"husky": "^9.1.7",
-		"pagefind": "^1.5.2",
 		"typescript": "~6.0.2",
 		"vite": "^8.0.10"
 	}

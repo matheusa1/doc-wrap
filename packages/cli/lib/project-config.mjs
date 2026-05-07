@@ -1,11 +1,7 @@
 import { readFile } from "node:fs/promises";
-import { basename, dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
+import { basename, join } from "node:path";
 import { z } from "zod";
 
-const rootDir = join(dirname(fileURLToPath(import.meta.url)), "..");
-const projectConfigPath = join(rootDir, "project.config.json");
-const defaultProjectConfigPath = join(rootDir, "project-config.defaults.json");
 const supportedThemes = ["dark", "light", "system"];
 
 const projectConfigSchema = z
@@ -62,17 +58,20 @@ const parseProjectConfigFile = async (filePath, schema) => {
 	return result.data;
 };
 
-export const readProjectConfig = async () => {
+export const readProjectConfig = async (rootDir) => {
+	const defaultProjectConfigPath = join(
+		rootDir,
+		"project-config.defaults.json",
+	);
+	const projectConfigPath = join(rootDir, "project.config.json");
 	const [defaultProjectConfig, parsedConfig] = await Promise.all([
 		parseProjectConfigFile(defaultProjectConfigPath, projectConfigSchema),
 		parseProjectConfigFile(projectConfigPath, projectConfigOverrideSchema),
 	]);
-
 	const mergedConfig = {
 		...defaultProjectConfig,
 		...parsedConfig,
 	};
-
 	const result = projectConfigSchema.safeParse(mergedConfig);
 
 	if (!result.success) {
@@ -88,5 +87,3 @@ export const readProjectConfig = async () => {
 
 	return result.data;
 };
-
-export { rootDir };

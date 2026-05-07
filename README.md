@@ -89,8 +89,8 @@ src/
     blog-map.ts            Mapa automático das publicações
   @service/
     docs/                  Integrações e side effects ligados ao fluxo de docs
-scripts/
-  build-pagefind-docs.mjs  Geração das páginas estáticas usadas pelo Pagefind
+packages/
+  cli/                     CLI local responsável pelos comandos do template
 ```
 
 ## Como a base funciona
@@ -103,12 +103,12 @@ No bootstrap da aplicação, `src/main.tsx` registra `QueryClientProvider`, `Bro
 
 ## Fluxo de build e busca
 
-`bun run build` executa quatro etapas principais:
+`bun run build` delega o fluxo para `doc-wrap build`, que executa quatro etapas principais:
 
 1. `tsc -b` para validar TypeScript.
 2. `vite build` para gerar a aplicação.
-3. `node scripts/build-pagefind-docs.mjs` para criar páginas estáticas dos documentos.
-4. `pagefind --site dist --force-language pt` para montar o índice final de busca.
+3. Pós-build da CLI para criar páginas estáticas dos documentos.
+4. Pagefind, resolvido pela própria CLI, para montar o índice final de busca.
 
 Durante o desenvolvimento, a busca usa os metadados já carregados em memória. Em produção, a aplicação usa o índice gerado em `dist/pagefind`.
 

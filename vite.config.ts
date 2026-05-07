@@ -1,4 +1,5 @@
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import mdx from "@mdx-js/rollup";
 import babel from "@rolldown/plugin-babel";
 import tailwindcss from "@tailwindcss/vite";
@@ -9,8 +10,8 @@ import remarkFrontmatter from "remark-frontmatter";
 import remarkMath from "remark-math";
 import remarkMdxFrontmatter from "remark-mdx-frontmatter";
 import { defineConfig } from "vite";
-import { rootDir } from "./scripts/project-config.mjs";
 
+const rootDir = path.dirname(fileURLToPath(import.meta.url));
 const resolvePath = (relativePath: string) =>
 	path.resolve(rootDir, relativePath);
 
