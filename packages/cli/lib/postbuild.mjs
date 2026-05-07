@@ -30,10 +30,7 @@ const resolvePagefindRunner = () => {
 	throw new Error("Could not find Pagefind runner from @doc-wrap/cli.");
 };
 
-export const runPagefindIndex = (
-	rootDir,
-	{ outDir = defaultOutDir } = {},
-) => {
+export const runPagefindIndex = (rootDir, { outDir = defaultOutDir } = {}) => {
 	const resolvedOutDir = resolveOutDir(rootDir, outDir);
 
 	run(rootDir, process.execPath, [

@@ -7,15 +7,15 @@
 		"packages/*"
 	],
 	"scripts": {
-		"dev": "doc-wrap dev",
-		"build": "doc-wrap build",
-		"docs:index": "doc-wrap docs:index",
+		"dev": "node packages/cli/bin/doc-wrap.mjs dev",
+		"build": "node packages/cli/bin/doc-wrap.mjs build",
+		"docs:index": "node packages/cli/bin/doc-wrap.mjs docs:index",
 		"format": "biome format --write .",
 		"lint": "biome lint .",
 		"lint:fix": "biome lint --write --unsafe .",
-		"check": "doc-wrap check",
-		"check:fix": "doc-wrap check --write --unsafe",
-		"preview": "doc-wrap preview",
+		"check": "node packages/cli/bin/doc-wrap.mjs check",
+		"check:fix": "node packages/cli/bin/doc-wrap.mjs check --write --unsafe",
+		"preview": "node packages/cli/bin/doc-wrap.mjs preview",
 		"prepare": "husky"
 	},
 	"dependencies": {

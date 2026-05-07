@@ -173,10 +173,7 @@ const injectSearchBody = (template, searchBody, indexHtmlPath) => {
 	);
 };
 
-export const buildPagefindDocs = async (
-	rootDir,
-	{ outDir = "dist" } = {},
-) => {
+export const buildPagefindDocs = async (rootDir, { outDir = "dist" } = {}) => {
 	const docsDir = join(rootDir, "src", "@content", "docs");
 	const distDir = resolveOutDir(rootDir, outDir);
 	const indexHtmlPath = join(distDir, "index.html");
