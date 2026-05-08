@@ -1,7 +1,14 @@
 {
 	"name": "@doc-wrap/project-config",
+	"description": "Centraliza a leitura, validacao e resolucao do project.config.json do doc-wrap.",
 	"version": "0.1.0",
+	"author": "Matheus Andrade",
+	"license": "MIT",
 	"type": "module",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/matheusa1/doc-wrap.git"
+	},
 	"publishConfig": {
 		"access": "public"
 	},
