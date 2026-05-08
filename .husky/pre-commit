@@ -1,10 +1,72 @@
 #!/usr/bin/env sh
 
-staged_files="$(git diff --cached --name-only --diff-filter=ACMR | grep -E '\.(js|jsx|ts|tsx|json|jsonc|css|scss|html|md)$' || true)"
+set -eu
 
-if [ -z "$staged_files" ]; then
+repo_root="$(pwd)"
+biome_bin="$repo_root/node_modules/.bin/biome"
+template_root_prefix="packages/create-doc-wrap/templates"
+staged_files_file="$(mktemp)"
+root_files_file="$(mktemp)"
+blog_files_file="$(mktemp)"
+docs_files_file="$(mktemp)"
+blog_docs_files_file="$(mktemp)"
+
+cleanup() {
+	rm -f \
+		"$staged_files_file" \
+		"$root_files_file" \
+		"$blog_files_file" \
+		"$docs_files_file" \
+		"$blog_docs_files_file"
+}
+
+trap cleanup EXIT
+
+git diff --cached --name-only --diff-filter=ACMR \
+	| grep -E '\.(js|jsx|ts|tsx|json|jsonc|css|scss|html|md)$' \
+	> "$staged_files_file" || true
+
+if [ ! -s "$staged_files_file" ]; then
 	exit 0
 fi
 
-echo "$staged_files" | xargs bunx biome format --write
-echo "$staged_files" | xargs git add
+while IFS= read -r file_path; do
+	case "$file_path" in
+		"$template_root_prefix"/blog-docs/*)
+			printf '%s\n' "${file_path#"$template_root_prefix"/blog-docs/}" >> "$blog_docs_files_file"
+			;;
+		"$template_root_prefix"/blog/*)
+			printf '%s\n' "${file_path#"$template_root_prefix"/blog/}" >> "$blog_files_file"
+			;;
+		"$template_root_prefix"/docs/*)
+			printf '%s\n' "${file_path#"$template_root_prefix"/docs/}" >> "$docs_files_file"
+			;;
+		*)
+			printf '%s\n' "$file_path" >> "$root_files_file"
+			;;
+	esac
+done < "$staged_files_file"
+
+format_group() {
+	group_root="$1"
+	group_files_file="$2"
+	group_stage_prefix="$3"
+	group_config_path="$4"
+
+	if [ ! -s "$group_files_file" ]; then
+		return 0
+	fi
+
+	while IFS= read -r group_file_path; do
+		(
+			cd "$group_root"
+			"$biome_bin" check --write --config-path "$group_config_path" -- "$group_file_path"
+		)
+		git add -- "${group_stage_prefix}${group_file_path}"
+	done < "$group_files_file"
+}
+
+format_group "$repo_root" "$root_files_file" "" "$repo_root/biome.json"
+format_group "$repo_root/$template_root_prefix"/blog "$blog_files_file" "$template_root_prefix"/blog/ "$repo_root/$template_root_prefix/blog/biome.json"
+format_group "$repo_root/$template_root_prefix"/docs "$docs_files_file" "$template_root_prefix"/docs/ "$repo_root/$template_root_prefix/docs/biome.json"
+format_group "$repo_root/$template_root_prefix"/blog-docs "$blog_docs_files_file" "$template_root_prefix"/blog-docs/ "$repo_root/$template_root_prefix/blog-docs/biome.json"
