@@ -1,8 +1,10 @@
 {
 	"name": "@doc-wrap/project-config",
-	"private": true,
-	"version": "0.0.0",
+	"version": "0.1.0",
 	"type": "module",
+	"publishConfig": {
+		"access": "public"
+	},
 	"exports": {
 		".": {
 			"types": "./index.d.mts",
