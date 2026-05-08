@@ -1,12 +1,12 @@
 import { afterEach, describe, expect, test } from "bun:test";
+import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import {
 	projectConfigDefaults,
 	readProjectConfig,
 	resolveProjectConfig,
 } from "@doc-wrap/project-config";
-import { mkdtemp, rm, writeFile } from "node:fs/promises";
-import { tmpdir } from "node:os";
-import { join } from "node:path";
 import projectConfigJson from "../../../project.config.json";
 import {
 	buildPageTitle,
