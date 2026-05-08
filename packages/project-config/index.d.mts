@@ -1,3 +1,5 @@
+import type { ZodSchema } from "zod";
+
 export type ProjectTheme = "dark" | "light" | "system";
 
 export type ProjectConfig = {
@@ -9,7 +11,7 @@ export type ProjectConfig = {
 };
 
 export declare const projectConfigDefaults: ProjectConfig;
-export declare const projectConfigSchema: unknown;
+export declare const projectConfigSchema: ZodSchema<ProjectConfig>;
 export declare const resolveProjectConfig: (
 	overrides?: Partial<ProjectConfig> & Record<string, unknown>,
 ) => ProjectConfig;
