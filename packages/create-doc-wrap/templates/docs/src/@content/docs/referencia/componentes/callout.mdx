@@ -1,0 +1,35 @@
+---
+title: Callout
+description: Destaque notas, dicas e avisos importantes dentro dos documentos.
+category: Referência
+order: 41
+author: Matheus Andrade
+updatedAt: 2026-04-28
+---
+import { Callout } from "@presentation/components/docs/Callout.tsx";
+
+## Quando usar
+
+Use `Callout` quando uma informação merece destaque visual, mas ainda faz parte do fluxo principal de leitura. Ele funciona bem para pré-requisitos, riscos operacionais, observações de contexto e recomendações rápidas.
+
+## Import
+
+```mdx
+import { Callout } from "@presentation/components/docs/Callout.tsx";
+```
+
+## API disponível hoje
+
+O componente aceita `title`, `type` e `children`. O `type` pode ser `info`, `hint` ou `warning`, e cada opção já aplica rótulo, ícone e cores compatíveis com o tema do template.
+
+## Exemplo
+
+```mdx
+<Callout title="Antes de começar" type="hint">
+  Confirme se o usuário tem permissão para acessar esta rotina.
+</Callout>
+```
+
+<Callout title="Antes de começar" type="hint">
+  Confirme se o usuário tem permissão para acessar esta rotina.
+</Callout>

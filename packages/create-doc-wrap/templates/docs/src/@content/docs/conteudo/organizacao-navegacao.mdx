@@ -1,0 +1,51 @@
+---
+title: Organização e navegação
+description: Entenda como diretórios, frontmatter, headings e busca se combinam para montar a experiência final de `/docs`.
+category: Conteúdo
+order: 2
+author: Matheus Andrade
+updatedAt: 2026-05-04
+---
+import { Callout } from "@presentation/components/docs/Callout.tsx";
+
+## A rota nasce do arquivo
+
+Em `/docs`, a URL pública é derivada do caminho relativo dentro de `src/@content/docs`. Isso vale tanto para páginas isoladas quanto para seções com `index.mdx`.
+
+```text
+src/@content/docs/conteudo/index.mdx -> /docs/conteudo
+src/@content/docs/conteudo/criando-documentos.mdx -> /docs/conteudo/criando-documentos
+src/@content/docs/referencia/componentes/callout.mdx -> /docs/referencia/componentes/callout
+```
+
+Renomear ou mover um arquivo também altera a URL correspondente, então essa operação deve ser feita com cuidado quando a base já estiver publicada ou referenciada por links externos.
+
+## Como a navegação da sidebar é montada
+
+`src/@presentation/docs-map.ts` lê todos os documentos com `import.meta.glob`, transforma o frontmatter em metadados e monta uma árvore a partir dos segmentos do caminho. Pastas funcionam como agrupadores visuais, e um `index.mdx` permite que aquele nível também seja clicável como página.
+
+O campo `order` controla a ordenação principal dentro do mesmo nível da árvore. Em caso de empate, o template usa o `title` como critério secundário. O campo `category` complementa a classificação editorial, mas a estrutura da sidebar continua nascendo do caminho dos arquivos.
+
+## Breadcrumb e contexto da página
+
+O breadcrumb reflete os segmentos da rota atual e usa o título real da página no último item. Isso ajuda a manter nomes legíveis mesmo quando o slug do arquivo é mais técnico ou resumido.
+
+Os metadados `title`, `description`, `author` e `updatedAt` também aparecem no cabeçalho do documento, então o frontmatter não serve apenas para organização interna. Ele participa diretamente da leitura da página.
+
+## Índice lateral e headings
+
+O índice lateral da página atual é extraído do conteúdo renderizado. `##` vira seção principal e `###` vira subseção. Quanto melhor esses títulos estiverem escritos, melhor será a navegação semântica da página.
+
+<Callout title="Boa prática" type="hint">
+  Se um documento exige muitos subtítulos ou seções profundas demais, normalmente é sinal de que ele deveria ser quebrado em páginas menores.
+</Callout>
+
+## Busca
+
+Durante o desenvolvimento, a busca usa os metadados já carregados em memória por `src/@presentation/docs-map.ts`. No build de produção, `doc-wrap build` gera páginas estáticas da documentação no pós-build e então executa o Pagefind para montar o índice final. Por isso, título e descrição curtos e específicos ajudam tanto na listagem quanto na encontrabilidade.
+
+## Diferença entre `/docs` e `/blog`
+
+`/docs` organiza conteúdo por árvore de navegação, com foco em consulta contínua. Já `/blog` usa `src/@content/blog/**/*.mdx` e um mapa separado, em `src/@presentation/blog-map.ts`, para ordenar publicações principalmente por `publishedAt`.
+
+Em outras palavras, documentos são escritos para permanecer e evoluir. Publicações são escritas para comunicar algo em um momento específico e manter o histórico desse anúncio.
