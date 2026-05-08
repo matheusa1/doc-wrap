@@ -92,12 +92,24 @@ export const resolveProjectConfig = (overrides = {}) => {
 export const readProjectConfig = async (rootDir) => {
 	const nodeFsPromisesId = "node:fs/promises";
 	const nodePathId = "node:path";
-	const [{ readFile }, { basename, join }] = await Promise.all([
+	const [{ access, readFile }, { basename, join }] = await Promise.all([
 		import(nodeFsPromisesId),
 		import(nodePathId),
 	]);
 	const projectConfigPath = join(rootDir, "project.config.json");
 	const filename = basename(projectConfigPath);
+
+	try {
+		await access(projectConfigPath);
+	} catch (error) {
+		throw new Error(
+			`Arquivo obrigatório ausente: ${filename}. Esperado em ${rootDir}. Crie o arquivo para continuar.`,
+			{
+				cause: error,
+			},
+		);
+	}
+
 	const content = await readFile(projectConfigPath, "utf8");
 	const parsedContent = parseJsonContent(content, filename);
 	const parsedConfig = parseProjectConfigOverrides(parsedContent, filename);

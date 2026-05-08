@@ -82,6 +82,16 @@ describe("readProjectConfig", () => {
 		);
 	});
 
+	test("retorna erro amigável quando project.config.json não existe", async () => {
+		const directory = await mkdtemp(join(tmpdir(), "doc-wrap-project-config-"));
+		createdDirectories.push(directory);
+		const result = readProjectConfig(directory);
+
+		await expect(result).rejects.toThrow("Arquivo obrigatório ausente");
+		await expect(result).rejects.toThrow("project.config.json");
+		await expect(result).rejects.not.toThrow("ENOENT");
+	});
+
 	test("retorna erro com caminho do campo problemático", async () => {
 		const directory = await createProjectDirectory(`{
 			"defaultTheme": "sepia"
