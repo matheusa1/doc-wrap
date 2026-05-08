@@ -1,12 +1,17 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import { mkdtemp, rm, writeFile } from "node:fs/promises";
-import { tmpdir } from "node:os";
-import { join } from "node:path";
 import {
 	projectConfigDefaults,
 	readProjectConfig,
 	resolveProjectConfig,
-} from "./project-config.mjs";
+} from "@doc-wrap/project-config";
+import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import projectConfigJson from "../../../project.config.json";
+import {
+	buildPageTitle,
+	projectConfig,
+} from "../../../src/@presentation/config/project.ts";
 
 const createdDirectories: string[] = [];
 
@@ -87,5 +92,16 @@ describe("readProjectConfig", () => {
 			"Invalid project config in project.config.json",
 		);
 		await expect(result).rejects.toThrow("defaultTheme");
+	});
+});
+
+describe("presentation project config", () => {
+	test("pode ser importado fora do Vite com config resolvida", () => {
+		const resolvedProjectConfig = resolveProjectConfig(projectConfigJson);
+
+		expect(projectConfig).toEqual(resolvedProjectConfig);
+		expect(buildPageTitle("Início")).toBe(
+			`Início - ${resolvedProjectConfig.name}`,
+		);
 	});
 });
