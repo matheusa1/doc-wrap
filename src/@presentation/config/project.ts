@@ -1,9 +1,15 @@
-import resolvedProjectConfig from "virtual:doc-wrap/project-config";
+import type { ProjectConfig, ProjectTheme } from "@doc-wrap/project-config";
+import { resolveProjectConfig } from "@doc-wrap/project-config";
+import rawProjectConfigJson from "../../../project.config.json";
 
-export type ProjectConfig = typeof resolvedProjectConfig;
-export type ProjectTheme = ProjectConfig["defaultTheme"];
+type ProjectConfigInput = Partial<ProjectConfig> & Record<string, unknown>;
 
-export const projectConfig: ProjectConfig = resolvedProjectConfig;
+const rawProjectConfig = rawProjectConfigJson as ProjectConfigInput;
+
+export type { ProjectConfig, ProjectTheme };
+
+export const projectConfig: ProjectConfig =
+	resolveProjectConfig(rawProjectConfig);
 
 export const buildPageTitle = (pageTitle: string) =>
 	`${pageTitle} - ${projectConfig.name}`;

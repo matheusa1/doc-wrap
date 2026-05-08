@@ -10,45 +10,21 @@ import remarkFrontmatter from "remark-frontmatter";
 import remarkMath from "remark-math";
 import remarkMdxFrontmatter from "remark-mdx-frontmatter";
 import { defineConfig, type HmrContext, type Plugin } from "vite";
-import { readProjectConfig } from "./packages/cli/lib/project-config.mjs";
 
 const rootDir = path.dirname(fileURLToPath(import.meta.url));
 const resolvePath = (relativePath: string) =>
 	path.resolve(rootDir, relativePath);
 const projectConfigPath = resolvePath("./project.config.json");
-const virtualProjectConfigId = "virtual:doc-wrap/project-config";
-const resolvedVirtualProjectConfigId = `\0${virtualProjectConfigId}`;
 
 const createProjectConfigPlugin = (): Plugin => ({
 	name: "doc-wrap-project-config",
-	resolveId(source: string) {
-		if (source === virtualProjectConfigId) {
-			return resolvedVirtualProjectConfigId;
-		}
-
-		return undefined;
-	},
-	async load(id: string) {
-		if (id === resolvedVirtualProjectConfigId) {
-			this.addWatchFile(projectConfigPath);
-			const projectConfig = await readProjectConfig(rootDir);
-
-			return `export default ${JSON.stringify(projectConfig)};`;
-		}
-
-		return undefined;
+	apply: "serve",
+	configureServer(server) {
+		server.watcher.add(projectConfigPath);
 	},
 	handleHotUpdate({ file, server }: HmrContext) {
 		if (path.resolve(file) !== projectConfigPath) {
 			return undefined;
-		}
-
-		const projectConfigModule = server.moduleGraph.getModuleById(
-			resolvedVirtualProjectConfigId,
-		);
-
-		if (projectConfigModule) {
-			server.moduleGraph.invalidateModule(projectConfigModule);
 		}
 
 		server.ws.send({ type: "full-reload" });
