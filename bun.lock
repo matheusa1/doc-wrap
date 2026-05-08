@@ -6,6 +6,7 @@
       "name": "doc-gest",
       "dependencies": {
         "@base-ui/react": "^1.4.1",
+        "@doc-wrap/project-config": "workspace:*",
         "@fontsource-variable/geist": "^5.2.8",
         "@hookform/resolvers": "^5.2.2",
         "@mdx-js/rollup": "^3.1.1",
@@ -56,7 +57,14 @@
         "doc-wrap": "./bin/doc-wrap.mjs",
       },
       "dependencies": {
+        "@doc-wrap/project-config": "workspace:*",
         "pagefind": "^1.5.2",
+      },
+    },
+    "packages/project-config": {
+      "name": "@doc-wrap/project-config",
+      "version": "0.0.0",
+      "dependencies": {
         "zod": "^4.3.6",
       },
     },
@@ -157,6 +165,8 @@
     "@chevrotain/utils": ["@chevrotain/utils@12.0.0", "", {}, "sha512-lB59uJoaGIfOOL9knQqQRfhl9g7x8/wqFkp13zTdkRu1huG9kg6IJs1O8hqj9rs6h7orGxHJUKb+mX3rPbWGhA=="],
 
     "@doc-wrap/cli": ["@doc-wrap/cli@workspace:packages/cli"],
+
+    "@doc-wrap/project-config": ["@doc-wrap/project-config@workspace:packages/project-config"],
 
     "@dotenvx/dotenvx": ["@dotenvx/dotenvx@1.64.0", "", { "dependencies": { "commander": "^11.1.0", "dotenv": "^17.2.1", "eciesjs": "^0.4.10", "execa": "^5.1.1", "fdir": "^6.2.0", "ignore": "^5.3.0", "object-treeify": "1.1.33", "picomatch": "^4.0.4", "which": "^4.0.0", "yocto-spinner": "^1.1.0" }, "bin": { "dotenvx": "src/cli/dotenvx.js" } }, "sha512-6+xRpZaWuHXEqnhBjae+VmQI9Uaqw5Uzu/ScpO+W7ww9Zp3lHSNBoNjFcUxhrCyc7pRGQzyDjhKzloqrPHERiQ=="],
 

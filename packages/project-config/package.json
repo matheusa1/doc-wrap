@@ -1,0 +1,19 @@
+{
+	"name": "@doc-wrap/project-config",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./index.d.mts",
+			"import": "./index.mjs"
+		}
+	},
+	"files": [
+		"index.mjs",
+		"index.d.mts"
+	],
+	"dependencies": {
+		"zod": "^4.3.6"
+	}
+}

@@ -5,10 +5,12 @@ on:
         branches:
             - main
             - develop
+            - develop-cli
     pull_request:
         branches:
             - main
             - develop
+            - develop-cli
 
 permissions:
     contents: read
@@ -43,6 +45,9 @@ jobs:
 
             - name: Run check
               run: bun run check
+
+            - name: Run tests
+              run: bun run test
 
             - name: Run build
               run: bun run build

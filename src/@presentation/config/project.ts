@@ -1,31 +1,15 @@
-import projectConfigJson from "../../../project.config.json";
-import defaultProjectConfigJson from "../../../project-config.defaults.json";
+import type { ProjectConfig, ProjectTheme } from "@doc-wrap/project-config";
+import { resolveProjectConfig } from "@doc-wrap/project-config";
+import rawProjectConfigJson from "../../../project.config.json";
 
-export type ProjectTheme = "dark" | "light" | "system";
+type ProjectConfigInput = Partial<ProjectConfig> & Record<string, unknown>;
 
-type ProjectConfigInput = {
-	defaultTheme?: ProjectTheme;
-	description?: string;
-	hasBlog?: boolean;
-	hasDocs?: boolean;
-	name?: string;
-};
+const rawProjectConfig = rawProjectConfigJson as ProjectConfigInput;
 
-export type ProjectConfig = {
-	defaultTheme: ProjectTheme;
-	description: string;
-	hasBlog: boolean;
-	hasDocs: boolean;
-	name: string;
-};
+export type { ProjectConfig, ProjectTheme };
 
-const defaultProjectConfig = defaultProjectConfigJson as ProjectConfig;
-const rawProjectConfig = projectConfigJson as ProjectConfigInput;
-
-export const projectConfig: ProjectConfig = {
-	...defaultProjectConfig,
-	...rawProjectConfig,
-};
+export const projectConfig: ProjectConfig =
+	resolveProjectConfig(rawProjectConfig);
 
 export const buildPageTitle = (pageTitle: string) =>
 	`${pageTitle} - ${projectConfig.name}`;

@@ -3,11 +3,16 @@
 	"private": true,
 	"version": "0.0.0",
 	"type": "module",
+	"files": [
+		"bin",
+		"lib/*.mjs",
+		"lib/*.d.mts"
+	],
 	"bin": {
 		"doc-wrap": "./bin/doc-wrap.mjs"
 	},
 	"dependencies": {
-		"pagefind": "^1.5.2",
-		"zod": "^4.3.6"
+		"@doc-wrap/project-config": "workspace:*",
+		"pagefind": "^1.5.2"
 	}
 }

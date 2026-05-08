@@ -1,9 +1,9 @@
 import { existsSync } from "node:fs";
 import { dirname, join, parse } from "node:path";
 import { fileURLToPath } from "node:url";
+import { readProjectConfig } from "@doc-wrap/project-config";
 import { buildPagefindDocs } from "./build-pagefind-docs.mjs";
 import { defaultOutDir, resolveOutDir } from "./out-dir.mjs";
-import { readProjectConfig } from "./project-config.mjs";
 import { run } from "./run.mjs";
 
 const cliLibDir = dirname(fileURLToPath(import.meta.url));
