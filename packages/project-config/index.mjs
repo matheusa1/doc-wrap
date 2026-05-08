@@ -22,20 +22,73 @@ export const projectConfigDefaults = {
 	name: "Projeto",
 };
 
+const formatExpectedType = (expected) => {
+	const typeLabels = {
+		array: "array",
+		boolean: "booleano",
+		null: "nulo",
+		number: "número",
+		object: "objeto",
+		string: "texto",
+	};
+
+	return typeLabels[expected] ?? String(expected);
+};
+
+const formatReceivedType = (input) => {
+	if (input === null) {
+		return "nulo";
+	}
+
+	if (Array.isArray(input)) {
+		return "array";
+	}
+
+	const typeLabels = {
+		boolean: "booleano",
+		number: "número",
+		object: "objeto",
+		string: "texto",
+		undefined: "indefinido",
+	};
+
+	return typeLabels[typeof input] ?? typeof input;
+};
+
 const formatIssuePath = (issue) => {
 	if (issue.path.length === 0) {
-		return "<root>";
+		return "<raiz>";
 	}
 
 	return issue.path.join(".");
 };
 
+const formatIssueMessage = (issue) => {
+	if (issue.code === "unrecognized_keys") {
+		const quotedKeys = issue.keys.map((key) => `"${key}"`).join(", ");
+
+		return `Chaves não reconhecidas: ${quotedKeys}`;
+	}
+
+	if (issue.code === "invalid_value") {
+		const allowedValues = issue.values.map((value) => `"${value}"`).join(", ");
+
+		return `Valor inválido. Use um dos valores permitidos: ${allowedValues}`;
+	}
+
+	if (issue.code === "invalid_type") {
+		return `Tipo inválido. Esperado ${formatExpectedType(issue.expected)}, recebido ${formatReceivedType(issue.input)}.`;
+	}
+
+	return "Valor inválido.";
+};
+
 const formatZodError = (filename, error) => {
 	const issues = error.issues
-		.map((issue) => `- ${formatIssuePath(issue)}: ${issue.message}`)
+		.map((issue) => `- ${formatIssuePath(issue)}: ${formatIssueMessage(issue)}`)
 		.join("\n");
 
-	return `Invalid project config in ${filename}:\n${issues}`;
+	return `Configuração de projeto inválida em ${filename}:\n${issues}`;
 };
 
 const parseJsonContent = (content, filename) => {
@@ -46,7 +99,7 @@ const parseJsonContent = (content, filename) => {
 	} catch (error) {
 		const reason = error instanceof Error ? error.message : String(error);
 
-		throw new Error(`Invalid JSON in ${filename}: ${reason}`, {
+		throw new Error(`JSON inválido em ${filename}: ${reason}`, {
 			cause: error,
 		});
 	}
@@ -66,42 +119,41 @@ const parseProjectConfig = (content, filename, schema) => {
 	return result.data;
 };
 
-const parseProjectConfigOverrides = (
-	content,
-	filename = "project.config.json",
-) => parseProjectConfig(content, filename, projectConfigOverrideSchema);
+const parseProjectConfigOverrides = (content, filename) =>
+	parseProjectConfig(content, filename, projectConfigOverrideSchema);
+
+const parseResolvedProjectConfig = (content, filename) =>
+	parseProjectConfig(content, filename, projectConfigSchema);
 
 export const resolveProjectConfig = (overrides = {}) => {
 	const filename = "project.config.json";
 	const parsedOverrides = parseProjectConfigOverrides(overrides, filename);
-
-	const result = projectConfigSchema.safeParse({
+	const mergedConfig = {
 		...projectConfigDefaults,
 		...parsedOverrides,
-	});
+	};
 
-	if (!result.success) {
-		throw new Error(formatZodError(filename, result.error), {
-			cause: result.error,
-		});
-	}
-
-	return result.data;
+	return parseResolvedProjectConfig(mergedConfig, filename);
 };
 
 export const readProjectConfig = async (rootDir) => {
 	const nodeFsPromisesId = "node:fs/promises";
 	const nodePathId = "node:path";
-	const [{ access, readFile }, { basename, join }] = await Promise.all([
+	const [{ readFile }, { join }] = await Promise.all([
 		import(nodeFsPromisesId),
 		import(nodePathId),
 	]);
-	const projectConfigPath = join(rootDir, "project.config.json");
-	const filename = basename(projectConfigPath);
+	const filename = "project.config.json";
+	const projectConfigPath = join(rootDir, filename);
+	let content;
 
 	try {
-		await access(projectConfigPath);
+		content = await readFile(projectConfigPath, "utf8");
 	} catch (error) {
+		if (error?.code !== "ENOENT") {
+			throw error;
+		}
+
 		throw new Error(
 			`Arquivo obrigatório ausente: ${filename}. Esperado em ${rootDir}. Crie o arquivo para continuar.`,
 			{
@@ -110,9 +162,7 @@ export const readProjectConfig = async (rootDir) => {
 		);
 	}
 
-	const content = await readFile(projectConfigPath, "utf8");
 	const parsedContent = parseJsonContent(content, filename);
-	const parsedConfig = parseProjectConfigOverrides(parsedContent, filename);
 
-	return resolveProjectConfig(parsedConfig);
+	return resolveProjectConfig(parsedContent);
 };
