@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import { runConfigCommand } from "../lib/config.mjs";
 import { runDocsIndex, runPostbuild } from "../lib/postbuild.mjs";
 import { run } from "../lib/run.mjs";
 
@@ -30,6 +31,10 @@ Comandos:
   build     Executa type-check, build e o pipeline de pos-build
   preview   Inicia o preview do build de producao
   check     Executa as validacoes do projeto com Biome
+  config
+    validate
+            Valida o project.config.json do projeto
+    print   Imprime a configuracao efetiva com defaults aplicados
   docs:index
             Gera paginas estaticas de docs para o Pagefind
 `;
@@ -47,6 +52,7 @@ const commands = {
 	},
 	preview: () => run(rootDir, "vite", ["preview", "--host", ...args]),
 	check: () => run(rootDir, "biome", ["check", ".", ...args]),
+	config: () => runConfigCommand(rootDir, args),
 	"docs:index": () => runDocsIndex(rootDir, { outDir: resolveOutDir(args) }),
 };
 
@@ -63,4 +69,11 @@ if (!selectedCommand) {
 	process.exit(1);
 }
 
-await selectedCommand();
+try {
+	await selectedCommand();
+} catch (error) {
+	const message = error instanceof Error ? error.message : String(error);
+
+	console.error(message);
+	process.exit(1);
+}
