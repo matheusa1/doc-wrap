@@ -4,7 +4,7 @@ const subcommandHelp = `Uso: doc-wrap config <subcomando>
 
 Subcomandos:
   validate  Valida o project.config.json do projeto
-  print     Imprime a configuracao efetiva com defaults aplicados
+  print     Imprime a configuração efetiva com defaults aplicados
 `;
 
 const configCommands = {
@@ -25,7 +25,14 @@ export const runConfigCommand = async (rootDir, args) => {
 	const [subcommand] = args;
 
 	if (!subcommand) {
-		throw new Error(subcommandHelp.trimEnd());
+		console.log(subcommandHelp.trimEnd());
+		return;
+	}
+
+	if (!Object.hasOwn(configCommands, subcommand)) {
+		throw new Error(
+			`Subcomando desconhecido: config ${subcommand}\n\n${subcommandHelp.trimEnd()}`,
+		);
 	}
 
 	const selectedCommand = configCommands[subcommand];

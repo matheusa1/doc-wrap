@@ -42,6 +42,18 @@ afterEach(async () => {
 });
 
 describe("doc-wrap config", () => {
+	test("sem subcomando imprime help em stdout e retorna sucesso", async () => {
+		const directory = await createProjectDirectory(`{
+			"name": "Central Docs"
+		}`);
+		const result = runCli(directory, ["config"]);
+
+		expect(result.status).toBe(0);
+		expect(result.stderr).toBe("");
+		expect(result.stdout).toContain("Uso: doc-wrap config <subcomando>");
+		expect(result.stdout).toContain("configuração efetiva");
+	});
+
 	test("validate retorna sucesso para config válida", async () => {
 		const directory = await createProjectDirectory(`{
 			"name": "Central Docs"
@@ -121,5 +133,21 @@ describe("doc-wrap config", () => {
 		expect(result.stderr).toContain("defaultTheme");
 		expect(result.stderr).not.toContain("ZodError");
 		expect(result.stderr).not.toContain("at ");
+	});
+
+	test("subcomandos herdados caem como desconhecidos", async () => {
+		const directory = await createProjectDirectory(`{
+			"name": "Central Docs"
+		}`);
+
+		for (const subcommand of ["toString", "constructor"]) {
+			const result = runCli(directory, ["config", subcommand]);
+
+			expect(result.status).toBe(1);
+			expect(result.stdout).toBe("");
+			expect(result.stderr).toContain(
+				`Subcomando desconhecido: config ${subcommand}`,
+			);
+		}
 	});
 });
