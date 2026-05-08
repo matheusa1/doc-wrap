@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/matheusa1/doc-wrap/compare/doc-wrap-v1.0.0...doc-wrap-v1.1.0) (2026-05-08)
+
+
+### Features
+
+* **project-config:** prepara pacote para publicação inicial ([#25](https://github.com/matheusa1/doc-wrap/issues/25)) ([cf2df3b](https://github.com/matheusa1/doc-wrap/commit/cf2df3bb1d2a38d19dc65cfc688a6011b291e1b5))
+
 ## 1.0.0 (2026-05-08)
 
 
