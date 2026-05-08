@@ -132,6 +132,8 @@ Existe uma exceção prática para `hasDocs`: quando ele está `false`, o pós-b
 
 O projeto usa `release-please` em modo manifest para abrir PRs de release a partir de commits no padrão Conventional Commits. Nesta etapa da trilha CLI, o workflow roda em `develop-cli`, mesmo com `develop` ainda configurada como branch padrão do repositório no GitHub.
 
+A automação usa um Personal Access Token armazenado em `RELEASE_PLEASE_TOKEN`, configurado em `Settings > Secrets and variables > Actions`. Esse token é necessário porque recursos criados com o `GITHUB_TOKEN` padrão não disparam workflows subsequentes; com o PAT, os PRs de release abertos pelo `release-please` continuam recebendo a CI normal do repositório. O token precisa ter acesso suficiente para operar no repositório e abrir PRs e releases.
+
 A versão controlada pelo fluxo é a versão do pacote raiz `doc-wrap` em `package.json`. Quando um PR de release é aberto e depois mergeado, o `release-please` atualiza `CHANGELOG.md`, faz o bump da versão do pacote, cria a tag Git no formato `doc-wrap-vX.Y.Z` e publica o GitHub Release correspondente.
 
 O fluxo atual não publica automaticamente no npm. Essa publicação fica para uma issue futura, assim como a revisão da configuração quando o repositório passar a expor também o pacote `create-doc-wrap` em uma estrutura multi-package real.
