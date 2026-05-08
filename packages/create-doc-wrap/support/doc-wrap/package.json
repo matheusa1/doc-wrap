@@ -1,0 +1,12 @@
+{
+	"name": "doc-wrap",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"bin": {
+		"doc-wrap": "./bin/doc-wrap.mjs"
+	},
+	"dependencies": {
+		"@doc-wrap/cli": "file:../../../cli"
+	}
+}

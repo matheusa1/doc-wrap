@@ -1,0 +1,15 @@
+{
+	"name": "create-doc-wrap",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"bin": {
+		"create-doc-wrap": "./bin/create-doc-wrap.mjs"
+	},
+	"files": [
+		"bin",
+		"lib/*.mjs",
+		"support/doc-wrap",
+		"templates"
+	]
+}
