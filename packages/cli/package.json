@@ -1,8 +1,17 @@
 {
 	"name": "@doc-wrap/cli",
-	"private": true,
-	"version": "0.0.0",
+	"description": "CLI do doc-wrap para construção e gerenciamento de documentação.",
+	"version": "0.1.0",
+	"author": "Matheus Andrade",
+	"license": "MIT",
 	"type": "module",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/matheusa1/doc-wrap.git"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
 	"files": [
 		"bin",
 		"lib/*.mjs",
@@ -12,7 +21,7 @@
 		"doc-wrap": "./bin/doc-wrap.mjs"
 	},
 	"dependencies": {
-		"@doc-wrap/project-config": "workspace:*",
+		"@doc-wrap/project-config": "0.1.0",
 		"pagefind": "^1.5.2"
 	}
 }
