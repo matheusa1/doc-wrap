@@ -1,45 +1,49 @@
-import { readFile } from "node:fs/promises";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
-
-const createDocWrapLibDir = dirname(fileURLToPath(import.meta.url));
-
-export const repoRootDir = join(createDocWrapLibDir, "..", "..", "..");
-
-const sanitizeDependencies = (dependencies = {}) => {
-	const sanitizedDependencies = {};
-
-	for (const [dependencyName, version] of Object.entries(dependencies)) {
-		if (String(version).startsWith("workspace:")) {
-			continue;
-		}
-
-		sanitizedDependencies[dependencyName] = version;
-	}
-
-	return sanitizedDependencies;
+const templateDependencies = {
+	"@base-ui/react": "^1.4.1",
+	"@fontsource-variable/geist": "^5.2.8",
+	"@hookform/resolvers": "^5.2.2",
+	"@mdx-js/rollup": "^3.1.1",
+	"@tailwindcss/vite": "^4.2.4",
+	"@tanstack/react-query": "^5.100.9",
+	"class-variance-authority": "^0.7.1",
+	clsx: "^2.1.1",
+	katex: "^0.16.45",
+	"lucide-react": "^1.11.0",
+	mermaid: "^11.14.0",
+	react: "^19.2.5",
+	"react-dom": "^19.2.5",
+	"react-hook-form": "^7.74.0",
+	"react-router-dom": "^7.14.2",
+	"rehype-katex": "^7.0.1",
+	"rehype-pretty-code": "^0.14.3",
+	"remark-frontmatter": "^5.0.0",
+	"remark-math": "^6.0.0",
+	"remark-mdx-frontmatter": "^5.2.0",
+	sonner: "^2.0.7",
+	"tailwind-merge": "^3.5.0",
+	tailwindcss: "^4.2.4",
+	"tw-animate-css": "^1.4.0",
+	zod: "^4.3.6",
+	"@doc-wrap/project-config": "^0.1.0",
 };
 
-const readRepositoryPackageJson = async () => {
-	const repositoryPackageJson = await readFile(
-		join(repoRootDir, "package.json"),
-		"utf8",
-	);
-
-	return JSON.parse(repositoryPackageJson);
+const templateDevDependencies = {
+	"@babel/core": "^7.29.0",
+	"@biomejs/biome": "2.4.13",
+	"@rolldown/plugin-babel": "^0.2.3",
+	"@types/babel__core": "^7.20.5",
+	"@types/mdx": "^2.0.13",
+	"@types/node": "^25.6.0",
+	"@types/react": "^19.2.14",
+	"@types/react-dom": "^19.2.3",
+	"@vitejs/plugin-react": "^6.0.1",
+	"babel-plugin-react-compiler": "^1.0.0",
+	typescript: "~6.0.2",
+	vite: "^8.0.10",
+	"doc-wrap": "^0.1.0",
 };
 
 export const createProjectPackageJson = async ({ projectName }) => {
-	const repositoryPackageJson = await readRepositoryPackageJson();
-	const dependencies = sanitizeDependencies(repositoryPackageJson.dependencies);
-	const devDependencies = sanitizeDependencies(
-		repositoryPackageJson.devDependencies,
-	);
-
-	delete dependencies["@doc-wrap/project-config"];
-	delete devDependencies["@doc-wrap/cli"];
-	delete devDependencies.husky;
-
 	return {
 		name: projectName,
 		private: true,
@@ -50,13 +54,7 @@ export const createProjectPackageJson = async ({ projectName }) => {
 			preview: "doc-wrap preview",
 			check: "doc-wrap check",
 		},
-		dependencies: {
-			...dependencies,
-			"@doc-wrap/project-config": "^0.1.0",
-		},
-		devDependencies: {
-			...devDependencies,
-			"doc-wrap": "^0.1.0",
-		},
+		dependencies: templateDependencies,
+		devDependencies: templateDevDependencies,
 	};
 };
