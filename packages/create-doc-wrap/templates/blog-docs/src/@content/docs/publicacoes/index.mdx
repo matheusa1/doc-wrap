@@ -1,0 +1,24 @@
+---
+title: Publicações
+description: Entenda quando usar a área `/blog` e como ela complementa a central permanente de documentação.
+category: Publicações
+order: 3
+author: Matheus Andrade
+updatedAt: 2026-04-28
+---
+import { Cards } from "@presentation/components/docs/Cards.tsx";
+import { Newspaper } from "lucide-react";
+
+## O papel das publicações
+
+Use `/blog` para conteúdos que fazem sentido dentro de uma linha do tempo, como novidades, comunicados, janelas de manutenção, treinamentos e avisos operacionais. A ideia não é substituir a documentação de referência, e sim separar conteúdos permanentes de conteúdos com contexto de data.
+
+<Cards num={1}>
+  <Cards.Card
+    icon={<Newspaper />}
+    title="Criando publicações"
+    description="Veja o frontmatter esperado, a lógica de ordenação e a diferença entre post e documento."
+    href="/docs/publicacoes/criando-publicacoes"
+    arrow
+  />
+</Cards>

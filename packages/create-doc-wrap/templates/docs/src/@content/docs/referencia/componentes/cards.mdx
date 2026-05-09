@@ -1,0 +1,64 @@
+---
+title: Cards
+description: Crie links visuais para guias relacionados, módulos e próximos passos.
+category: Referência
+order: 43
+author: Matheus Andrade
+updatedAt: 2026-04-28
+---
+import { Cards } from "@presentation/components/docs/Cards.tsx";
+import { Blocks, Network } from "lucide-react";
+
+## Quando usar
+
+Use `Cards` para sugerir próximas leituras, agrupar atalhos por assunto ou organizar páginas-hub. Ele funciona melhor quando o documento precisa apontar caminhos e não apenas explicar um único fluxo linear.
+
+## Import
+
+```mdx
+import { Cards } from "@presentation/components/docs/Cards.tsx";
+```
+
+## API disponível hoje
+
+`Cards` recebe a quantidade de colunas em `num`. Cada `Cards.Card` aceita `title`, `description`, `href`, `icon`, `arrow` e conteúdo opcional. Links internos usam `react-router-dom`, enquanto URLs externas são abertas como `<a>`.
+
+## Exemplo
+
+```mdx
+import { Blocks, Network } from "lucide-react";
+
+<Cards num={2}>
+  <Cards.Card
+    icon={<Blocks />}
+    title="Módulos"
+    description="Conheça os domínios e limites de responsabilidade do sistema."
+    href="/docs/arquitetura/modulos"
+    arrow
+  />
+  <Cards.Card
+    icon={<Network />}
+    title="Integrações"
+    description="Veja contratos, eventos e dependências externas."
+    href="/docs/arquitetura/integracoes"
+    arrow
+  />
+</Cards>
+```
+
+<Cards num={2}>
+  <Cards.Card
+    icon={<Blocks />}
+    title="Módulos"
+    description="Conheça os domínios e limites de responsabilidade do sistema."
+    href="/docs/introducao"
+    arrow
+  />
+  <Cards.Card
+    icon={<Network />}
+    title="Integrações"
+    description="Use cards para apontar seções relacionadas ou próximos passos."
+    href="/docs/conteudo/desenvolvendo-template"
+    arrow
+  />
+</Cards>

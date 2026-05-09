@@ -1,0 +1,109 @@
+---
+title: DataTable
+description: Mostre dados tabulares em documentos MDX usando a Table do shadcn como base visual.
+category: Referência
+order: 48
+author: Matheus Andrade
+updatedAt: 2026-04-30
+---
+import { DataTable } from "@presentation/components/docs/DataTable.tsx";
+
+export const colunasRotinas = [
+  { key: "rotina", header: "Rotina" },
+  { key: "responsavel", header: "Responsável" },
+  { key: "status", header: "Status" },
+  { key: "revisao", header: "Última revisão", align: "right" }
+];
+
+export const linhasRotinas = [
+  {
+    rotina: "Cadastro Ambiental Rural",
+    responsavel: "Analista rural",
+    status: "Publicado",
+    revisao: "30/04/2026"
+  },
+  {
+    rotina: "Acompanhamento de Safras",
+    responsavel: "Equipe técnica",
+    status: "Em revisão",
+    revisao: "29/04/2026"
+  },
+  {
+    rotina: "Destino da Produção",
+    responsavel: "Produto",
+    status: "Planejado",
+    revisao: "28/04/2026"
+  }
+];
+
+## Quando usar
+
+Use `DataTable` quando o documento precisar comparar registros, resumir propriedades de uma rotina ou apresentar uma matriz pequena de informações. Ele é melhor para dados que precisam ser lidos por coluna, como status, responsáveis, permissões, parâmetros e compatibilidade entre recursos.
+
+Para conteúdo puramente textual, prefira parágrafos ou listas simples. Se a tabela começar a exigir ordenação, filtros, paginação ou edição inline, documente a regra em texto e considere criar uma página ou componente específico para esse fluxo.
+
+## Import
+
+```mdx
+import { DataTable } from "@presentation/components/docs/DataTable.tsx";
+```
+
+## API disponível hoje
+
+`DataTable` recebe `columns` e `rows`. Cada coluna define `key`, `header`, `align`, `headerClassName`, `cellClassName` e `render`; cada linha é um objeto em que as chaves correspondem às colunas. Também é possível informar `caption`, `emptyMessage`, `getRowKey` e `className`.
+
+O componente usa `Table`, `TableHeader`, `TableBody`, `TableRow`, `TableHead`, `TableCell` e `TableCaption` do shadcn por baixo, mantendo o comportamento responsivo e o padrão visual do template.
+
+## Exemplo
+
+```mdx
+export const colunas = [
+  { key: "rotina", header: "Rotina" },
+  { key: "responsavel", header: "Responsável" },
+  { key: "status", header: "Status" },
+  { key: "revisao", header: "Última revisão", align: "right" }
+];
+
+export const linhas = [
+  {
+    rotina: "Cadastro Ambiental Rural",
+    responsavel: "Analista rural",
+    status: "Publicado",
+    revisao: "30/04/2026"
+  },
+  {
+    rotina: "Acompanhamento de Safras",
+    responsavel: "Equipe técnica",
+    status: "Em revisão",
+    revisao: "29/04/2026"
+  }
+];
+
+<DataTable
+  caption="Resumo editorial das rotinas documentadas."
+  columns={colunas}
+  rows={linhas}
+/>
+```
+
+<DataTable
+  caption="Resumo editorial das rotinas documentadas."
+  columns={colunasRotinas}
+  rows={linhasRotinas}
+/>
+
+## Renderização customizada
+
+Use `render` quando uma célula precisar transformar o valor antes da exibição, como aplicar destaque, combinar campos ou renderizar um link. Para manter a leitura do MDX simples, prefira deixar transformações complexas fora do documento e usar `render` apenas para ajustes pequenos.
+
+```mdx
+export const colunasComRender = [
+  { key: "nome", header: "Campo" },
+  {
+    key: "obrigatorio",
+    header: "Obrigatório",
+    align: "center",
+    render: (row) => row.obrigatorio ? "Sim" : "Não"
+  }
+];
+```

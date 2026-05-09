@@ -1,0 +1,45 @@
+---
+title: Criando publicações
+description: Publique notas de versão, avisos e comunicados em `src/@content/blog` com a estrutura atual do template.
+category: Publicações
+order: 3
+author: Matheus Andrade
+updatedAt: 2026-04-28
+---
+import { Callout } from "@presentation/components/docs/Callout.tsx";
+
+## Onde as publicações vivem
+
+As publicações ficam em `src/@content/blog/**/*.mdx`. Cada arquivo vira uma rota pública em `/blog`, e o carregamento é automático pelo mapa em `src/@presentation/blog-map.ts`.
+
+```text
+src/@content/blog/nota-de-versao-abril.mdx -> /blog/nota-de-versao-abril
+```
+
+Ao contrário de `/docs`, a organização principal do blog não depende de uma árvore de navegação lateral. O foco está na listagem, nos filtros por categoria e na ordenação por data de publicação.
+
+## Frontmatter esperado
+
+O frontmatter das publicações segue a estrutura usada hoje pelo blog do template.
+
+```mdx
+---
+title: Nota de versão de abril
+description: Resumo das principais melhorias liberadas neste ciclo.
+category: Novidades
+publishedAt: 2026-04-28
+eventAt: 2026-05-02
+---
+```
+
+`title`, `description` e `category` alimentam cabeçalho, listagem e filtros. `publishedAt` controla a ordenação principal. `eventAt` é opcional e faz sentido quando o post comunica uma data futura relevante, como uma manutenção programada.
+
+## Quando usar publicação e quando usar documento
+
+Escreva um post quando o conteúdo precisar registrar uma novidade, um aviso ou um evento de data marcada. Escreva um documento quando o conteúdo precisar servir como referência contínua para uso, operação ou implantação do sistema.
+
+Essa distinção ajuda o template a manter duas experiências diferentes. `/docs` é pensado para consulta permanente. `/blog` é pensado para acompanhar o histórico de comunicação do produto ou da operação.
+
+<Callout title="Regra prática" type="hint">
+  Se o texto continua útil meses depois como guia operacional, ele provavelmente pertence a `/docs`. Se o valor principal está no momento da comunicação, ele provavelmente pertence a `/blog`.
+</Callout>

@@ -21,7 +21,7 @@
 		"doc-wrap": "./bin/doc-wrap.mjs"
 	},
 	"dependencies": {
-		"@doc-wrap/project-config": "0.1.0",
+		"@doc-wrap/project-config": "workspace:*",
 		"pagefind": "^1.5.2"
 	}
 }
