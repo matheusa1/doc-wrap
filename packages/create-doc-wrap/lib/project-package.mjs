@@ -1,36 +1,10 @@
 import { readFile } from "node:fs/promises";
-import { dirname, join, relative, sep } from "node:path";
+import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const createDocWrapLibDir = dirname(fileURLToPath(import.meta.url));
 
 export const repoRootDir = join(createDocWrapLibDir, "..", "..", "..");
-const docWrapShimDir = join(
-	repoRootDir,
-	"packages",
-	"create-doc-wrap",
-	"support",
-	"doc-wrap",
-);
-const projectConfigPackageDir = join(repoRootDir, "packages", "project-config");
-
-const normalizeFileDependencyPath = (value) => {
-	const normalizedPath = value.split(sep).join("/");
-
-	if (normalizedPath === ".") {
-		return normalizedPath;
-	}
-
-	return normalizedPath.startsWith(".")
-		? normalizedPath
-		: `./${normalizedPath}`;
-};
-
-const createLocalFileSpec = (fromDirectory, targetDirectory) => {
-	const relativePath = relative(fromDirectory, targetDirectory) || ".";
-
-	return `file:${normalizeFileDependencyPath(relativePath)}`;
-};
 
 const sanitizeDependencies = (dependencies = {}) => {
 	const sanitizedDependencies = {};
@@ -55,10 +29,7 @@ const readRepositoryPackageJson = async () => {
 	return JSON.parse(repositoryPackageJson);
 };
 
-export const createProjectPackageJson = async ({
-	destinationDirectory,
-	projectName,
-}) => {
+export const createProjectPackageJson = async ({ projectName }) => {
 	const repositoryPackageJson = await readRepositoryPackageJson();
 	const dependencies = sanitizeDependencies(repositoryPackageJson.dependencies);
 	const devDependencies = sanitizeDependencies(
@@ -81,14 +52,11 @@ export const createProjectPackageJson = async ({
 		},
 		dependencies: {
 			...dependencies,
-			"@doc-wrap/project-config": createLocalFileSpec(
-				destinationDirectory,
-				projectConfigPackageDir,
-			),
+			"@doc-wrap/project-config": "^0.1.0",
 		},
 		devDependencies: {
 			...devDependencies,
-			"doc-wrap": createLocalFileSpec(destinationDirectory, docWrapShimDir),
+			"doc-wrap": "^0.1.0",
 		},
 	};
 };

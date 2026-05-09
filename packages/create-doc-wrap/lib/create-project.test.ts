@@ -190,10 +190,13 @@ describe("createProject", () => {
 			preview: "doc-wrap preview",
 			check: "doc-wrap check",
 		});
-		expect(generatedPackageJson.devDependencies["doc-wrap"]).toContain("file:");
+		expect(generatedPackageJson.devDependencies["doc-wrap"]).toMatch(
+			/^\^?\d+\.\d+\.\d+/,
+		);
 		expect(
 			generatedPackageJson.dependencies["@doc-wrap/project-config"],
-		).toContain("file:");
+		).toMatch(/^\^?\d+\.\d+\.\d+/);
+		expect(serializedPackageJson).not.toContain("file:");
 	});
 
 	test("atualiza o nome em package.json e project.config.json", async () => {
