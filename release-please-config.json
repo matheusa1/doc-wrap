@@ -5,9 +5,22 @@
 	"include-v-in-tag": true,
 	"tag-separator": "-",
 	"packages": {
-		".": {
+		"packages/cli": {
 			"release-type": "node",
-			"package-name": "doc-wrap",
+			"package-name": "@doc-wrap/cli",
+			"component": "cli",
+			"changelog-path": "CHANGELOG.md"
+		},
+		"packages/create-doc-wrap": {
+			"release-type": "node",
+			"package-name": "create-doc-wrap",
+			"component": "create-doc-wrap",
+			"changelog-path": "CHANGELOG.md"
+		},
+		"packages/project-config": {
+			"release-type": "node",
+			"package-name": "@doc-wrap/project-config",
+			"component": "project-config",
 			"changelog-path": "CHANGELOG.md"
 		}
 	}
