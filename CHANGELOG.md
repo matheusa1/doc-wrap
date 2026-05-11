@@ -8,4 +8,6 @@ Os changelogs oficiais agora vivem em:
 - `packages/create-doc-wrap/CHANGELOG.md`
 - `packages/project-config/CHANGELOG.md`
 
-Este arquivo não é mais gerenciado pelo `release-please`.
+Este arquivo não é mais o changelog oficial do projeto.
+
+O `release-please` atua apenas na branch `release-cli` e atualiza os changelogs oficiais de cada pacote.
