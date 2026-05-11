@@ -6,11 +6,15 @@ on:
             - main
             - develop
             - develop-cli
+            - release-cli
+            - main-cli
     pull_request:
         branches:
             - main
             - develop
             - develop-cli
+            - release-cli
+            - main-cli
 
 permissions:
     contents: read
