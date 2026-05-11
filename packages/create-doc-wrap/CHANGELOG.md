@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/matheusa1/doc-wrap/compare/b81c1de556dadc90fb3f02ce7e249504ceb5c04f...3f465e22f6fc51375e983bba04ad6036c9e94957) (2026-05-11)
+
+
+### Bug Fixes
+
+* **create-doc-wrap:** corrige validação de nomes de projeto ([#33](https://github.com/matheusa1/doc-wrap/issues/33)) ([3f465e2](https://github.com/matheusa1/doc-wrap/commit/3f465e22f6fc51375e983bba04ad6036c9e94957))
+
 ## 0.1.0 (2026-05-11)
 
 
