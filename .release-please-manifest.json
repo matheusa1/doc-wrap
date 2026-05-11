@@ -1,5 +1,5 @@
 {
-	"packages/cli": "0.1.1",
-	"packages/create-doc-wrap": "0.1.1",
-	"packages/project-config": "0.1.0"
+	"packages/cli": "0.2.0",
+	"packages/create-doc-wrap": "0.2.0",
+	"packages/project-config": "0.2.0"
 }
