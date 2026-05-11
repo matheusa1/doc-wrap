@@ -1,7 +1,7 @@
 {
 	"name": "@doc-wrap/cli",
 	"description": "CLI do doc-wrap para construção e gerenciamento de documentação.",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"author": "Matheus Andrade",
 	"license": "MIT",
 	"type": "module",
