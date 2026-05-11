@@ -9,7 +9,22 @@ import {
 	resolveProjectName,
 } from "../lib/prompts.mjs";
 
-const [, , projectNameArg] = process.argv;
+const help = `Uso: create-doc-wrap [nome-do-projeto]
+
+Cria um novo projeto Doc Wrap a partir de um dos templates disponíveis.
+
+Opções:
+  -h, --help  Exibe esta ajuda.
+`;
+
+const [, , firstArg] = process.argv;
+
+if (firstArg === "-h" || firstArg === "--help") {
+	console.log(help);
+	process.exit(0);
+}
+
+const projectNameArg = firstArg;
 const promptSession = createPromptSession();
 
 try {

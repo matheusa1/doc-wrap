@@ -23,6 +23,20 @@ afterEach(async () => {
 });
 
 describe("create-doc-wrap bin", () => {
+	test("exibe ajuda sem entrar no fluxo interativo", () => {
+		const result = spawnSync(process.execPath, [binPath, "--help"], {
+			encoding: "utf8",
+		});
+
+		expect(result.status).toBe(0);
+		expect(result.stderr).toBe("");
+		expect(result.stdout).toContain("Uso: create-doc-wrap [nome-do-projeto]");
+		expect(result.stdout).toContain("-h, --help");
+		expect(result.stdout).not.toContain(
+			"Qual gerenciador de pacotes deseja usar?",
+		);
+	});
+
 	test("gera projeto com argumento posicional e imprime instruções do package manager", async () => {
 		const sandboxDirectory = await mkdtemp(
 			join(tmpdir(), "create-doc-wrap-bin-"),
