@@ -1,7 +1,7 @@
 {
 	"name": "@doc-wrap/cli",
 	"description": "CLI do doc-wrap para construção e gerenciamento de documentação.",
-	"version": "0.1.1",
+	"version": "0.2.0",
 	"author": "Matheus Andrade",
 	"license": "MIT",
 	"type": "module",
@@ -21,7 +21,7 @@
 		"doc-wrap": "./bin/doc-wrap.mjs"
 	},
 	"dependencies": {
-		"@doc-wrap/project-config": "^0.1.0",
+		"@doc-wrap/project-config": "^0.2.0",
 		"pagefind": "^1.5.2"
 	}
 }
