@@ -9,7 +9,11 @@ import {
 import { isAbsolute, join } from "node:path";
 import { assertPackageManager } from "./package-manager.mjs";
 import { createProjectPackageJson } from "./project-package.mjs";
-import { isValidProjectPackageName, normalizeProjectName } from "./prompts.mjs";
+import {
+	isValidProjectPackageName,
+	normalizePackageName,
+	resolveProjectDirectoryName,
+} from "./prompts.mjs";
 import { assertTemplate, resolveTemplateDirectory } from "./templates.mjs";
 
 const updateProjectConfigName = async (projectDirectory, projectName) => {
@@ -92,7 +96,7 @@ const copyTemplateContents = async (templateDirectory, projectDirectory) => {
 const resolveProjectDirectory = ({
 	cwd,
 	destinationDirectory,
-	projectName,
+	projectDirectoryName,
 }) => {
 	if (destinationDirectory) {
 		return isAbsolute(destinationDirectory)
@@ -100,7 +104,7 @@ const resolveProjectDirectory = ({
 			: join(cwd, destinationDirectory);
 	}
 
-	return join(cwd, projectName);
+	return join(cwd, projectDirectoryName);
 };
 
 export const createProject = async ({
@@ -110,12 +114,9 @@ export const createProject = async ({
 	projectName,
 	template,
 }) => {
-	const normalizedProjectName = normalizeProjectName(projectName);
+	const packageName = normalizePackageName(projectName);
 
-	if (
-		!normalizedProjectName ||
-		!isValidProjectPackageName(normalizedProjectName)
-	) {
+	if (!packageName || !isValidProjectPackageName(packageName)) {
 		throw new Error(
 			"O nome do projeto é obrigatório e deve resultar em um nome válido para package.json.",
 		);
@@ -123,20 +124,21 @@ export const createProject = async ({
 
 	assertPackageManager(packageManager);
 	const selectedTemplate = assertTemplate(template);
+	const projectDirectoryName = resolveProjectDirectoryName(packageName);
 	const projectDirectory = resolveProjectDirectory({
 		cwd,
 		destinationDirectory,
-		projectName: normalizedProjectName,
+		projectDirectoryName,
 	});
 	const templateDirectory = resolveTemplateDirectory(selectedTemplate);
 
 	await ensureDestinationDirectory(projectDirectory);
 	await copyTemplateContents(templateDirectory, projectDirectory);
-	await updateProjectConfigName(projectDirectory, normalizedProjectName);
+	await updateProjectConfigName(projectDirectory, packageName);
 
 	const packageJson = await createProjectPackageJson({
 		destinationDirectory: projectDirectory,
-		projectName: normalizedProjectName,
+		projectName: packageName,
 	});
 
 	await writeFile(
@@ -148,7 +150,8 @@ export const createProject = async ({
 	return {
 		packageJson,
 		projectDirectory,
-		projectName: normalizedProjectName,
+		projectDirectoryName,
+		projectName: packageName,
 		template: selectedTemplate,
 	};
 };
