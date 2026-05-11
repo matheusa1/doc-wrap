@@ -1,9 +1,8 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import mdx from "@mdx-js/rollup";
-import babel from "@rolldown/plugin-babel";
 import tailwindcss from "@tailwindcss/vite";
-import react, { reactCompilerPreset } from "@vitejs/plugin-react";
+import react from "@vitejs/plugin-react";
 import rehypeKatex from "rehype-katex";
 import rehypePrettyCode from "rehype-pretty-code";
 import remarkFrontmatter from "remark-frontmatter";
@@ -62,7 +61,6 @@ export default defineConfig(() => {
 				}),
 			},
 			react({ include: /\.(mdx|js|jsx|ts|tsx)$/ }),
-			babel({ presets: [reactCompilerPreset()] }),
 			tailwindcss(),
 		],
 		resolve: {

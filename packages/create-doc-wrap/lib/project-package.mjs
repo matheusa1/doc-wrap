@@ -20,6 +20,7 @@ const templateDependencies = {
 	"remark-math": "^6.0.0",
 	"remark-mdx-frontmatter": "^5.2.0",
 	shadcn: "^4.4.0",
+	shiki: "^4.0.0",
 	sonner: "^2.0.7",
 	"tailwind-merge": "^3.5.0",
 	tailwindcss: "^4.2.4",
@@ -29,17 +30,14 @@ const templateDependencies = {
 };
 
 const templateDevDependencies = {
-	"@babel/core": "^7.29.0",
 	"@biomejs/biome": "2.4.13",
-	"@rolldown/plugin-babel": "^0.2.3",
-	"@types/babel__core": "^7.20.5",
 	"@types/mdx": "^2.0.13",
 	"@types/node": "^25.6.0",
 	"@types/react": "^19.2.14",
 	"@types/react-dom": "^19.2.3",
 	"@vitejs/plugin-react": "^6.0.1",
 	"@doc-wrap/cli": "^0.1.1",
-	"babel-plugin-react-compiler": "^1.0.0",
+	rollup: "^4.0.0",
 	typescript: "~6.0.2",
 	vite: "^8.0.10",
 };

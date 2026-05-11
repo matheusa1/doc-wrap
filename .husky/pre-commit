@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-staged_files="$(git diff --cached --name-only --diff-filter=ACMR | grep -E '\.(js|jsx|ts|tsx|json|jsonc|css|scss|html|md)$' || true)"
+staged_files="$(git diff --cached --name-only --diff-filter=ACMR | grep -E '\.(js|jsx|ts|tsx|json|jsonc|css|scss|html)$' || true)"
 
 if [ -z "$staged_files" ]; then
 	exit 0
