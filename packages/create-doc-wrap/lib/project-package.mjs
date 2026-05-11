@@ -38,7 +38,7 @@ const templateDevDependencies = {
 	"@types/react": "^19.2.14",
 	"@types/react-dom": "^19.2.3",
 	"@vitejs/plugin-react": "^6.0.1",
-	"@doc-wrap/cli": "^0.1.0",
+	"@doc-wrap/cli": "^0.1.1",
 	"babel-plugin-react-compiler": "^1.0.0",
 	typescript: "~6.0.2",
 	vite: "^8.0.10",
