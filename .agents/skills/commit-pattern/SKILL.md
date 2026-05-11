@@ -53,6 +53,7 @@ Boas práticas:
 - priorize verbos como `ajusta`, `separa`, `padroniza`, `remove`, `adiciona`
 - evite títulos vagos como `corrige coisas` ou `ajustes diversos`
 - não crie um único commit se houver blocos independentes de mudança
+- não adicione o trailer `Co-authored-by:` nas mensagens de commit
 
 ## Fluxo Recomendado
 
