@@ -143,3 +143,7 @@ Ainda não existem `schemaVersion` nem `doc-wrap migrate`. Por isso, qualquer mu
 ## Fonte principal de documentação
 
 A central em `/docs` é a documentação oficial do template. Ela explica como evoluir a base, como escrever documentos e publicações, quais componentes MDX estão disponíveis e como a arquitetura atual do projeto está organizada.
+
+## Licença
+
+Este projeto está licenciado sob a licença MIT. Consulte o arquivo [LICENSE](./LICENSE) para mais detalhes.
