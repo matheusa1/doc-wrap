@@ -14,6 +14,7 @@ dist-ssr
 
 # Agent local instructions
 .codex
+.claude
 
 # Editor directories and files
 .vscode/*
