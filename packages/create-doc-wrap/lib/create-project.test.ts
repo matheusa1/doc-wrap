@@ -243,14 +243,14 @@ describe("createProject", () => {
 		expect(await pathExists(projectDirectory)).toBe(true);
 	});
 
-	test("remove til do nome ao criar diretório e arquivos de configuração", async () => {
+	test("separa package name scoped do diretório criado", async () => {
 		const sandboxDirectory = await createTemporaryDirectory();
-		const projectDirectory = join(sandboxDirectory, "meuprojeto");
+		const projectDirectory = join(sandboxDirectory, "main-docs-pax");
 
 		await createProject({
 			cwd: sandboxDirectory,
 			packageManager: "npm",
-			projectName: "meu~projeto",
+			projectName: "@main-docs/pax",
 			template: "docs",
 		});
 
@@ -260,10 +260,30 @@ describe("createProject", () => {
 			await readFile(join(projectDirectory, "project.config.json"), "utf8"),
 		);
 
-		expect(generatedPackageJson.name).toBe("meuprojeto");
-		expect(generatedPackageJson.name).not.toContain("~");
-		expect(generatedProjectConfig.name).toBe("meuprojeto");
-		expect(generatedProjectConfig.name).not.toContain("~");
+		expect(generatedPackageJson.name).toBe("@main-docs/pax");
+		expect(generatedProjectConfig.name).toBe("@main-docs/pax");
+		expect(await pathExists(projectDirectory)).toBe(true);
+	});
+
+	test("mantém pontos válidos no package name e no diretório", async () => {
+		const sandboxDirectory = await createTemporaryDirectory();
+		const projectDirectory = join(sandboxDirectory, "docs.v2");
+
+		await createProject({
+			cwd: sandboxDirectory,
+			packageManager: "npm",
+			projectName: "docs.v2",
+			template: "docs",
+		});
+
+		const generatedPackageJson =
+			await readGeneratedPackageJson(projectDirectory);
+		const generatedProjectConfig = JSON.parse(
+			await readFile(join(projectDirectory, "project.config.json"), "utf8"),
+		);
+
+		expect(generatedPackageJson.name).toBe("docs.v2");
+		expect(generatedProjectConfig.name).toBe("docs.v2");
 		expect(await pathExists(projectDirectory)).toBe(true);
 	});
 
@@ -302,6 +322,28 @@ describe("createProject", () => {
 				cwd: sandboxDirectory,
 				packageManager: "bun",
 				projectName: "node_modules",
+				template: "blog",
+			}),
+		).rejects.toThrow(
+			"O nome do projeto é obrigatório e deve resultar em um nome válido para package.json.",
+		);
+
+		await expect(
+			createProject({
+				cwd: sandboxDirectory,
+				packageManager: "bun",
+				projectName: "favicon.ico",
+				template: "blog",
+			}),
+		).rejects.toThrow(
+			"O nome do projeto é obrigatório e deve resultar em um nome válido para package.json.",
+		);
+
+		await expect(
+			createProject({
+				cwd: sandboxDirectory,
+				packageManager: "bun",
+				projectName: "fs",
 				template: "blog",
 			}),
 		).rejects.toThrow(

@@ -64,6 +64,34 @@ describe("create-doc-wrap bin", () => {
 		expect(generatedPackageJson.name).toBe("my-docs");
 	});
 
+	test("usa o diretório derivado nas instruções finais para scoped package", async () => {
+		const sandboxDirectory = await mkdtemp(
+			join(tmpdir(), "create-doc-wrap-bin-"),
+		);
+		const projectDirectory = join(sandboxDirectory, "main-docs-pax");
+		createdDirectories.push(sandboxDirectory);
+
+		const result = spawnSync(process.execPath, [binPath, "@main-docs/pax"], {
+			cwd: sandboxDirectory,
+			encoding: "utf8",
+			input: "4\n1\n",
+		});
+
+		expect(result.status).toBe(0);
+		expect(result.stderr).toBe("");
+		expect(result.stdout).toContain("Projeto criado com sucesso em ");
+		expect(result.stdout).toContain("main-docs-pax.\n");
+		expect(result.stdout).toContain("cd main-docs-pax");
+		expect(result.stdout).not.toContain("cd @main-docs/pax");
+		expect(existsSync(projectDirectory)).toBe(true);
+
+		const generatedPackageJson = JSON.parse(
+			await readFile(join(projectDirectory, "package.json"), "utf8"),
+		);
+
+		expect(generatedPackageJson.name).toBe("@main-docs/pax");
+	});
+
 	test("falha quando o nome não é informado em modo não interativo", async () => {
 		const sandboxDirectory = await mkdtemp(
 			join(tmpdir(), "create-doc-wrap-bin-"),

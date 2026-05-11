@@ -1,60 +1,63 @@
 import { describe, expect, test } from "bun:test";
 import {
 	isValidProjectPackageName,
-	normalizeProjectName,
+	normalizePackageName,
 	promptPackageManager,
 	promptTemplate,
+	resolveProjectDirectoryName,
 	resolveProjectName,
 	resolveSelection,
 } from "./prompts.mjs";
 
-describe("normalizeProjectName", () => {
+describe("normalizePackageName", () => {
 	test("mantém nome válido simples", () => {
-		expect(normalizeProjectName("meu-projeto")).toBe("meu-projeto");
+		expect(normalizePackageName("meu-projeto")).toBe("meu-projeto");
 	});
 
 	test("converte espaços em hifens", () => {
-		expect(normalizeProjectName("meu projeto")).toBe("meu-projeto");
+		expect(normalizePackageName("meu projeto")).toBe("meu-projeto");
 	});
 
 	test("converte para minúsculo", () => {
-		expect(normalizeProjectName("Meu Projeto")).toBe("meu-projeto");
+		expect(normalizePackageName("Meu Projeto")).toBe("meu-projeto");
 	});
 
 	test("remove espaços nas extremidades", () => {
-		expect(normalizeProjectName("  meu-projeto  ")).toBe("meu-projeto");
+		expect(normalizePackageName("  meu-projeto  ")).toBe("meu-projeto");
 	});
 
-	test("remove caracteres especiais inválidos", () => {
-		expect(normalizeProjectName("meu@projeto!")).toBe("meuprojeto");
+	test("preserva ponto em nome válido", () => {
+		expect(normalizePackageName("docs.v2")).toBe("docs.v2");
 	});
 
-	test("trata caracteres permitidos no npm", () => {
-		expect(normalizeProjectName("meu_projeto")).toBe("meu_projeto");
+	test("preserva scoped package válido", () => {
+		expect(normalizePackageName("@main-docs/pax")).toBe("@main-docs/pax");
+		expect(normalizePackageName("@Main-Docs/Pax")).toBe("@main-docs/pax");
 	});
 
 	test("remove til durante a normalização", () => {
-		expect(normalizeProjectName("meu~projeto")).toBe("meuprojeto");
-		expect(normalizeProjectName("~foo")).toBe("foo");
+		expect(normalizePackageName("meu~projeto")).toBe("meuprojeto");
 	});
 
 	test("retorna string vazia para entrada inválida", () => {
-		expect(normalizeProjectName("   ")).toBe("");
-		expect(normalizeProjectName("!!!")).toBe("");
-		expect(normalizeProjectName(undefined)).toBe("");
+		expect(normalizePackageName("   ")).toBe("");
+		expect(normalizePackageName("!!!")).toBe("");
+		expect(normalizePackageName(undefined)).toBe("");
 	});
 });
 
 describe("isValidProjectPackageName", () => {
 	test("aceita nomes válidos", () => {
 		expect(isValidProjectPackageName("meu-projeto")).toBe(true);
-		expect(isValidProjectPackageName("projeto123")).toBe(true);
+		expect(isValidProjectPackageName("docs.v2")).toBe(true);
 		expect(isValidProjectPackageName("meu_projeto")).toBe(true);
+		expect(isValidProjectPackageName("@main-docs/pax")).toBe(true);
+		expect(isValidProjectPackageName("@scope/docs.v2")).toBe(true);
 	});
 
 	test("rejeita nomes que começam com ponto ou underscore", () => {
-		expect(isValidProjectPackageName(".projeto")).toBe(false);
-		expect(isValidProjectPackageName("_projeto")).toBe(false);
+		expect(isValidProjectPackageName(".docs")).toBe(false);
+		expect(isValidProjectPackageName("_docs")).toBe(false);
 	});
 
 	test("rejeita nomes reservados", () => {
@@ -69,9 +72,26 @@ describe("isValidProjectPackageName", () => {
 	test("rejeita nomes vazios ou inválidos", () => {
 		expect(isValidProjectPackageName("")).toBe(false);
 		expect(isValidProjectPackageName("Meu Projeto")).toBe(false);
-		expect(isValidProjectPackageName("meu@projeto")).toBe(false);
-		expect(isValidProjectPackageName("~foo")).toBe(false);
+		expect(isValidProjectPackageName("fs")).toBe(false);
+		expect(isValidProjectPackageName("path")).toBe(false);
+		expect(isValidProjectPackageName("http")).toBe(false);
+		expect(isValidProjectPackageName("crypto")).toBe(false);
+		expect(isValidProjectPackageName("stream")).toBe(false);
+		expect(isValidProjectPackageName("@scope")).toBe(false);
+		expect(isValidProjectPackageName("@scope/")).toBe(false);
+		expect(isValidProjectPackageName("@/package")).toBe(false);
+		expect(isValidProjectPackageName("scope/package")).toBe(false);
+		expect(isValidProjectPackageName("meu projeto")).toBe(false);
 		expect(isValidProjectPackageName("meu~projeto")).toBe(false);
+	});
+});
+
+describe("resolveProjectDirectoryName", () => {
+	test("mantém nomes simples e converte scoped packages", () => {
+		expect(resolveProjectDirectoryName("meu-projeto")).toBe("meu-projeto");
+		expect(resolveProjectDirectoryName("docs.v2")).toBe("docs.v2");
+		expect(resolveProjectDirectoryName("@main-docs/pax")).toBe("main-docs-pax");
+		expect(resolveProjectDirectoryName("@scope/docs.v2")).toBe("scope-docs.v2");
 	});
 });
 
@@ -82,8 +102,11 @@ describe("resolveProjectName", () => {
 		);
 	});
 
-	test("remove til do argumento antes de validar", async () => {
-		await expect(resolveProjectName("~foo")).resolves.toBe("foo");
+	test("preserva scoped package e pontos válidos", async () => {
+		await expect(resolveProjectName("@main-docs/pax")).resolves.toBe(
+			"@main-docs/pax",
+		);
+		await expect(resolveProjectName("docs.v2")).resolves.toBe("docs.v2");
 	});
 
 	test("pergunta o nome e normaliza quando o argumento não existe em modo interativo", async () => {
@@ -101,7 +124,10 @@ describe("resolveProjectName", () => {
 	});
 
 	test("falha quando o argumento normalizado é um nome reservado", async () => {
-		await expect(resolveProjectName("node_modules")).rejects.toThrow(
+		await expect(resolveProjectName("favicon.ico")).rejects.toThrow(
+			"O nome do projeto é obrigatório e deve resultar em um nome válido para package.json.",
+		);
+		await expect(resolveProjectName("fs")).rejects.toThrow(
 			"O nome do projeto é obrigatório e deve resultar em um nome válido para package.json.",
 		);
 	});
