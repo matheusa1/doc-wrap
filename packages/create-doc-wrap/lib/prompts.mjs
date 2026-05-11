@@ -55,7 +55,7 @@ export const normalizeProjectName = (name) => {
 		.trim()
 		.toLowerCase()
 		.replace(/\s+/g, "-")
-		.replace(/[^a-z0-9_\-~]/g, "")
+		.replace(/[^a-z0-9_-]/g, "")
 		.replace(/-+/g, "-")
 		.replace(/^-+|-+$/g, "");
 };
@@ -77,7 +77,7 @@ export const isValidProjectPackageName = (name) => {
 		return false;
 	}
 
-	return /^[a-z0-9_\-~]+$/.test(name);
+	return /^[a-z0-9_-]+$/.test(name);
 };
 
 export const resolveSelection = (value, options, label) => {
