@@ -243,6 +243,30 @@ describe("createProject", () => {
 		expect(await pathExists(projectDirectory)).toBe(true);
 	});
 
+	test("remove til do nome ao criar diretório e arquivos de configuração", async () => {
+		const sandboxDirectory = await createTemporaryDirectory();
+		const projectDirectory = join(sandboxDirectory, "meuprojeto");
+
+		await createProject({
+			cwd: sandboxDirectory,
+			packageManager: "npm",
+			projectName: "meu~projeto",
+			template: "docs",
+		});
+
+		const generatedPackageJson =
+			await readGeneratedPackageJson(projectDirectory);
+		const generatedProjectConfig = JSON.parse(
+			await readFile(join(projectDirectory, "project.config.json"), "utf8"),
+		);
+
+		expect(generatedPackageJson.name).toBe("meuprojeto");
+		expect(generatedPackageJson.name).not.toContain("~");
+		expect(generatedProjectConfig.name).toBe("meuprojeto");
+		expect(generatedProjectConfig.name).not.toContain("~");
+		expect(await pathExists(projectDirectory)).toBe(true);
+	});
+
 	test("restaura .gitignore do template no projeto gerado", async () => {
 		const sandboxDirectory = await createTemporaryDirectory();
 		const projectDirectory = join(sandboxDirectory, "gitignore-project");

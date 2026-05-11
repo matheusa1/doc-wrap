@@ -31,7 +31,11 @@ describe("normalizeProjectName", () => {
 
 	test("trata caracteres permitidos no npm", () => {
 		expect(normalizeProjectName("meu_projeto")).toBe("meu_projeto");
-		expect(normalizeProjectName("meu~projeto")).toBe("meu~projeto");
+	});
+
+	test("remove til durante a normalização", () => {
+		expect(normalizeProjectName("meu~projeto")).toBe("meuprojeto");
+		expect(normalizeProjectName("~foo")).toBe("foo");
 	});
 
 	test("retorna string vazia para entrada inválida", () => {
@@ -46,7 +50,6 @@ describe("isValidProjectPackageName", () => {
 		expect(isValidProjectPackageName("meu-projeto")).toBe(true);
 		expect(isValidProjectPackageName("projeto123")).toBe(true);
 		expect(isValidProjectPackageName("meu_projeto")).toBe(true);
-		expect(isValidProjectPackageName("meu~projeto")).toBe(true);
 	});
 
 	test("rejeita nomes que começam com ponto ou underscore", () => {
@@ -67,6 +70,8 @@ describe("isValidProjectPackageName", () => {
 		expect(isValidProjectPackageName("")).toBe(false);
 		expect(isValidProjectPackageName("Meu Projeto")).toBe(false);
 		expect(isValidProjectPackageName("meu@projeto")).toBe(false);
+		expect(isValidProjectPackageName("~foo")).toBe(false);
+		expect(isValidProjectPackageName("meu~projeto")).toBe(false);
 	});
 });
 
@@ -75,6 +80,10 @@ describe("resolveProjectName", () => {
 		await expect(resolveProjectName("Meu Projeto")).resolves.toBe(
 			"meu-projeto",
 		);
+	});
+
+	test("remove til do argumento antes de validar", async () => {
+		await expect(resolveProjectName("~foo")).resolves.toBe("foo");
 	});
 
 	test("pergunta o nome e normaliza quando o argumento não existe em modo interativo", async () => {
