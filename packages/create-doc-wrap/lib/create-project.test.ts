@@ -259,6 +259,43 @@ describe("createProject", () => {
 		).resolves.toContain("node_modules");
 	});
 
+	test("falha quando o nome do projeto é inválido", async () => {
+		const sandboxDirectory = await createTemporaryDirectory();
+
+		await expect(
+			createProject({
+				cwd: sandboxDirectory,
+				packageManager: "bun",
+				projectName: "!!!",
+				template: "blog",
+			}),
+		).rejects.toThrow(
+			"O nome do projeto é obrigatório e deve resultar em um nome válido para package.json.",
+		);
+
+		await expect(
+			createProject({
+				cwd: sandboxDirectory,
+				packageManager: "bun",
+				projectName: "node_modules",
+				template: "blog",
+			}),
+		).rejects.toThrow(
+			"O nome do projeto é obrigatório e deve resultar em um nome válido para package.json.",
+		);
+
+		await expect(
+			createProject({
+				cwd: sandboxDirectory,
+				packageManager: "bun",
+				projectName: "_foo",
+				template: "blog",
+			}),
+		).rejects.toThrow(
+			"O nome do projeto é obrigatório e deve resultar em um nome válido para package.json.",
+		);
+	});
+
 	test("falha quando o diretório já existe e não está vazio", async () => {
 		const sandboxDirectory = await createTemporaryDirectory();
 		const projectDirectory = join(sandboxDirectory, "existing-project");

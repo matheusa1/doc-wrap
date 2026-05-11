@@ -9,7 +9,7 @@ import {
 import { isAbsolute, join } from "node:path";
 import { assertPackageManager } from "./package-manager.mjs";
 import { createProjectPackageJson } from "./project-package.mjs";
-import { normalizeProjectName } from "./prompts.mjs";
+import { isValidProjectPackageName, normalizeProjectName } from "./prompts.mjs";
 import { assertTemplate, resolveTemplateDirectory } from "./templates.mjs";
 
 const updateProjectConfigName = async (projectDirectory, projectName) => {
@@ -112,8 +112,13 @@ export const createProject = async ({
 }) => {
 	const normalizedProjectName = normalizeProjectName(projectName);
 
-	if (!normalizedProjectName) {
-		throw new Error("O nome do projeto é obrigatório.");
+	if (
+		!normalizedProjectName ||
+		!isValidProjectPackageName(normalizedProjectName)
+	) {
+		throw new Error(
+			"O nome do projeto é obrigatório e deve resultar em um nome válido para package.json.",
+		);
 	}
 
 	assertPackageManager(packageManager);
