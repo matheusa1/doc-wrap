@@ -19,6 +19,7 @@ const templateDependencies = {
 	"remark-frontmatter": "^5.0.0",
 	"remark-math": "^6.0.0",
 	"remark-mdx-frontmatter": "^5.2.0",
+	shadcn: "^4.4.0",
 	sonner: "^2.0.7",
 	"tailwind-merge": "^3.5.0",
 	tailwindcss: "^4.2.4",
@@ -37,10 +38,10 @@ const templateDevDependencies = {
 	"@types/react": "^19.2.14",
 	"@types/react-dom": "^19.2.3",
 	"@vitejs/plugin-react": "^6.0.1",
+	"@doc-wrap/cli": "^0.1.0",
 	"babel-plugin-react-compiler": "^1.0.0",
 	typescript: "~6.0.2",
 	vite: "^8.0.10",
-	"doc-wrap": "^0.1.0",
 };
 
 export const createProjectPackageJson = async ({ projectName }) => {

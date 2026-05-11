@@ -27,15 +27,16 @@ describe("createProjectPackageJson", () => {
 		expect(serialized).not.toContain("file:");
 
 		// Verifica dependências obrigatórias com versões fixas/específicas
-		expect(packageJson.devDependencies["doc-wrap"]).toBe("^0.1.0");
+		expect(packageJson.devDependencies["@doc-wrap/cli"]).toBe("^0.1.0");
 		expect(packageJson.dependencies["@doc-wrap/project-config"]).toBe("^0.1.0");
 
 		// Verifica que não contém dependências indesejadas
-		expect(packageJson.devDependencies).not.toHaveProperty("@doc-wrap/cli");
+		expect(packageJson.devDependencies).not.toHaveProperty("doc-wrap");
 		expect(packageJson.devDependencies).not.toHaveProperty("husky");
 
 		// Verifica presença de algumas dependências do template
 		expect(packageJson.dependencies.react).toBeDefined();
+		expect(packageJson.dependencies.shadcn).toBeDefined();
 		expect(packageJson.dependencies.tailwindcss).toBeDefined();
 		expect(packageJson.devDependencies.typescript).toBeDefined();
 		expect(packageJson.devDependencies.vite).toBeDefined();
