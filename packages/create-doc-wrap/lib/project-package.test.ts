@@ -40,6 +40,19 @@ describe("createProjectPackageJson", () => {
 		expect(packageJson.dependencies.tailwindcss).toBeDefined();
 		expect(packageJson.devDependencies.typescript).toBeDefined();
 		expect(packageJson.devDependencies.vite).toBeDefined();
+
+		// Peer dependencies explícitas (issue #32)
+		expect(packageJson.dependencies.shiki).toBeDefined();
+		expect(packageJson.devDependencies.rollup).toBeDefined();
+
+		// React Compiler removido para evitar peer dep de rolldown (RC)
+		expect(packageJson.devDependencies).not.toHaveProperty(
+			"@rolldown/plugin-babel",
+		);
+		expect(packageJson.devDependencies).not.toHaveProperty("@babel/core");
+		expect(packageJson.devDependencies).not.toHaveProperty(
+			"babel-plugin-react-compiler",
+		);
 	});
 
 	test("não depende da raiz do monorepo", async () => {
