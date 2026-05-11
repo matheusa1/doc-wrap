@@ -190,9 +190,10 @@ describe("createProject", () => {
 			preview: "doc-wrap preview",
 			check: "doc-wrap check",
 		});
-		expect(generatedPackageJson.devDependencies["doc-wrap"]).toMatch(
+		expect(generatedPackageJson.devDependencies["@doc-wrap/cli"]).toMatch(
 			/^\^?\d+\.\d+\.\d+/,
 		);
+		expect(generatedPackageJson.devDependencies).not.toHaveProperty("doc-wrap");
 		expect(
 			generatedPackageJson.dependencies["@doc-wrap/project-config"],
 		).toMatch(/^\^?\d+\.\d+\.\d+/);
@@ -218,6 +219,22 @@ describe("createProject", () => {
 
 		expect(generatedPackageJson.name).toBe("custom-docs");
 		expect(generatedProjectConfig.name).toBe("custom-docs");
+	});
+
+	test("restaura .gitignore do template no projeto gerado", async () => {
+		const sandboxDirectory = await createTemporaryDirectory();
+		const projectDirectory = join(sandboxDirectory, "gitignore-project");
+
+		await createProject({
+			cwd: sandboxDirectory,
+			packageManager: "npm",
+			projectName: "gitignore-project",
+			template: "docs",
+		});
+
+		await expect(
+			readFile(join(projectDirectory, ".gitignore"), "utf8"),
+		).resolves.toContain("node_modules");
 	});
 
 	test("falha quando o diretório já existe e não está vazio", async () => {

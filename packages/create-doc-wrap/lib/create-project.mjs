@@ -63,15 +63,18 @@ const copyTemplateContents = async (templateDirectory, projectDirectory) => {
 
 	try {
 		await Promise.all(
-			templateEntries.map((entry) =>
-				cp(
+			templateEntries.map((entry) => {
+				const destinationName =
+					entry.name === "gitignore" ? ".gitignore" : entry.name;
+
+				return cp(
 					join(templateDirectory, entry.name),
-					join(projectDirectory, entry.name),
+					join(projectDirectory, destinationName),
 					{
 						recursive: entry.isDirectory(),
 					},
-				),
-			),
+				);
+			}),
 		);
 	} catch (error) {
 		const message = error instanceof Error ? error.message : String(error);
