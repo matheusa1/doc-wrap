@@ -1,5 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import {
+	isValidProjectPackageName,
 	normalizeProjectName,
 	promptPackageManager,
 	promptTemplate,
@@ -28,10 +29,44 @@ describe("normalizeProjectName", () => {
 		expect(normalizeProjectName("meu@projeto!")).toBe("meuprojeto");
 	});
 
+	test("trata caracteres permitidos no npm", () => {
+		expect(normalizeProjectName("meu_projeto")).toBe("meu_projeto");
+		expect(normalizeProjectName("meu~projeto")).toBe("meu~projeto");
+	});
+
 	test("retorna string vazia para entrada inválida", () => {
 		expect(normalizeProjectName("   ")).toBe("");
 		expect(normalizeProjectName("!!!")).toBe("");
 		expect(normalizeProjectName(undefined)).toBe("");
+	});
+});
+
+describe("isValidProjectPackageName", () => {
+	test("aceita nomes válidos", () => {
+		expect(isValidProjectPackageName("meu-projeto")).toBe(true);
+		expect(isValidProjectPackageName("projeto123")).toBe(true);
+		expect(isValidProjectPackageName("meu_projeto")).toBe(true);
+		expect(isValidProjectPackageName("meu~projeto")).toBe(true);
+	});
+
+	test("rejeita nomes que começam com ponto ou underscore", () => {
+		expect(isValidProjectPackageName(".projeto")).toBe(false);
+		expect(isValidProjectPackageName("_projeto")).toBe(false);
+	});
+
+	test("rejeita nomes reservados", () => {
+		expect(isValidProjectPackageName("node_modules")).toBe(false);
+		expect(isValidProjectPackageName("favicon.ico")).toBe(false);
+	});
+
+	test("rejeita nomes com mais de 214 caracteres", () => {
+		expect(isValidProjectPackageName("a".repeat(215))).toBe(false);
+	});
+
+	test("rejeita nomes vazios ou inválidos", () => {
+		expect(isValidProjectPackageName("")).toBe(false);
+		expect(isValidProjectPackageName("Meu Projeto")).toBe(false);
+		expect(isValidProjectPackageName("meu@projeto")).toBe(false);
 	});
 });
 
@@ -52,7 +87,13 @@ describe("resolveProjectName", () => {
 
 	test("falha quando o argumento é inválido", async () => {
 		await expect(resolveProjectName("!!!")).rejects.toThrow(
-			"O nome do projeto informado é inválido.",
+			"O nome do projeto é obrigatório e deve resultar em um nome válido para package.json.",
+		);
+	});
+
+	test("falha quando o argumento normalizado é um nome reservado", async () => {
+		await expect(resolveProjectName("node_modules")).rejects.toThrow(
+			"O nome do projeto é obrigatório e deve resultar em um nome válido para package.json.",
 		);
 	});
 
@@ -62,7 +103,7 @@ describe("resolveProjectName", () => {
 		await expect(
 			resolveProjectName(undefined, { ask, interactive: true }),
 		).rejects.toThrow(
-			"O nome do projeto é obrigatório e deve resultar em um nome válido.",
+			"O nome do projeto é obrigatório e deve resultar em um nome válido para package.json.",
 		);
 	});
 

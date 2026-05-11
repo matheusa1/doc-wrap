@@ -55,9 +55,29 @@ export const normalizeProjectName = (name) => {
 		.trim()
 		.toLowerCase()
 		.replace(/\s+/g, "-")
-		.replace(/[^a-z0-9-_~]/g, "")
+		.replace(/[^a-z0-9_\-~]/g, "")
 		.replace(/-+/g, "-")
 		.replace(/^-+|-+$/g, "");
+};
+
+export const isValidProjectPackageName = (name) => {
+	if (!name || typeof name !== "string") {
+		return false;
+	}
+
+	if (name.length > 214) {
+		return false;
+	}
+
+	if (name.startsWith(".") || name.startsWith("_")) {
+		return false;
+	}
+
+	if (name === "node_modules" || name === "favicon.ico") {
+		return false;
+	}
+
+	return /^[a-z0-9_\-~]+$/.test(name);
 };
 
 export const resolveSelection = (value, options, label) => {
@@ -105,12 +125,17 @@ export const resolveProjectName = async (
 		? normalizeProjectName(projectNameArg)
 		: "";
 
-	if (normalizedProjectNameArg) {
+	if (
+		normalizedProjectNameArg &&
+		isValidProjectPackageName(normalizedProjectNameArg)
+	) {
 		return normalizedProjectNameArg;
 	}
 
-	if (projectNameArg && !normalizedProjectNameArg) {
-		throw new Error("O nome do projeto informado é inválido.");
+	if (projectNameArg) {
+		throw new Error(
+			"O nome do projeto é obrigatório e deve resultar em um nome válido para package.json.",
+		);
 	}
 
 	if (!interactive) {
@@ -123,9 +148,12 @@ export const resolveProjectName = async (
 	const normalizedPromptedProjectName =
 		normalizeProjectName(promptedProjectName);
 
-	if (!normalizedPromptedProjectName) {
+	if (
+		!normalizedPromptedProjectName ||
+		!isValidProjectPackageName(normalizedPromptedProjectName)
+	) {
 		throw new Error(
-			"O nome do projeto é obrigatório e deve resultar em um nome válido.",
+			"O nome do projeto é obrigatório e deve resultar em um nome válido para package.json.",
 		);
 	}
 
