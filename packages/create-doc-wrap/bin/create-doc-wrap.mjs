@@ -35,7 +35,7 @@ try {
 		ask: promptSession.ask,
 	});
 	const template = await promptTemplate({ ask: promptSession.ask });
-	const { projectDirectory } = await createProject({
+	const { projectDirectory, projectDirectoryName } = await createProject({
 		cwd: process.cwd(),
 		packageManager,
 		projectName,
@@ -43,7 +43,12 @@ try {
 	});
 
 	console.log(`Projeto criado com sucesso em ${projectDirectory}.\n`);
-	console.log(buildFinalInstructions(packageManager, projectName));
+	console.log(
+		buildFinalInstructions({
+			packageManager,
+			projectDirectoryName,
+		}),
+	);
 } catch (error) {
 	const message = error instanceof Error ? error.message : String(error);
 

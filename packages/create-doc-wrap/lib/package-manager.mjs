@@ -32,9 +32,14 @@ export const assertPackageManager = (value) => {
 	return value;
 };
 
-export const buildFinalInstructions = (packageManager, projectName) => {
+export const buildFinalInstructions = ({
+	packageManager,
+	projectDirectoryName,
+}) => {
 	const selectedPackageManager = assertPackageManager(packageManager);
 	const commands = packageManagerCommands[selectedPackageManager];
 
-	return [`cd ${projectName}`, commands.install, commands.dev].join("\n");
+	return [`cd ${projectDirectoryName}`, commands.install, commands.dev].join(
+		"\n",
+	);
 };

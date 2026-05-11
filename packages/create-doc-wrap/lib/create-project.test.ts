@@ -221,6 +221,72 @@ describe("createProject", () => {
 		expect(generatedProjectConfig.name).toBe("custom-docs");
 	});
 
+	test("normaliza o nome do projeto ao criar o diretório e arquivos", async () => {
+		const sandboxDirectory = await createTemporaryDirectory();
+		const projectDirectory = join(sandboxDirectory, "meu-projeto");
+
+		await createProject({
+			cwd: sandboxDirectory,
+			packageManager: "npm",
+			projectName: "  Meu Projeto  ",
+			template: "docs",
+		});
+
+		const generatedPackageJson =
+			await readGeneratedPackageJson(projectDirectory);
+		const generatedProjectConfig = JSON.parse(
+			await readFile(join(projectDirectory, "project.config.json"), "utf8"),
+		);
+
+		expect(generatedPackageJson.name).toBe("meu-projeto");
+		expect(generatedProjectConfig.name).toBe("meu-projeto");
+		expect(await pathExists(projectDirectory)).toBe(true);
+	});
+
+	test("separa package name scoped do diretório criado", async () => {
+		const sandboxDirectory = await createTemporaryDirectory();
+		const projectDirectory = join(sandboxDirectory, "main-docs-pax");
+
+		await createProject({
+			cwd: sandboxDirectory,
+			packageManager: "npm",
+			projectName: "@main-docs/pax",
+			template: "docs",
+		});
+
+		const generatedPackageJson =
+			await readGeneratedPackageJson(projectDirectory);
+		const generatedProjectConfig = JSON.parse(
+			await readFile(join(projectDirectory, "project.config.json"), "utf8"),
+		);
+
+		expect(generatedPackageJson.name).toBe("@main-docs/pax");
+		expect(generatedProjectConfig.name).toBe("@main-docs/pax");
+		expect(await pathExists(projectDirectory)).toBe(true);
+	});
+
+	test("mantém pontos válidos no package name e no diretório", async () => {
+		const sandboxDirectory = await createTemporaryDirectory();
+		const projectDirectory = join(sandboxDirectory, "docs.v2");
+
+		await createProject({
+			cwd: sandboxDirectory,
+			packageManager: "npm",
+			projectName: "docs.v2",
+			template: "docs",
+		});
+
+		const generatedPackageJson =
+			await readGeneratedPackageJson(projectDirectory);
+		const generatedProjectConfig = JSON.parse(
+			await readFile(join(projectDirectory, "project.config.json"), "utf8"),
+		);
+
+		expect(generatedPackageJson.name).toBe("docs.v2");
+		expect(generatedProjectConfig.name).toBe("docs.v2");
+		expect(await pathExists(projectDirectory)).toBe(true);
+	});
+
 	test("restaura .gitignore do template no projeto gerado", async () => {
 		const sandboxDirectory = await createTemporaryDirectory();
 		const projectDirectory = join(sandboxDirectory, "gitignore-project");
@@ -235,6 +301,65 @@ describe("createProject", () => {
 		await expect(
 			readFile(join(projectDirectory, ".gitignore"), "utf8"),
 		).resolves.toContain("node_modules");
+	});
+
+	test("falha quando o nome do projeto é inválido", async () => {
+		const sandboxDirectory = await createTemporaryDirectory();
+
+		await expect(
+			createProject({
+				cwd: sandboxDirectory,
+				packageManager: "bun",
+				projectName: "!!!",
+				template: "blog",
+			}),
+		).rejects.toThrow(
+			"O nome do projeto é obrigatório e deve resultar em um nome válido para package.json.",
+		);
+
+		await expect(
+			createProject({
+				cwd: sandboxDirectory,
+				packageManager: "bun",
+				projectName: "node_modules",
+				template: "blog",
+			}),
+		).rejects.toThrow(
+			"O nome do projeto é obrigatório e deve resultar em um nome válido para package.json.",
+		);
+
+		await expect(
+			createProject({
+				cwd: sandboxDirectory,
+				packageManager: "bun",
+				projectName: "favicon.ico",
+				template: "blog",
+			}),
+		).rejects.toThrow(
+			"O nome do projeto é obrigatório e deve resultar em um nome válido para package.json.",
+		);
+
+		await expect(
+			createProject({
+				cwd: sandboxDirectory,
+				packageManager: "bun",
+				projectName: "fs",
+				template: "blog",
+			}),
+		).rejects.toThrow(
+			"O nome do projeto é obrigatório e deve resultar em um nome válido para package.json.",
+		);
+
+		await expect(
+			createProject({
+				cwd: sandboxDirectory,
+				packageManager: "bun",
+				projectName: "_foo",
+				template: "blog",
+			}),
+		).rejects.toThrow(
+			"O nome do projeto é obrigatório e deve resultar em um nome válido para package.json.",
+		);
 	});
 
 	test("falha quando o diretório já existe e não está vazio", async () => {

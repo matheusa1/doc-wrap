@@ -1,3 +1,4 @@
+import { builtinModules } from "node:module";
 import { stdin as defaultInput, stdout as defaultOutput } from "node:process";
 import { createInterface } from "node:readline";
 import { packageManagers } from "./package-manager.mjs";
@@ -46,6 +47,108 @@ export const isInteractiveSession = ({
 	output = defaultOutput,
 } = {}) => Boolean(input.isTTY && output.isTTY);
 
+const projectNameErrorMessage =
+	"O nome do projeto é obrigatório e deve resultar em um nome válido para package.json.";
+
+const builtinModuleNames = new Set(
+	builtinModules.map((moduleName) => moduleName.replace(/^node:/, "")),
+);
+
+const normalizePackageSegment = (value) =>
+	value.replace(/[^a-z0-9._-]/g, "").replace(/-+/g, "-");
+
+export const normalizePackageName = (name) => {
+	if (typeof name !== "string") {
+		return "";
+	}
+
+	const normalizedValue = name.trim().toLowerCase().replace(/\s+/g, "-");
+
+	if (!normalizedValue) {
+		return "";
+	}
+
+	if (normalizedValue.startsWith("@")) {
+		const scopedSegments = normalizedValue
+			.slice(1)
+			.split("/")
+			.map(normalizePackageSegment);
+
+		return `@${scopedSegments.join("/")}`;
+	}
+
+	if (normalizedValue.includes("/")) {
+		return normalizedValue.split("/").map(normalizePackageSegment).join("/");
+	}
+
+	return normalizePackageSegment(normalizedValue);
+};
+
+export const isValidProjectPackageName = (name) => {
+	if (!name || typeof name !== "string") {
+		return false;
+	}
+
+	if (name.length > 214) {
+		return false;
+	}
+
+	if (name.includes(" ") || name.includes("~")) {
+		return false;
+	}
+
+	if (!/^[a-z0-9._/@-]+$/.test(name)) {
+		return false;
+	}
+
+	if (name.startsWith("@")) {
+		const scopedMatch = /^@([^/]+)\/([^/]+)$/.exec(name);
+
+		if (!scopedMatch) {
+			return false;
+		}
+
+		const [, scopeName, packageName] = scopedMatch;
+
+		return (
+			/^[a-z0-9][a-z0-9._-]*$/.test(scopeName) &&
+			/^[a-z0-9][a-z0-9._-]*$/.test(packageName)
+		);
+	}
+
+	if (name.startsWith(".") || name.startsWith("_") || name.includes("/")) {
+		return false;
+	}
+
+	if (name === "node_modules" || name === "favicon.ico") {
+		return false;
+	}
+
+	if (builtinModuleNames.has(name)) {
+		return false;
+	}
+
+	return /^[a-z0-9][a-z0-9._-]*$/.test(name);
+};
+
+export const resolveProjectDirectoryName = (packageName) => {
+	const projectDirectoryName = packageName
+		.replace(/^@/, "")
+		.replaceAll("/", "-");
+
+	if (
+		!projectDirectoryName ||
+		projectDirectoryName.includes("/") ||
+		projectDirectoryName.includes("\\")
+	) {
+		throw new Error(
+			"Não foi possível resolver um diretório válido para o projeto.",
+		);
+	}
+
+	return projectDirectoryName;
+};
+
 export const resolveSelection = (value, options, label) => {
 	const normalizedValue = value.trim().toLowerCase();
 
@@ -87,10 +190,19 @@ export const resolveProjectName = async (
 		interactive = isInteractiveSession({ input, output }),
 	} = {},
 ) => {
-	const normalizedProjectName = projectNameArg?.trim();
+	const normalizedProjectNameArg = projectNameArg
+		? normalizePackageName(projectNameArg)
+		: "";
 
-	if (normalizedProjectName) {
-		return normalizedProjectName;
+	if (
+		normalizedProjectNameArg &&
+		isValidProjectPackageName(normalizedProjectNameArg)
+	) {
+		return normalizedProjectNameArg;
+	}
+
+	if (projectNameArg) {
+		throw new Error(projectNameErrorMessage);
 	}
 
 	if (!interactive) {
@@ -99,15 +211,18 @@ export const resolveProjectName = async (
 		);
 	}
 
-	const promptedProjectName = (
-		await ask("Nome do projeto: ", { input, output })
-	).trim();
+	const promptedProjectName = await ask("Nome do projeto: ", { input, output });
+	const normalizedPromptedProjectName =
+		normalizePackageName(promptedProjectName);
 
-	if (!promptedProjectName) {
-		throw new Error("O nome do projeto é obrigatório.");
+	if (
+		!normalizedPromptedProjectName ||
+		!isValidProjectPackageName(normalizedPromptedProjectName)
+	) {
+		throw new Error(projectNameErrorMessage);
 	}
 
-	return promptedProjectName;
+	return normalizedPromptedProjectName;
 };
 
 export const promptPackageManager = async ({
