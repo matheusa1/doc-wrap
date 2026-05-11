@@ -26,7 +26,7 @@ const templateDependencies = {
 	tailwindcss: "^4.2.4",
 	"tw-animate-css": "^1.4.0",
 	zod: "^4.3.6",
-	"@doc-wrap/project-config": "^0.1.0",
+	"@doc-wrap/project-config": "^0.2.0",
 };
 
 const templateDevDependencies = {
@@ -36,7 +36,7 @@ const templateDevDependencies = {
 	"@types/react": "^19.2.14",
 	"@types/react-dom": "^19.2.3",
 	"@vitejs/plugin-react": "^6.0.1",
-	"@doc-wrap/cli": "^0.1.1",
+	"@doc-wrap/cli": "^0.2.0",
 	rollup: "^4.0.0",
 	typescript: "~6.0.2",
 	vite: "^8.0.10",

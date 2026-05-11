@@ -27,8 +27,8 @@ describe("createProjectPackageJson", () => {
 		expect(serialized).not.toContain("file:");
 
 		// Verifica dependências obrigatórias com versões fixas/específicas
-		expect(packageJson.devDependencies["@doc-wrap/cli"]).toBe("^0.1.1");
-		expect(packageJson.dependencies["@doc-wrap/project-config"]).toBe("^0.1.0");
+		expect(packageJson.devDependencies["@doc-wrap/cli"]).toBe("^0.2.0");
+		expect(packageJson.dependencies["@doc-wrap/project-config"]).toBe("^0.2.0");
 
 		// Verifica que não contém dependências indesejadas
 		expect(packageJson.devDependencies).not.toHaveProperty("doc-wrap");
