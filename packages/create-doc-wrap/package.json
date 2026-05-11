@@ -1,7 +1,7 @@
 {
 	"name": "create-doc-wrap",
 	"description": "Scaffold projects powered by Doc Wrap templates.",
-	"version": "0.1.1",
+	"version": "0.2.0",
 	"author": "Matheus Andrade",
 	"license": "MIT",
 	"type": "module",
