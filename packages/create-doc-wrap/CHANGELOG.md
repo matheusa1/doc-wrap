@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/matheusa1/doc-wrap/compare/create-doc-wrap-v0.2.0...create-doc-wrap-v0.2.1) (2026-05-11)
+
+
+### Bug Fixes
+
+* **create-doc-wrap:** 🐛 atualiza versões de @doc-wrap/cli e @doc-wrap/project-config para ^0.2.0 ([#44](https://github.com/matheusa1/doc-wrap/issues/44)) ([e7701a6](https://github.com/matheusa1/doc-wrap/commit/e7701a60e6a4787e3f0dbcae48480297e7524ac6))
+
 ## [0.2.0](https://github.com/matheusa1/doc-wrap/compare/create-doc-wrap-v0.1.1...create-doc-wrap-v0.2.0) (2026-05-11)
 
 
