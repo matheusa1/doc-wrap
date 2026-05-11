@@ -221,6 +221,28 @@ describe("createProject", () => {
 		expect(generatedProjectConfig.name).toBe("custom-docs");
 	});
 
+	test("normaliza o nome do projeto ao criar o diretório e arquivos", async () => {
+		const sandboxDirectory = await createTemporaryDirectory();
+		const projectDirectory = join(sandboxDirectory, "meu-projeto");
+
+		await createProject({
+			cwd: sandboxDirectory,
+			packageManager: "npm",
+			projectName: "  Meu Projeto  ",
+			template: "docs",
+		});
+
+		const generatedPackageJson =
+			await readGeneratedPackageJson(projectDirectory);
+		const generatedProjectConfig = JSON.parse(
+			await readFile(join(projectDirectory, "project.config.json"), "utf8"),
+		);
+
+		expect(generatedPackageJson.name).toBe("meu-projeto");
+		expect(generatedProjectConfig.name).toBe("meu-projeto");
+		expect(await pathExists(projectDirectory)).toBe(true);
+	});
+
 	test("restaura .gitignore do template no projeto gerado", async () => {
 		const sandboxDirectory = await createTemporaryDirectory();
 		const projectDirectory = join(sandboxDirectory, "gitignore-project");

@@ -46,6 +46,20 @@ export const isInteractiveSession = ({
 	output = defaultOutput,
 } = {}) => Boolean(input.isTTY && output.isTTY);
 
+export const normalizeProjectName = (name) => {
+	if (typeof name !== "string") {
+		return "";
+	}
+
+	return name
+		.trim()
+		.toLowerCase()
+		.replace(/\s+/g, "-")
+		.replace(/[^a-z0-9-_~]/g, "")
+		.replace(/-+/g, "-")
+		.replace(/^-+|-+$/g, "");
+};
+
 export const resolveSelection = (value, options, label) => {
 	const normalizedValue = value.trim().toLowerCase();
 
@@ -87,10 +101,16 @@ export const resolveProjectName = async (
 		interactive = isInteractiveSession({ input, output }),
 	} = {},
 ) => {
-	const normalizedProjectName = projectNameArg?.trim();
+	const normalizedProjectNameArg = projectNameArg
+		? normalizeProjectName(projectNameArg)
+		: "";
 
-	if (normalizedProjectName) {
-		return normalizedProjectName;
+	if (normalizedProjectNameArg) {
+		return normalizedProjectNameArg;
+	}
+
+	if (projectNameArg && !normalizedProjectNameArg) {
+		throw new Error("O nome do projeto informado é inválido.");
 	}
 
 	if (!interactive) {
@@ -99,15 +119,17 @@ export const resolveProjectName = async (
 		);
 	}
 
-	const promptedProjectName = (
-		await ask("Nome do projeto: ", { input, output })
-	).trim();
+	const promptedProjectName = await ask("Nome do projeto: ", { input, output });
+	const normalizedPromptedProjectName =
+		normalizeProjectName(promptedProjectName);
 
-	if (!promptedProjectName) {
-		throw new Error("O nome do projeto é obrigatório.");
+	if (!normalizedPromptedProjectName) {
+		throw new Error(
+			"O nome do projeto é obrigatório e deve resultar em um nome válido.",
+		);
 	}
 
-	return promptedProjectName;
+	return normalizedPromptedProjectName;
 };
 
 export const promptPackageManager = async ({
