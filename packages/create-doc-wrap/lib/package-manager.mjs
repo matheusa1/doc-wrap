@@ -1,4 +1,29 @@
-export const packageManagers = ["npm", "yarn", "pnpm", "bun"];
+export const packageManagerOptions = [
+	{
+		description: "Fluxo mais comum para projetos Node.js.",
+		label: "npm",
+		value: "npm",
+	},
+	{
+		description: "Instalacao enxuta com comandos curtos.",
+		label: "Yarn",
+		value: "yarn",
+	},
+	{
+		description: "Workspace-friendly e rapido em monorepos.",
+		label: "pnpm",
+		value: "pnpm",
+	},
+	{
+		description: "Instalacao e dev server rapidos com Bun.",
+		label: "Bun",
+		value: "bun",
+	},
+];
+
+export const packageManagers = packageManagerOptions.map(
+	(option) => option.value,
+);
 
 const packageManagerCommands = {
 	bun: {
