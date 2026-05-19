@@ -1,10 +1,11 @@
+import { createRequire } from "node:module";
 import { stdin as defaultInput, stdout as defaultOutput } from "node:process";
-import { createInterface } from "node:readline";
 import {
 	buildFinalInstructions,
 	packageManagerOptions,
 } from "./package-manager.mjs";
 import {
+	createPromptSession,
 	isInteractiveSession,
 	isValidProjectPackageName,
 	normalizePackageName,
@@ -14,41 +15,117 @@ import {
 } from "./prompts.mjs";
 import { templateOptions } from "./templates.mjs";
 
-const createPromptSession = ({
-	input = defaultInput,
-	output = defaultOutput,
-} = {}) => {
-	const readline = createInterface({
-		input,
-		output,
-		terminal: Boolean(output.isTTY),
-	});
-	const lines = readline[Symbol.asyncIterator]();
+const require = createRequire(import.meta.url);
 
-	return {
-		ask: async (question) => {
-			output.write(question);
-			const nextLine = await lines.next();
-
-			return nextLine.done ? "" : nextLine.value;
-		},
-		close: () => readline.close(),
-	};
-};
-
-const formatChoiceList = (options) =>
-	options
+const createSelectionPrompt = ({ options, question }) =>
+	`${question}\n${options
 		.map(
 			(option, index) =>
 				`  ${index + 1}. ${option.label} (${option.value})\n     ${option.description}`,
 		)
-		.join("\n");
-
-const createSelectionPrompt = ({ options, question }) =>
-	`${question}\n${formatChoiceList(options)}\n> `;
+		.join("\n")}\n> `;
 
 const writeBlock = (output, message = "") => {
 	output.write(`${message}\n`);
+};
+
+const loadTerminalFactory = () => {
+	const terminalKit = require("terminal-kit");
+
+	if (typeof terminalKit.createTerminal === "function") {
+		return ({ input = defaultInput, output = defaultOutput } = {}) =>
+			terminalKit.createTerminal({
+				stdin: input,
+				stdout: output,
+			});
+	}
+
+	if (typeof terminalKit.terminal === "function") {
+		return ({ input = defaultInput, output = defaultOutput } = {}) =>
+			terminalKit.terminal({
+				stdin: input,
+				stdout: output,
+			});
+	}
+
+	throw new Error("Não foi possível inicializar o terminal-kit.");
+};
+
+const createFallbackPromptAdapter = ({
+	ask,
+	error = process.stderr,
+	input = defaultInput,
+	output = defaultOutput,
+} = {}) => {
+	const promptSession = ask
+		? { ask, close: () => {} }
+		: createPromptSession({ input, output });
+
+	return {
+		close: () => promptSession.close(),
+		promptSelection: ({ options, question }) =>
+			promptSession.ask(createSelectionPrompt({ options, question })),
+		promptText: (question) => promptSession.ask(question),
+		write: (message = "") => writeBlock(output, message),
+		writeError: (message = "") => writeBlock(error, message),
+	};
+};
+
+const createTerminalPromptAdapter = ({
+	error = process.stderr,
+	input = defaultInput,
+	output = defaultOutput,
+	terminalFactory = loadTerminalFactory(),
+} = {}) => {
+	const term = terminalFactory({ input, output });
+
+	const write = (message = "") => {
+		term(`${message}\n`);
+	};
+
+	const writeError = (message = "") => {
+		if (typeof term.brightRed === "function") {
+			term.brightRed(`${message}\n`);
+			return;
+		}
+
+		error.write(`${message}\n`);
+	};
+
+	return {
+		close: () => {
+			if (typeof term.grabInput === "function") {
+				term.grabInput(false);
+			}
+		},
+		promptSelection: async ({ options, question }) => {
+			write(question);
+			const items = options.map(
+				(option) => `${option.label} (${option.value}) - ${option.description}`,
+			);
+			const response = await term.singleColumnMenu(items, {
+				cancelable: false,
+				selectedStyle: term.black?.bgGreen ?? term.green,
+				submitOnEnter: true,
+			}).promise;
+
+			write();
+			return options[response.selectedIndex].value;
+		},
+		promptText: async (question) => {
+			if (typeof term.cyan === "function") {
+				term.cyan(question);
+			} else {
+				term(question);
+			}
+
+			const value = await term.inputField().promise;
+			write();
+			return value ?? "";
+		},
+		write,
+		writeError,
+	};
 };
 
 export const createInteractiveSession = ({
@@ -57,15 +134,27 @@ export const createInteractiveSession = ({
 	error = process.stderr,
 	input = defaultInput,
 	output = defaultOutput,
+	terminalFactory,
 } = {}) => {
-	const promptSession = askOverride
-		? { ask: askOverride, close: () => {} }
-		: createPromptSession({ input, output });
 	const interactive = isInteractiveSession({ env, input, output });
+	const promptAdapter =
+		interactive && !askOverride
+			? createTerminalPromptAdapter({
+					error,
+					input,
+					output,
+					terminalFactory,
+				})
+			: createFallbackPromptAdapter({
+					ask: askOverride,
+					error,
+					input,
+					output,
+				});
 
 	const showSelection = (label, value) => {
-		writeBlock(output, `[ok] ${label}: ${value}`);
-		writeBlock(output);
+		promptAdapter.write(`[ok] ${label}: ${value}`);
+		promptAdapter.write();
 	};
 
 	const askUntilValid = async ({ label, options, question }) => {
@@ -73,9 +162,10 @@ export const createInteractiveSession = ({
 
 		while (true) {
 			try {
-				const selection = await promptSession.ask(
-					createSelectionPrompt({ options, question }),
-				);
+				const selection = await promptAdapter.promptSelection({
+					options,
+					question,
+				});
 				const resolvedSelection = resolveSelection(
 					selection,
 					optionValues,
@@ -93,14 +183,14 @@ export const createInteractiveSession = ({
 					throw new Error(message);
 				}
 
-				writeBlock(error, `Erro: ${message}`);
-				writeBlock(output);
+				promptAdapter.writeError(`Erro: ${message}`);
+				promptAdapter.write();
 			}
 		}
 	};
 
 	return {
-		close: () => promptSession.close(),
+		close: () => promptAdapter.close(),
 		isInteractive: interactive,
 		promptPackageManager: async () =>
 			askUntilValid({
@@ -126,11 +216,11 @@ export const createInteractiveSession = ({
 			}
 
 			while (true) {
-				const promptedProjectName = await promptSession.ask(
+				const promptedProjectName = await promptAdapter.promptText(
 					"Nome do projeto (ex.: docs-internos ou @scope/docs): ",
 				);
 
-				writeBlock(output, "[step] Validando nome do projeto...");
+				promptAdapter.write("[step] Validando nome do projeto...");
 				const normalizedProjectName = normalizePackageName(promptedProjectName);
 
 				if (
@@ -141,8 +231,8 @@ export const createInteractiveSession = ({
 					return normalizedProjectName;
 				}
 
-				writeBlock(error, `Erro: ${projectNameErrorMessage}`);
-				writeBlock(output);
+				promptAdapter.writeError(`Erro: ${projectNameErrorMessage}`);
+				promptAdapter.write();
 			}
 		},
 		promptTemplate: async () =>
@@ -152,35 +242,33 @@ export const createInteractiveSession = ({
 				question: "Escolha a base inicial do projeto:",
 			}),
 		showError: (message) => {
-			writeBlock(error, `Erro: ${message}`);
+			promptAdapter.writeError(`Erro: ${message}`);
 		},
 		showFinalInstructions: ({ packageManager, projectDirectoryName }) => {
-			writeBlock(output, "Proximos passos:");
+			promptAdapter.write("Proximos passos:");
 
 			for (const command of buildFinalInstructions({
 				packageManager,
 				projectDirectoryName,
 			}).split("\n")) {
-				writeBlock(output, `  ${command}`);
+				promptAdapter.write(`  ${command}`);
 			}
 		},
 		showIntro: () => {
-			writeBlock(output, "Create Doc Wrap");
-			writeBlock(
-				output,
+			promptAdapter.write("Create Doc Wrap");
+			promptAdapter.write(
 				"Cria um novo projeto Doc Wrap a partir de um template pronto.",
 			);
-			writeBlock(output);
+			promptAdapter.write();
 		},
 		showStep: ({ message }) => {
-			writeBlock(output, `[step] ${message}`);
+			promptAdapter.write(`[step] ${message}`);
 		},
 		showSuccess: ({ projectDirectory }) => {
-			writeBlock(
-				output,
+			promptAdapter.write(
 				`[ok] Projeto criado com sucesso em ${projectDirectory}.`,
 			);
-			writeBlock(output);
+			promptAdapter.write();
 		},
 	};
 };

@@ -14,23 +14,66 @@ const createWritableCollector = ({ isTTY = false } = {}) => {
 	};
 };
 
+const createFakeTerminal = ({
+	inputAnswers = [],
+	menuSelections = [],
+	output = createWritableCollector({ isTTY: true }),
+} = {}) => {
+	const write = (value) => {
+		output.write(value);
+	};
+
+	const term = Object.assign(write, {
+		black: {
+			bgGreen: () => undefined,
+		},
+		brightRed: (value) => {
+			output.write(value);
+		},
+		cyan: (value) => {
+			output.write(value);
+		},
+		grabInput: () => undefined,
+		inputField: () => ({
+			promise: Promise.resolve(inputAnswers.shift() ?? ""),
+		}),
+		singleColumnMenu: (items) => {
+			const selectedIndex = menuSelections.shift() ?? 0;
+
+			if (selectedIndex < 0 || selectedIndex >= items.length) {
+				return {
+					promise: Promise.reject(new Error("Seleção fora do intervalo.")),
+				};
+			}
+
+			return {
+				promise: Promise.resolve({ selectedIndex }),
+			};
+		},
+	});
+
+	return {
+		output,
+		terminalFactory: () => term,
+	};
+};
+
 describe("createInteractiveSession", () => {
-	test("repete a selecao em modo interativo ate receber valor valido", async () => {
-		const output = createWritableCollector({ isTTY: true });
+	test("usa terminal-kit para selecionar opcoes em modo interativo", async () => {
+		const { output, terminalFactory } = createFakeTerminal({
+			menuSelections: [3],
+		});
 		const error = createWritableCollector({ isTTY: true });
-		const answers = ["0", "bun"];
 		const session = createInteractiveSession({
-			ask: async () => answers.shift() ?? "",
 			env: {},
 			error,
 			input: { isTTY: true },
 			output,
+			terminalFactory,
 		});
 
 		await expect(session.promptPackageManager()).resolves.toBe("bun");
-		expect(error.toString()).toContain(
-			"Erro: Seleção inválida de gerenciador de pacotes",
-		);
+		expect(error.toString()).toBe("");
 		expect(output.toString()).toContain("[ok] gerenciador de pacotes: bun");
 	});
 
@@ -47,6 +90,31 @@ describe("createInteractiveSession", () => {
 
 		await expect(session.promptTemplate()).rejects.toThrow(
 			"Seleção inválida de template",
+		);
+		expect(error.toString()).toBe("");
+	});
+
+	test("repete o nome do projeto em modo interativo ate receber valor valido", async () => {
+		const { output, terminalFactory } = createFakeTerminal({
+			inputAnswers: ["!!!", "Meu Projeto"],
+		});
+		const error = createWritableCollector({ isTTY: true });
+		const session = createInteractiveSession({
+			env: {},
+			error,
+			input: { isTTY: true },
+			output,
+			terminalFactory,
+		});
+
+		await expect(session.promptProjectName()).resolves.toBe("meu-projeto");
+		expect(output.toString()).toContain("[step] Validando nome do projeto...");
+		expect(output.toString()).toContain("[ok] Projeto: meu-projeto");
+		expect(output.toString()).toContain(
+			"Nome do projeto (ex.: docs-internos ou @scope/docs): ",
+		);
+		expect(output.toString()).toContain(
+			"Erro: O nome do projeto é obrigatório e deve resultar em um nome válido para package.json.",
 		);
 		expect(error.toString()).toBe("");
 	});
@@ -82,5 +150,21 @@ describe("createInteractiveSession", () => {
 		expect(output.toString()).toContain("  cd meu-projeto");
 		expect(output.toString()).toContain("  pnpm install");
 		expect(output.toString()).toContain("  pnpm dev");
+	});
+
+	test("renderiza erro no stream dedicado em fallback nao interativo", () => {
+		const output = createWritableCollector();
+		const error = createWritableCollector();
+		const session = createInteractiveSession({
+			ask: async () => "",
+			error,
+			input: { isTTY: false },
+			output,
+		});
+
+		session.showError("Falha qualquer");
+
+		expect(error.toString()).toContain("Erro: Falha qualquer");
+		expect(output.toString()).toBe("");
 	});
 });
