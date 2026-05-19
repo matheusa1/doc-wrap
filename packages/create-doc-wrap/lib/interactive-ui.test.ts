@@ -21,6 +21,7 @@ describe("createInteractiveSession", () => {
 		const answers = ["0", "bun"];
 		const session = createInteractiveSession({
 			ask: async () => answers.shift() ?? "",
+			env: {},
 			error,
 			input: { isTTY: true },
 			output,
