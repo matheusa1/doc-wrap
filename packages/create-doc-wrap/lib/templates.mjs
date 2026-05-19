@@ -3,17 +3,17 @@ import { fileURLToPath } from "node:url";
 
 export const templateOptions = [
 	{
-		description: "Central de publicacoes com rota /blog.",
+		description: "Central de publicações com rota /blog.",
 		label: "Blog",
 		value: "blog",
 	},
 	{
-		description: "Central de documentacao com rota /docs.",
+		description: "Central de documentação com rota /docs.",
 		label: "Docs",
 		value: "docs",
 	},
 	{
-		description: "Documentacao e publicacoes no mesmo projeto.",
+		description: "Documentação e publicações no mesmo projeto.",
 		label: "Blog + Docs",
 		value: "blog-docs",
 	},

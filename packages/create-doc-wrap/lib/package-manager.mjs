@@ -5,17 +5,17 @@ export const packageManagerOptions = [
 		value: "npm",
 	},
 	{
-		description: "Instalacao enxuta com comandos curtos.",
+		description: "Instalação enxuta com comandos curtos.",
 		label: "Yarn",
 		value: "yarn",
 	},
 	{
-		description: "Workspace-friendly e rapido em monorepos.",
+		description: "Workspace-friendly e rápido em monorepos.",
 		label: "pnpm",
 		value: "pnpm",
 	},
 	{
-		description: "Instalacao e dev server rapidos com Bun.",
+		description: "Instalação e dev server rápidos com Bun.",
 		label: "Bun",
 		value: "bun",
 	},
