@@ -42,11 +42,21 @@ const defaultAsk = async (
 const formatOptions = (options) =>
 	options.map((option, index) => `  ${index + 1}. ${option}`).join("\n");
 
+const isEnabledCiValue = (value) => {
+	if (typeof value !== "string") {
+		return false;
+	}
+
+	const normalizedValue = value.trim().toLowerCase();
+
+	return normalizedValue === "1" || normalizedValue === "true";
+};
+
 export const isInteractiveSession = ({
 	env = process.env,
 	input = defaultInput,
 	output = defaultOutput,
-} = {}) => Boolean(input.isTTY && output.isTTY && !env.CI);
+} = {}) => Boolean(input.isTTY && output.isTTY && !isEnabledCiValue(env.CI));
 
 export const projectNameErrorMessage =
 	"O nome do projeto é obrigatório e deve resultar em um nome válido para package.json.";

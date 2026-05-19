@@ -40,15 +40,9 @@ const loadTerminalFactory = () => {
 			});
 	}
 
-	if (typeof terminalKit.terminal === "function") {
-		return ({ input = defaultInput, output = defaultOutput } = {}) =>
-			terminalKit.terminal({
-				stdin: input,
-				stdout: output,
-			});
-	}
-
-	throw new Error("Não foi possível inicializar o terminal-kit.");
+	throw new Error(
+		"Não foi possível inicializar o terminal-kit com os streams informados.",
+	);
 };
 
 const createFallbackPromptAdapter = ({
@@ -121,7 +115,12 @@ const createTerminalPromptAdapter = ({
 
 			const value = await term.inputField().promise;
 			write();
-			return value ?? "";
+
+			if (typeof value !== "string") {
+				throw new Error("Entrada cancelada pelo usuário.");
+			}
+
+			return value;
 		},
 		write,
 		writeError,
@@ -245,7 +244,7 @@ export const createInteractiveSession = ({
 			promptAdapter.writeError(`Erro: ${message}`);
 		},
 		showFinalInstructions: ({ packageManager, projectDirectoryName }) => {
-			promptAdapter.write("Proximos passos:");
+			promptAdapter.write("Próximos passos:");
 
 			for (const command of buildFinalInstructions({
 				packageManager,

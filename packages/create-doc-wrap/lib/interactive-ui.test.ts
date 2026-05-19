@@ -35,7 +35,9 @@ const createFakeTerminal = ({
 		},
 		grabInput: () => undefined,
 		inputField: () => ({
-			promise: Promise.resolve(inputAnswers.shift() ?? ""),
+			promise: Promise.resolve(
+				inputAnswers.length > 0 ? inputAnswers.shift() : "",
+			),
 		}),
 		singleColumnMenu: (items) => {
 			const selectedIndex = menuSelections.shift() ?? 0;
@@ -133,7 +135,28 @@ describe("createInteractiveSession", () => {
 		expect(session.isInteractive).toBe(false);
 	});
 
-	test("renderiza mensagem final com proximos passos", () => {
+	test("encerra o fluxo quando o prompt de nome e cancelado", async () => {
+		const { output, terminalFactory } = createFakeTerminal({
+			inputAnswers: [undefined],
+		});
+		const error = createWritableCollector({ isTTY: true });
+		const session = createInteractiveSession({
+			env: {},
+			error,
+			input: { isTTY: true },
+			output,
+			terminalFactory,
+		});
+
+		await expect(session.promptProjectName()).rejects.toThrow(
+			"Entrada cancelada pelo usuário.",
+		);
+		expect(output.toString()).toContain(
+			"Nome do projeto (ex.: docs-internos ou @scope/docs): ",
+		);
+	});
+
+	test("renderiza mensagem final com próximos passos", () => {
 		const output = createWritableCollector();
 		const session = createInteractiveSession({
 			ask: async () => "",
@@ -146,7 +169,7 @@ describe("createInteractiveSession", () => {
 			projectDirectoryName: "meu-projeto",
 		});
 
-		expect(output.toString()).toContain("Proximos passos:");
+		expect(output.toString()).toContain("Próximos passos:");
 		expect(output.toString()).toContain("  cd meu-projeto");
 		expect(output.toString()).toContain("  pnpm install");
 		expect(output.toString()).toContain("  pnpm dev");
