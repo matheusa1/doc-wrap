@@ -1,5 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import {
+	isInteractiveSession,
 	isValidProjectPackageName,
 	normalizePackageName,
 	promptPackageManager,
@@ -146,6 +147,48 @@ describe("resolveProjectName", () => {
 		await expect(
 			resolveProjectName(undefined, { interactive: false }),
 		).rejects.toThrow("O nome do projeto é obrigatório");
+	});
+});
+
+describe("isInteractiveSession", () => {
+	test("trata CI=1 como sessão não interativa", () => {
+		expect(
+			isInteractiveSession({
+				env: { CI: "1" },
+				input: { isTTY: true },
+				output: { isTTY: true },
+			}),
+		).toBe(false);
+	});
+
+	test("trata CI=true como sessão não interativa", () => {
+		expect(
+			isInteractiveSession({
+				env: { CI: "true" },
+				input: { isTTY: true },
+				output: { isTTY: true },
+			}),
+		).toBe(false);
+	});
+
+	test("mantém modo interativo com CI=false", () => {
+		expect(
+			isInteractiveSession({
+				env: { CI: "false" },
+				input: { isTTY: true },
+				output: { isTTY: true },
+			}),
+		).toBe(true);
+	});
+
+	test("mantém modo interativo com CI=0", () => {
+		expect(
+			isInteractiveSession({
+				env: { CI: "0" },
+				input: { isTTY: true },
+				output: { isTTY: true },
+			}),
+		).toBe(true);
 	});
 });
 

@@ -1,7 +1,25 @@
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-export const templates = ["blog", "docs", "blog-docs"];
+export const templateOptions = [
+	{
+		description: "Central de publicações com rota /blog.",
+		label: "Blog",
+		value: "blog",
+	},
+	{
+		description: "Central de documentação com rota /docs.",
+		label: "Docs",
+		value: "docs",
+	},
+	{
+		description: "Documentação e publicações no mesmo projeto.",
+		label: "Blog + Docs",
+		value: "blog-docs",
+	},
+];
+
+export const templates = templateOptions.map((option) => option.value);
 
 const templatesDir = join(
 	dirname(fileURLToPath(import.meta.url)),

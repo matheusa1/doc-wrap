@@ -407,4 +407,36 @@ describe("createProject", () => {
 			);
 		}
 	});
+
+	test("emite etapas de progresso quando onStep é informado", async () => {
+		const sandboxDirectory = await createTemporaryDirectory();
+		const steps = [];
+
+		await createProject({
+			cwd: sandboxDirectory,
+			onStep: (step) => steps.push(step),
+			packageManager: "bun",
+			projectName: "@main-docs/pax",
+			template: "docs",
+		});
+
+		expect(steps).toEqual([
+			{
+				message: "Preparando diretório main-docs-pax...",
+				type: "prepare-directory",
+			},
+			{
+				message: "Copiando o template docs...",
+				type: "copy-template",
+			},
+			{
+				message: "Atualizando project.config.json...",
+				type: "update-project-config",
+			},
+			{
+				message: "Criando package.json...",
+				type: "write-package-json",
+			},
+		]);
+	});
 });

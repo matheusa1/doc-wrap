@@ -5,16 +5,12 @@ on:
         branches:
             - main
             - develop
-            - develop-cli
-            - release-cli
-            - main-cli
+            - release
     pull_request:
         branches:
             - main
             - develop
-            - develop-cli
-            - release-cli
-            - main-cli
+            - release
 
 permissions:
     contents: read

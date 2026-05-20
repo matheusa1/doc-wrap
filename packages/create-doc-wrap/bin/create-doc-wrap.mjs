@@ -1,13 +1,7 @@
 #!/usr/bin/env node
 
 import { createProject } from "../lib/create-project.mjs";
-import { buildFinalInstructions } from "../lib/package-manager.mjs";
-import {
-	createPromptSession,
-	promptPackageManager,
-	promptTemplate,
-	resolveProjectName,
-} from "../lib/prompts.mjs";
+import { createInteractiveSession } from "../lib/interactive-ui.mjs";
 
 const help = `Uso: create-doc-wrap [nome-do-projeto]
 
@@ -25,35 +19,31 @@ if (firstArg === "-h" || firstArg === "--help") {
 }
 
 const projectNameArg = firstArg;
-const promptSession = createPromptSession();
+const session = createInteractiveSession();
 
 try {
-	const projectName = await resolveProjectName(projectNameArg, {
-		ask: promptSession.ask,
-	});
-	const packageManager = await promptPackageManager({
-		ask: promptSession.ask,
-	});
-	const template = await promptTemplate({ ask: promptSession.ask });
+	session.showIntro();
+	const projectName = await session.promptProjectName(projectNameArg);
+	const packageManager = await session.promptPackageManager();
+	const template = await session.promptTemplate();
 	const { projectDirectory, projectDirectoryName } = await createProject({
 		cwd: process.cwd(),
+		onStep: (step) => session.showStep(step),
 		packageManager,
 		projectName,
 		template,
 	});
 
-	console.log(`Projeto criado com sucesso em ${projectDirectory}.\n`);
-	console.log(
-		buildFinalInstructions({
-			packageManager,
-			projectDirectoryName,
-		}),
-	);
+	session.showSuccess({ projectDirectory });
+	session.showFinalInstructions({
+		packageManager,
+		projectDirectoryName,
+	});
 } catch (error) {
 	const message = error instanceof Error ? error.message : String(error);
 
-	console.error(message);
+	session.showError(message);
 	process.exit(1);
 } finally {
-	promptSession.close();
+	session.close();
 }

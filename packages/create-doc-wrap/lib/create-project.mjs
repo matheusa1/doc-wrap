@@ -110,6 +110,7 @@ const resolveProjectDirectory = ({
 export const createProject = async ({
 	cwd = process.cwd(),
 	destinationDirectory,
+	onStep,
 	packageManager,
 	projectName,
 	template,
@@ -132,8 +133,20 @@ export const createProject = async ({
 	});
 	const templateDirectory = resolveTemplateDirectory(selectedTemplate);
 
+	onStep?.({
+		message: `Preparando diretório ${projectDirectoryName}...`,
+		type: "prepare-directory",
+	});
 	await ensureDestinationDirectory(projectDirectory);
+	onStep?.({
+		message: `Copiando o template ${selectedTemplate}...`,
+		type: "copy-template",
+	});
 	await copyTemplateContents(templateDirectory, projectDirectory);
+	onStep?.({
+		message: "Atualizando project.config.json...",
+		type: "update-project-config",
+	});
 	await updateProjectConfigName(projectDirectory, packageName);
 
 	const packageJson = await createProjectPackageJson({
@@ -141,6 +154,10 @@ export const createProject = async ({
 		projectName: packageName,
 	});
 
+	onStep?.({
+		message: "Criando package.json...",
+		type: "write-package-json",
+	});
 	await writeFile(
 		join(projectDirectory, "package.json"),
 		`${JSON.stringify(packageJson, null, "\t")}\n`,
