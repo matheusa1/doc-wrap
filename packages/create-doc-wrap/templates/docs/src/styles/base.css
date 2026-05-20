@@ -1,0 +1,21 @@
+@layer base {
+	* {
+		@apply border-border outline-ring/50;
+	}
+
+	body {
+		@apply bg-background text-foreground max-w-screen antialiased overflow-x-hidden;
+	}
+
+	html {
+		@apply font-sans;
+	}
+
+	.docs-search-input::-webkit-search-cancel-button,
+	.docs-search-input::-webkit-search-decoration,
+	.docs-search-input::-webkit-search-results-button,
+	.docs-search-input::-webkit-search-results-decoration {
+		-webkit-appearance: none;
+		appearance: none;
+	}
+}

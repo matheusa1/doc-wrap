@@ -1,0 +1,83 @@
+---
+title: Componentes MDX
+description: Catálogo dos componentes e recursos já disponíveis para escrita de documentos no template.
+category: Referência
+order: 40
+author: Matheus Andrade
+updatedAt: 2026-04-30
+---
+import { Cards } from "@presentation/components/docs/Cards.tsx";
+import { Blocks, FileText, FolderTree, GitBranch, Info, ListChecks, Rows3, Table2 } from "lucide-react";
+
+## O que já existe hoje
+
+Os componentes de MDX do projeto vivem em `src/@presentation/components/docs`. Eles foram feitos para complementar a escrita em Markdown, não para substituí-la. Em geral, vale começar por texto corrido e só introduzir um componente quando houver ganho real de legibilidade.
+
+Além dos componentes importados, o template também já oferece dois recursos automáticos. Blocos `mermaid` são convertidos em diagramas sem import manual, e expressões LaTeX são renderizadas com KaTeX dentro do pipeline de MDX.
+
+## Catálogo
+
+<Cards num={2}>
+  <Cards.Card
+    icon={<Info />}
+    title="Callout"
+    description="Notas, dicas e avisos curtos para destacar contexto sem quebrar a leitura."
+    href="/docs/referencia/componentes/callout"
+    arrow
+  />
+  <Cards.Card
+    icon={<ListChecks />}
+    title="Steps"
+    description="Fluxos sequenciais para procedimentos, cadastros, checklists e passo a passo."
+    href="/docs/referencia/componentes/steps"
+    arrow
+  />
+  <Cards.Card
+    icon={<Blocks />}
+    title="Cards"
+    description="Links visuais para próximas leituras, áreas da documentação e pontos de entrada."
+    href="/docs/referencia/componentes/cards"
+    arrow
+  />
+  <Cards.Card
+    icon={<FolderTree />}
+    title="FileTree"
+    description="Representação visual de diretórios, arquivos e trechos de arquitetura."
+    href="/docs/referencia/componentes/filetree"
+    arrow
+  />
+  <Cards.Card
+    icon={<Rows3 />}
+    title="Tabs"
+    description="Alternância entre variações de conteúdo com abas acessíveis e sincronizáveis."
+    href="/docs/referencia/componentes/tabs"
+    arrow
+  />
+  <Cards.Card
+    icon={<Table2 />}
+    title="DataTable"
+    description="Tabelas de dados responsivas para comparar registros e resumir informações."
+    href="/docs/referencia/componentes/data-table"
+    arrow
+  />
+  <Cards.Card
+    icon={<GitBranch />}
+    title="Mermaid"
+    description="Diagramas textuais renderizados automaticamente a partir de blocos de código."
+    href="/docs/referencia/componentes/mermaid"
+    arrow
+  />
+  <Cards.Card
+    icon={<FileText />}
+    title="LaTeX/KaTeX"
+    description="Fórmulas inline e em bloco dentro do próprio MDX."
+    href="/docs/referencia/componentes/latex-katex"
+    arrow
+  />
+</Cards>
+
+## Imports e recursos automáticos
+
+Componentes como `Callout`, `Cards`, `Steps`, `FileTree`, `Tabs`, `TabItem` e `DataTable` exigem import explícito com o alias `@presentation`. Já Mermaid e KaTeX entram pelo pipeline configurado em `vite.config.ts`, então não dependem de um componente importado no topo do arquivo.
+
+Essa distinção é importante para manter os exemplos corretos e evitar imports desnecessários em MDX.

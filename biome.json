@@ -6,7 +6,7 @@
 		"useIgnoreFile": true
 	},
 	"files": {
-		"includes": ["**", "!!**/dist"]
+		"includes": ["**", "!!**/dist", "!!packages/create-doc-wrap/templates"]
 	},
 	"formatter": {
 		"enabled": true,

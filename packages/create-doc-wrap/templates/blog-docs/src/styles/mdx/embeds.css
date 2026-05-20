@@ -1,0 +1,58 @@
+@layer components {
+	.mdx-content .mermaid-diagram {
+		overflow-x: auto;
+		margin: 1.5rem 0;
+		border: 1px solid var(--border);
+		border-radius: 1rem;
+		background: var(--card);
+		padding: 1rem;
+		box-shadow: 0 12px 30px oklch(0 0 0 / 6%);
+	}
+
+	.mdx-content .mermaid-diagram-canvas {
+		min-width: max-content;
+	}
+
+	.mdx-content .mermaid-diagram svg {
+		display: block;
+		max-width: none;
+	}
+
+	.mdx-content .mermaid-diagram-error {
+		border-color: color-mix(in oklch, var(--destructive) 45%, var(--border));
+		background: color-mix(in oklch, var(--destructive) 8%, var(--card));
+	}
+
+	.mdx-content .mermaid-diagram-error figcaption {
+		font-weight: 700;
+		color: var(--destructive);
+	}
+
+	.mdx-content figure.mermaid-diagram-error pre {
+		overflow-x: auto;
+		margin: 0.75rem 0;
+		font-size: 0.8125rem;
+	}
+
+	.mdx-content .katex {
+		font-size: 1.05em;
+	}
+
+	.mdx-content .katex-display {
+		overflow-x: auto;
+		overflow-y: hidden;
+		margin: 1.5rem 0;
+		border: 1px solid var(--border);
+		border-radius: 1rem;
+		background: var(--card);
+		padding: 1rem;
+		text-align: center;
+		box-shadow: 0 12px 30px oklch(0 0 0 / 6%);
+	}
+
+	.mdx-content .katex-display > .katex {
+		display: inline-block;
+		min-width: max-content;
+		text-align: initial;
+	}
+}

@@ -6,6 +6,7 @@
       "name": "doc-gest",
       "dependencies": {
         "@base-ui/react": "^1.4.1",
+        "@doc-wrap/project-config": "workspace:*",
         "@fontsource-variable/geist": "^5.2.8",
         "@hookform/resolvers": "^5.2.2",
         "@mdx-js/rollup": "^3.1.1",
@@ -35,6 +36,7 @@
       "devDependencies": {
         "@babel/core": "^7.29.0",
         "@biomejs/biome": "2.4.13",
+        "@doc-wrap/cli": "workspace:*",
         "@rolldown/plugin-babel": "^0.2.3",
         "@types/babel__core": "^7.20.5",
         "@types/mdx": "^2.0.13",
@@ -44,9 +46,33 @@
         "@vitejs/plugin-react": "^6.0.1",
         "babel-plugin-react-compiler": "^1.0.0",
         "husky": "^9.1.7",
-        "pagefind": "^1.5.2",
         "typescript": "~6.0.2",
         "vite": "^8.0.10",
+      },
+    },
+    "packages/cli": {
+      "name": "@doc-wrap/cli",
+      "version": "0.0.0",
+      "bin": {
+        "doc-wrap": "./bin/doc-wrap.mjs",
+      },
+      "dependencies": {
+        "@doc-wrap/project-config": "workspace:*",
+        "pagefind": "^1.5.2",
+      },
+    },
+    "packages/create-doc-wrap": {
+      "name": "create-doc-wrap",
+      "version": "0.0.0",
+      "bin": {
+        "create-doc-wrap": "./bin/create-doc-wrap.mjs",
+      },
+    },
+    "packages/project-config": {
+      "name": "@doc-wrap/project-config",
+      "version": "0.0.0",
+      "dependencies": {
+        "zod": "^4.3.6",
       },
     },
   },
@@ -144,6 +170,10 @@
     "@chevrotain/types": ["@chevrotain/types@12.0.0", "", {}, "sha512-S+04vjFQKeuYw0/eW3U52LkAHQsB1ASxsPGsLPUyQgrZ2iNNibQrsidruDzjEX2JYfespXMG0eZmXlhA6z7nWA=="],
 
     "@chevrotain/utils": ["@chevrotain/utils@12.0.0", "", {}, "sha512-lB59uJoaGIfOOL9knQqQRfhl9g7x8/wqFkp13zTdkRu1huG9kg6IJs1O8hqj9rs6h7orGxHJUKb+mX3rPbWGhA=="],
+
+    "@doc-wrap/cli": ["@doc-wrap/cli@workspace:packages/cli"],
+
+    "@doc-wrap/project-config": ["@doc-wrap/project-config@workspace:packages/project-config"],
 
     "@dotenvx/dotenvx": ["@dotenvx/dotenvx@1.64.0", "", { "dependencies": { "commander": "^11.1.0", "dotenv": "^17.2.1", "eciesjs": "^0.4.10", "execa": "^5.1.1", "fdir": "^6.2.0", "ignore": "^5.3.0", "object-treeify": "1.1.33", "picomatch": "^4.0.4", "which": "^4.0.0", "yocto-spinner": "^1.1.0" }, "bin": { "dotenvx": "src/cli/dotenvx.js" } }, "sha512-6+xRpZaWuHXEqnhBjae+VmQI9Uaqw5Uzu/ScpO+W7ww9Zp3lHSNBoNjFcUxhrCyc7pRGQzyDjhKzloqrPHERiQ=="],
 
@@ -602,6 +632,8 @@
     "cose-base": ["cose-base@1.0.3", "", { "dependencies": { "layout-base": "^1.0.0" } }, "sha512-s9whTXInMSgAp/NVXVNuVxVKzGH2qck3aQlVHxDCdAEPgtMKwc4Wq6/QKhgdEdgbLSi9rBTAcPoRa6JpiG4ksg=="],
 
     "cosmiconfig": ["cosmiconfig@9.0.1", "", { "dependencies": { "env-paths": "^2.2.1", "import-fresh": "^3.3.0", "js-yaml": "^4.1.0", "parse-json": "^5.2.0" }, "peerDependencies": { "typescript": ">=4.9.5" }, "optionalPeers": ["typescript"] }, "sha512-hr4ihw+DBqcvrsEDioRO31Z17x71pUYoNe/4h6Z0wB72p7MU7/9gH8Q3s12NFhHPfYBBOV3qyfUxmr/Yn3shnQ=="],
+
+    "create-doc-wrap": ["create-doc-wrap@workspace:packages/create-doc-wrap"],
 
     "cross-spawn": ["cross-spawn@7.0.6", "", { "dependencies": { "path-key": "^3.1.0", "shebang-command": "^2.0.0", "which": "^2.0.1" } }, "sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA=="],
 

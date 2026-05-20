@@ -1,0 +1,95 @@
+---
+title: Criando documentos
+description: Aprenda a escrever páginas MDX em `/docs` usando a estrutura atual do template e a convenção editorial do projeto.
+category: Conteúdo
+order: 1
+author: Matheus Andrade
+updatedAt: 2026-05-04
+---
+import { Callout } from "@presentation/components/docs/Callout.tsx";
+import { Steps } from "@presentation/components/docs/Step.tsx";
+
+export const fluxoDocumento = [
+  {
+    title: "Crie o arquivo MDX",
+    children: "Adicione um arquivo em `src/@content/docs`. O caminho do arquivo definirá a URL pública em `/docs`."
+  },
+  {
+    title: "Preencha o frontmatter",
+    children: "Informe título, descrição, categoria, ordem, autor e data de revisão para alimentar navegação, busca e cabeçalho."
+  },
+  {
+    title: "Escreva em Markdown primeiro",
+    children: "Use parágrafos, `h2` e `h3` como estrutura principal. Só recorra a componentes MDX quando eles realmente deixarem o conteúdo mais claro."
+  },
+  {
+    title: "Valide no build",
+    children: "Execute `bun run build` para confirmar que o MDX, a aplicação e a indexação continuam consistentes."
+  }
+];
+
+## Onde os documentos vivem
+
+Os documentos da central ficam em `src/@content/docs/**/*.mdx`. Cada arquivo vira uma rota pública em `/docs`, sem cadastro manual em uma tabela de rotas.
+
+```text
+src/@content/docs/introducao.mdx -> /docs/introducao
+src/@content/docs/conteudo/index.mdx -> /docs/conteudo
+src/@content/docs/conteudo/criando-documentos.mdx -> /docs/conteudo/criando-documentos
+```
+
+Quando uma pasta tem `index.mdx`, esse arquivo funciona como a página principal daquele nível da navegação.
+
+## Frontmatter esperado
+
+Todo documento deve começar com frontmatter compatível com o mapa atual de docs.
+
+```mdx
+---
+title: Acesso inicial
+description: Como acessar o sistema pela primeira vez.
+category: Primeiros passos
+order: 1
+author: Equipe do Produto
+updatedAt: 2026-04-28
+---
+```
+
+`title` e `description` aparecem no cabeçalho, na sidebar e na busca. `category` e `order` ajudam na organização editorial. `author` e `updatedAt` completam os metadados exibidos na página e ajudam a identificar a revisão do conteúdo.
+
+## Estrutura editorial recomendada
+
+O índice lateral da página é gerado a partir dos headings renderizados, então vale usar `##` para seções principais e `###` para detalhes do mesmo bloco. Isso deixa a navegação previsível e evita que o usuário dependa apenas da leitura linear para encontrar uma resposta.
+
+Na maior parte dos casos, o melhor resultado vem de parágrafos curtos, exemplos concretos e transições simples entre seções. Listas devem aparecer só quando houver sequência de passos, enumeração real ou comparação objetiva.
+
+<Callout title="Mermaid é automático" type="hint">
+  Para diagramas, use bloco de código com linguagem `mermaid`. Não é necessário importar um componente para isso, porque o template intercepta `pre` e `figure` com esse idioma e renderiza o diagrama automaticamente.
+</Callout>
+
+## Quando importar componentes MDX
+
+Os componentes reutilizáveis ficam em `src/@presentation/components/docs`. Quando um trecho pede destaque visual, passo a passo, cards de navegação, abas ou árvore de arquivos, faça o import explícito no topo do `.mdx`.
+
+```mdx
+import { Callout } from "@presentation/components/docs/Callout.tsx";
+import { Steps } from "@presentation/components/docs/Step.tsx";
+```
+
+A referência completa de componentes fica em `/docs/referencia/componentes`.
+
+## Skill de escrita do projeto
+
+A escrita dos documentos desta base segue a skill local `.agents/skills/docs-mdx-authoring/SKILL.md`. Ela orienta a preservar o frontmatter, priorizar parágrafos, usar títulos úteis para navegação e introduzir componentes MDX apenas quando eles melhorarem a compreensão do texto.
+
+A skill complementa as regras gerais do projeto e pode ser tratada como referência prática sempre que a mudança acontecer dentro de `src/@content/docs`.
+
+## Diferença entre documentos e publicações
+
+Use `src/@content/docs` para conteúdo permanente, como guias, referência funcional e material de implantação. Use `src/@content/blog` para conteúdos com contexto temporal, como notas de versão, avisos e manutenções programadas.
+
+O template carrega os dois tipos de conteúdo com a mesma base de MDX, mas a experiência de navegação é diferente porque `/docs` prioriza consulta contínua e `/blog` prioriza histórico de publicação.
+
+## Fluxo recomendado
+
+<Steps steps={fluxoDocumento} />

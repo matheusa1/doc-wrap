@@ -1,0 +1,45 @@
+---
+title: Tabs
+description: Organize variações de conteúdo em abas sincronizáveis e acessíveis.
+category: Referência
+order: 45
+author: Matheus Andrade
+updatedAt: 2026-04-28
+---
+import { Tabs, TabItem } from "@presentation/components/docs/Tabs.tsx";
+
+## Quando usar
+
+Use `Tabs` quando o conteúdo principal for o mesmo, mas precisar ser apresentado em variações, como ambiente, perfil, canal ou tecnologia. Isso evita repetição excessiva e mantém a comparação no mesmo espaço de leitura.
+
+## Import
+
+```mdx
+import { Tabs, TabItem } from "@presentation/components/docs/Tabs.tsx";
+```
+
+## API disponível hoje
+
+`Tabs` aceita `defaultValue`, `groupId`, `lazy`, `queryString`, `values` e `className`. `TabItem` define cada aba com `value`, `label`, `default`, `attributes` e `children`. Quando `groupId` é informado, o template sincroniza a seleção entre blocos relacionados e salva a preferência em `localStorage`.
+
+## Exemplo
+
+```mdx
+<Tabs defaultValue="api" groupId="surface">
+  <TabItem value="api" label="API">
+    Use esta aba para documentar contratos, endpoints e integrações.
+  </TabItem>
+  <TabItem value="web" label="Web">
+    Use esta aba para documentar telas, componentes e fluxos do frontend.
+  </TabItem>
+</Tabs>
+```
+
+<Tabs defaultValue="api" groupId="surface">
+  <TabItem value="api" label="API">
+    Use esta aba para documentar contratos, endpoints e integrações.
+  </TabItem>
+  <TabItem value="web" label="Web">
+    Use esta aba para documentar telas, componentes e fluxos do frontend.
+  </TabItem>
+</Tabs>
