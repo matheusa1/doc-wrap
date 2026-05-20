@@ -52,6 +52,9 @@ describe("create-doc-wrap bin", () => {
 
 		expect(result.status).toBe(0);
 		expect(result.stderr).toBe("");
+		expect(result.stdout).toContain("Create Doc Wrap");
+		expect(result.stdout).toContain("[ok] gerenciador de pacotes: bun");
+		expect(result.stdout).toContain("[step] Copiando o template blog");
 		expect(result.stdout).toContain("cd my-docs");
 		expect(result.stdout).toContain("bun install");
 		expect(result.stdout).toContain("bun run dev");
@@ -79,7 +82,7 @@ describe("create-doc-wrap bin", () => {
 
 		expect(result.status).toBe(0);
 		expect(result.stderr).toBe("");
-		expect(result.stdout).toContain("Projeto criado com sucesso em ");
+		expect(result.stdout).toContain("[ok] Projeto criado com sucesso em ");
 		expect(result.stdout).toContain("main-docs-pax.\n");
 		expect(result.stdout).toContain("cd main-docs-pax");
 		expect(result.stdout).not.toContain("cd @main-docs/pax");
@@ -104,7 +107,26 @@ describe("create-doc-wrap bin", () => {
 		});
 
 		expect(result.status).toBe(1);
-		expect(result.stdout).toBe("");
-		expect(result.stderr).toContain("O nome do projeto é obrigatório");
+		expect(result.stdout).toContain("Create Doc Wrap");
+		expect(result.stderr).toContain("Erro: O nome do projeto é obrigatório");
+	});
+
+	test("mantém fallback claro quando CI força modo não interativo", async () => {
+		const sandboxDirectory = await mkdtemp(
+			join(tmpdir(), "create-doc-wrap-bin-"),
+		);
+		createdDirectories.push(sandboxDirectory);
+		const result = spawnSync(process.execPath, [binPath], {
+			cwd: sandboxDirectory,
+			encoding: "utf8",
+			env: {
+				...process.env,
+				CI: "1",
+			},
+			input: "",
+		});
+
+		expect(result.status).toBe(1);
+		expect(result.stderr).toContain("Erro: O nome do projeto é obrigatório");
 	});
 });

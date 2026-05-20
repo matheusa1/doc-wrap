@@ -42,12 +42,23 @@ const defaultAsk = async (
 const formatOptions = (options) =>
 	options.map((option, index) => `  ${index + 1}. ${option}`).join("\n");
 
+const isEnabledCiValue = (value) => {
+	if (typeof value !== "string") {
+		return false;
+	}
+
+	const normalizedValue = value.trim().toLowerCase();
+
+	return normalizedValue === "1" || normalizedValue === "true";
+};
+
 export const isInteractiveSession = ({
+	env = process.env,
 	input = defaultInput,
 	output = defaultOutput,
-} = {}) => Boolean(input.isTTY && output.isTTY);
+} = {}) => Boolean(input.isTTY && output.isTTY && !isEnabledCiValue(env.CI));
 
-const projectNameErrorMessage =
+export const projectNameErrorMessage =
 	"O nome do projeto é obrigatório e deve resultar em um nome válido para package.json.";
 
 const builtinModuleNames = new Set(
@@ -185,9 +196,10 @@ export const resolveProjectName = async (
 	projectNameArg,
 	{
 		ask = defaultAsk,
+		env = process.env,
 		input = defaultInput,
 		output = defaultOutput,
-		interactive = isInteractiveSession({ input, output }),
+		interactive = isInteractiveSession({ env, input, output }),
 	} = {},
 ) => {
 	const normalizedProjectNameArg = projectNameArg
