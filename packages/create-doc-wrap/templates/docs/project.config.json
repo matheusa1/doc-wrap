@@ -1,0 +1,7 @@
+{
+	"name": "Central de Documentação",
+	"description": "Use este projeto como base para criar uma central de ajuda, manuais internos, notas de versão e comunicados de um sistema.",
+	"hasDocs": true,
+	"hasBlog": false,
+	"defaultTheme": "light"
+}

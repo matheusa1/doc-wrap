@@ -1,0 +1,11 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/geist";
+@import "katex/dist/katex.min.css";
+@import "./styles/theme.css";
+@import "./styles/base.css";
+@import "./styles/scrollbar.css";
+@import "./styles/mdx/typography.css";
+@import "./styles/mdx/code.css";
+@import "./styles/mdx/embeds.css";

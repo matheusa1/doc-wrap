@@ -1,0 +1,26 @@
+{
+	"name": "create-doc-wrap",
+	"description": "Scaffold projects powered by Doc Wrap templates.",
+	"version": "0.2.1",
+	"author": "Matheus Andrade",
+	"license": "MIT",
+	"type": "module",
+	"dependencies": {
+		"terminal-kit": "^3.1.2"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/matheusa1/doc-wrap.git"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"bin": {
+		"create-doc-wrap": "./bin/create-doc-wrap.mjs"
+	},
+	"files": [
+		"bin/create-doc-wrap.mjs",
+		"lib/*.mjs",
+		"templates"
+	]
+}

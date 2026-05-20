@@ -1,4 +1,5 @@
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import mdx from "@mdx-js/rollup";
 import babel from "@rolldown/plugin-babel";
 import tailwindcss from "@tailwindcss/vite";
@@ -8,16 +9,35 @@ import rehypePrettyCode from "rehype-pretty-code";
 import remarkFrontmatter from "remark-frontmatter";
 import remarkMath from "remark-math";
 import remarkMdxFrontmatter from "remark-mdx-frontmatter";
-import { defineConfig } from "vite";
-import { rootDir } from "./scripts/project-config.mjs";
+import { defineConfig, type HmrContext, type Plugin } from "vite";
 
+const rootDir = path.dirname(fileURLToPath(import.meta.url));
 const resolvePath = (relativePath: string) =>
 	path.resolve(rootDir, relativePath);
+const projectConfigPath = resolvePath("./project.config.json");
+
+const createProjectConfigPlugin = (): Plugin => ({
+	name: "doc-wrap-project-config",
+	apply: "serve",
+	configureServer(server) {
+		server.watcher.add(projectConfigPath);
+	},
+	handleHotUpdate({ file, server }: HmrContext) {
+		if (path.resolve(file) !== projectConfigPath) {
+			return undefined;
+		}
+
+		server.ws.send({ type: "full-reload" });
+
+		return [];
+	},
+});
 
 // https://vite.dev/config/
 export default defineConfig(() => {
 	return {
 		plugins: [
+			createProjectConfigPlugin(),
 			{
 				enforce: "pre",
 				...mdx({

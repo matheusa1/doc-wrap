@@ -1,0 +1,38 @@
+---
+title: Conteúdo
+description: Encontre os guias para manter o template, escrever documentos e organizar a navegação da base.
+category: Conteúdo
+order: 1
+author: Matheus Andrade
+updatedAt: 2026-05-04
+---
+import { Cards } from "@presentation/components/docs/Cards.tsx";
+import { Compass, FileText, GitCompareArrows } from "lucide-react";
+
+## O que você encontra aqui
+
+Esta seção reúne a parte operacional da base. Ela cobre tanto a manutenção do template quanto a escrita do conteúdo que será publicado em `/docs` e `/blog`.
+
+<Cards num={3}>
+  <Cards.Card
+    icon={<Compass />}
+    title="Desenvolvendo o template"
+    description="Stack, camadas do projeto, providers, mapas automáticos, build e indexação."
+    href="/docs/conteudo/desenvolvendo-template"
+    arrow
+  />
+  <Cards.Card
+    icon={<FileText />}
+    title="Criando documentos"
+    description="Fluxo para escrever páginas MDX em `src/@content/docs` com frontmatter e convenções editoriais."
+    href="/docs/conteudo/criando-documentos"
+    arrow
+  />
+  <Cards.Card
+    icon={<GitCompareArrows />}
+    title="Organização e navegação"
+    description="Como diretórios, categorias, headings e busca influenciam a experiência final."
+    href="/docs/conteudo/organizacao-navegacao"
+    arrow
+  />
+</Cards>

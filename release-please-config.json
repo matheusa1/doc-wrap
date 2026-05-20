@@ -1,0 +1,28 @@
+{
+	"$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+	"bootstrap-sha": "7910f5cb7ce23b70957e9d615f12451c6f0ae8de",
+	"plugins": ["node-workspace"],
+	"include-component-in-tag": true,
+	"include-v-in-tag": true,
+	"tag-separator": "-",
+	"packages": {
+		"packages/cli": {
+			"release-type": "node",
+			"package-name": "@doc-wrap/cli",
+			"component": "cli",
+			"changelog-path": "CHANGELOG.md"
+		},
+		"packages/create-doc-wrap": {
+			"release-type": "node",
+			"package-name": "create-doc-wrap",
+			"component": "create-doc-wrap",
+			"changelog-path": "CHANGELOG.md"
+		},
+		"packages/project-config": {
+			"release-type": "node",
+			"package-name": "@doc-wrap/project-config",
+			"component": "project-config",
+			"changelog-path": "CHANGELOG.md"
+		}
+	}
+}
